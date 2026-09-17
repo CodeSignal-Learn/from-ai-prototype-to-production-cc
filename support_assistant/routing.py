@@ -1,3 +1,5 @@
+import re
+
 # Keyword rules that assign a category to a request. The category with the most
 # keyword hits wins; on a tie, the category listed first wins, so returns_refunds
 # is listed before orders_shipping (a return of a shipped order is a return).
@@ -10,20 +12,20 @@ CATEGORY_KEYWORDS: dict[str, tuple[str, ...]] = {
         "shipping", "delivery", "delivered", "tracking", "shipped", "package",
         "where is my order", "order status",
     ),
-    "product_issue": ("broken", "defective", "zipper", "leak", "torn", "stopped working", "warranty"),
+    "product_issue": ("broken", "defective", "zipper", "leak", "leaks", "torn", "stopped working", "warranty"),
 }
 
 FALLBACK_CATEGORY = "other"
 
 
-def tokenize(text: str) -> set[str]:
-    """Split text into whole words so that keywords match words, not fragments."""
-    return set(text.split())
+def contains_keyword(text: str, keyword: str) -> bool:
+    """True when the keyword appears as whole words, so "reset" does not match "preset"
+    but "locked out" and "shipping." still match."""
+    return re.search(rf"\b{re.escape(keyword)}\b", text) is not None
 
 
 def count_hits(text: str, keywords: tuple[str, ...]) -> int:
-    tokens = tokenize(text)
-    return sum(1 for keyword in keywords if keyword in tokens)
+    return sum(1 for keyword in keywords if contains_keyword(text, keyword))
 
 
 def classify(text: str) -> str:
