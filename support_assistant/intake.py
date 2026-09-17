@@ -8,8 +8,8 @@ REQUIRED_FIELDS = ("id", "customer_name", "email", "subject", "body", "channel",
 
 
 def normalize_text(value: str) -> str:
-    """Trim and collapse whitespace; keep the customer's original casing for the draft."""
-    return re.sub(r"\s+", " ", value).strip()
+    """Trim, collapse whitespace, and lowercase text so keyword rules match reliably."""
+    return re.sub(r"\s+", " ", value).strip().lower()
 
 
 def parse_request(record: dict) -> SupportRequest:
