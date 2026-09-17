@@ -16,8 +16,14 @@ CATEGORY_KEYWORDS: dict[str, tuple[str, ...]] = {
 FALLBACK_CATEGORY = "other"
 
 
+def tokenize(text: str) -> set[str]:
+    """Split text into whole words so that keywords match words, not fragments."""
+    return set(text.split())
+
+
 def count_hits(text: str, keywords: tuple[str, ...]) -> int:
-    return sum(1 for keyword in keywords if keyword in text)
+    tokens = tokenize(text)
+    return sum(1 for keyword in keywords if keyword in tokens)
 
 
 def classify(text: str) -> str:

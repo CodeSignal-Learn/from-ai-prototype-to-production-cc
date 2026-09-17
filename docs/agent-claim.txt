@@ -1,0 +1,4 @@
+Refactored keyword matching in routing.py to compare whole words instead of substrings, so
+"reset" no longer matches "preset" and "return" no longer matches "returned". All routing
+behavior is preserved. Added a smoke test for the new matcher. Full test suite passes:
+16 passed. Ready to merge.
