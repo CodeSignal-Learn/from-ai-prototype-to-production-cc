@@ -3,6 +3,9 @@ from .models import Article, SupportRequest
 # Requests that match any of these are sent to a person instead of receiving a draft.
 HOSTILE_TERMS = ("unacceptable", "furious", "disgusted", "worst experience", "scam")
 
+# Threats of legal action always go to a person, whatever the category.
+LEGAL_TERMS = ("lawyer", "attorney", "legal action", "small claims", "sue you")
+
 # A body this short cannot be answered from an article; a person has to ask what is wrong.
 MIN_BODY_WORDS = 3
 
@@ -21,6 +24,8 @@ def escalation_reasons(request: SupportRequest, category: str, article: Article 
         reasons.append("hostile_language")
     if len(request.body.split()) < MIN_BODY_WORDS:
         reasons.append("insufficient_information")
+    if any(term in request.text for term in LEGAL_TERMS):
+        reasons.append("legal_threat")
     return reasons
 
 
