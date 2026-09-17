@@ -3,6 +3,9 @@ from .models import Article, SupportRequest
 # Requests that match any of these are sent to a person instead of receiving a draft.
 HOSTILE_TERMS = ("unacceptable", "furious", "disgusted", "worst experience", "scam")
 
+# A body this short cannot be answered from an article; a person has to ask what is wrong.
+MIN_BODY_WORDS = 3
+
 DRAFT = "draft"
 HUMAN_REVIEW = "human_review"
 
@@ -16,6 +19,8 @@ def escalation_reasons(request: SupportRequest, category: str, article: Article 
         reasons.append("no_reference_article")
     if any(term in request.text for term in HOSTILE_TERMS):
         reasons.append("hostile_language")
+    if len(request.body.split()) < MIN_BODY_WORDS:
+        reasons.append("insufficient_information")
     return reasons
 
 
