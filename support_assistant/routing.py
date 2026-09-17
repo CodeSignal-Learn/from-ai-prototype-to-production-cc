@@ -1,10 +1,15 @@
-# Keyword rules that assign a category to a request. The first category with the
-# highest number of keyword hits wins; a request with no hits is "other".
+# Keyword rules that assign a category to a request. The category with the most
+# keyword hits wins; on a tie, the category listed first wins, so returns_refunds
+# is listed before orders_shipping (a return of a shipped order is a return).
+# A request with no hits is "other".
 CATEGORY_KEYWORDS: dict[str, tuple[str, ...]] = {
     "billing": ("invoice", "charged", "charge", "payment", "billing", "receipt", "double"),
     "account_access": ("password", "log in", "login", "locked out", "sign in", "reset", "two-factor"),
-    "orders_shipping": ("shipping", "delivery", "delivered"),
     "returns_refunds": ("return", "refund", "exchange", "send back"),
+    "orders_shipping": (
+        "shipping", "delivery", "delivered", "tracking", "shipped", "package",
+        "where is my order", "order status",
+    ),
     "product_issue": ("broken", "defective", "zipper", "leak", "torn", "stopped working", "warranty"),
 }
 

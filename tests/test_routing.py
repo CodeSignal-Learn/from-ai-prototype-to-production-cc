@@ -19,3 +19,15 @@ def test_defect_request_routes_to_product_issue():
 
 def test_unrelated_request_routes_to_other():
     assert classify("what colors does the ridge jacket come in") == "other"
+
+
+def test_tracking_request_routes_to_orders_shipping():
+    assert classify("the tracking number still shows label created") == "orders_shipping"
+
+
+def test_missing_package_routes_to_orders_shipping():
+    assert classify("my package has been sitting at a carrier hub for a week") == "orders_shipping"
+
+
+def test_return_of_a_delivered_order_prefers_returns():
+    assert classify("the carrier shows it delivered to you but no refund has appeared") == "returns_refunds"
