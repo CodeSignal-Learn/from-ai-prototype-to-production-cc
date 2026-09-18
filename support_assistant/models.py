@@ -10,6 +10,7 @@ class SupportRequest:
     body: str
     channel: str
     created_at: str
+    flags: tuple[str, ...] = ()
 
     @property
     def text(self) -> str:

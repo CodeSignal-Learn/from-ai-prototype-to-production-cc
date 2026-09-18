@@ -40,7 +40,10 @@ def main(argv=None) -> int:
         overrides["knowledge_dir"] = Path(overrides["knowledge_dir"])
     settings = dataclasses.replace(settings, **overrides)
 
-    requests = load_requests(args.requests)
+    rejected: list = []
+    requests = load_requests(args.requests, rejected)
+    for line_number, reason in rejected:
+        print(f"Rejected line {line_number}: {reason}")
     done_ids = set()
     if args.resume and Path(args.out).exists():
         with Path(args.out).open(encoding="utf-8") as handle:

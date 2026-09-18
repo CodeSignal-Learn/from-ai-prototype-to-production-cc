@@ -10,6 +10,7 @@ from .llm.errors import LLMFailed
 from .llm.retry import RetryPolicy, call_with_retry
 from .models import Article, Result, SupportRequest
 from .routing import classify
+from .security import check_draft
 
 CLASSIFICATION_UNAVAILABLE = "classification_unavailable"
 DRAFT_UNAVAILABLE = "draft_unavailable"
@@ -40,9 +41,9 @@ def process_request(
             raise ValueError("model mode needs an LLM client")
         policy = retry_policy(settings)
         try:
-            verdict = call_with_retry(lambda: model.classify(client, request.text), policy, sleep)
-            category = verdict["category"]
-            confidence = verdict["confidence"]
+            verdict = call_with_retry(lambda: model.classify(client, request), policy, sleep)
+            category = verdict.category
+            confidence = verdict.confidence
         except LLMFailed:
             category = "other"
             reasons.append(CLASSIFICATION_UNAVAILABLE)
@@ -61,6 +62,11 @@ def process_request(
             except LLMFailed:
                 reasons.append(DRAFT_UNAVAILABLE)
                 route = decide_route(reasons)
+            else:
+                problems = check_draft(draft, article, request)
+                if problems:
+                    reasons += problems
+                    route = decide_route(reasons)
         else:
             draft = compose_draft(request, article)
     return Result(
