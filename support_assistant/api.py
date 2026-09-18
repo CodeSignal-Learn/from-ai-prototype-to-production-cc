@@ -18,6 +18,7 @@ from .knowledge import load_articles
 from .llm.client import LLMClient
 from .llm.factory import build_client
 from .pipeline import process_batch, process_request
+from .version import versions
 
 MAX_BATCH = 200
 
@@ -43,6 +44,7 @@ def create_app(settings: Settings, articles=None, client: LLMClient | None = Non
             "model": settings.model if settings.mode == "model" else None,
             "concurrency": settings.concurrency,
             "articles": len(articles),
+            "versions": versions(settings),
         }
 
     @app.post("/requests", dependencies=[Depends(require_key)])

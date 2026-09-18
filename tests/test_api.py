@@ -6,6 +6,7 @@ from fastapi.testclient import TestClient
 from support_assistant.api import app_factory, create_app
 from support_assistant.config import Settings
 from support_assistant.llm.client import ScriptedClient
+from support_assistant.version import versions
 
 RECORD = {"id": "REQ-7001", "customer_name": "Ada Lovelace", "email": "ada@example.com",
           "subject": "Refund status", "body": "when will i get my refund for order 48102",
@@ -21,6 +22,7 @@ def test_health_reports_mode_and_configuration(articles):
     assert response.status_code == 200
     body = response.json()
     assert body["status"] == "ok" and body["mode"] == "rules" and body["concurrency"] == 4 and body["articles"] == 9
+    assert body["versions"] == versions(Settings(mode="rules", concurrency=4))
 
 
 def test_one_request_returns_a_result(articles):
