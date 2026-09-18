@@ -42,3 +42,4 @@ class Result:
     draft: str | None = None
     sent: bool = False
     confidence: float | None = None
+    versions: dict | None = None

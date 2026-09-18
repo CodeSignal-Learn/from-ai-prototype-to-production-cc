@@ -12,6 +12,7 @@ from .llm.retry import RetryPolicy, call_with_retry
 from .models import Article, Result, SupportRequest
 from .routing import classify
 from .security import check_draft
+from .version import versions
 
 CLASSIFICATION_UNAVAILABLE = "classification_unavailable"
 DRAFT_UNAVAILABLE = "draft_unavailable"
@@ -79,6 +80,7 @@ def process_request(
         draft=draft,
         sent=False,
         confidence=confidence,
+        versions=versions(settings),
     )
 
 

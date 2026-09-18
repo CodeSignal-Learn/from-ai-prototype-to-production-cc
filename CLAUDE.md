@@ -22,7 +22,7 @@ refreshed with `scripts/record.py` whenever a prompt changes.
   require it in `X-API-Key`, `GET /health` is open. Do not add an endpoint that takes customer
   text without the key check.
 - Keep `Result` fields as they are: `id`, `category`, `route`, `reasons`, `article`, `draft`,
-  `sent`, `confidence` (`None` in rules mode).
+  `sent`, `confidence` (`None` in rules mode), `versions` (what produced the result).
 - The model's output is advisory. It never sends, never chooses the route on its own, and every
   escalation rule applies to its output too. Drafts come from the selected article only.
 - Only `llm/live.py` touches the Anthropic SDK; credentials are the SDK's business, not ours. Tests never call the API: use `ScriptedClient` or `ReplayClient`.
