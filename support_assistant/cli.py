@@ -5,7 +5,7 @@ from collections import Counter
 from dataclasses import asdict
 from pathlib import Path
 
-from .config import load_settings
+from .config import load_settings, validate
 from .intake import load_requests
 from .knowledge import load_articles
 from .llm.factory import build_client
@@ -30,15 +30,20 @@ def main(argv=None) -> int:
     parser.add_argument("--mode", choices=["rules", "model"], default=None, help="overrides ASSISTANT_MODE")
     parser.add_argument("--client", choices=["live", "replay"], default=None, help="overrides ASSISTANT_LLM_CLIENT")
     parser.add_argument("--resume", action="store_true", help="skip requests already present in --out and append the rest")
+    parser.add_argument("--concurrency", type=int, default=None, help="overrides ASSISTANT_CONCURRENCY")
     args = parser.parse_args(argv)
     if args.resume and not args.out:
         parser.error("--resume needs --out")
 
     settings = load_settings()
-    overrides = {name: value for name, value in (("mode", args.mode), ("llm_client", args.client), ("knowledge_dir", args.kb)) if value}
+    overrides = {name: value for name, value in (("mode", args.mode), ("llm_client", args.client), ("knowledge_dir", args.kb), ("concurrency", args.concurrency)) if value is not None}
     if "knowledge_dir" in overrides:
         overrides["knowledge_dir"] = Path(overrides["knowledge_dir"])
     settings = dataclasses.replace(settings, **overrides)
+    try:
+        validate(settings)                   # the flags are checked like the variables they override
+    except ValueError as error:
+        parser.error(f"invalid settings after the flags: {error}")
 
     rejected: list = []
     requests = load_requests(args.requests, rejected)

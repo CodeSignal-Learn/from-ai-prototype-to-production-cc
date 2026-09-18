@@ -133,6 +133,14 @@ def test_numbers_not_in_the_article_or_request_are_flagged(make_request, article
     assert check_draft("You have 60 days to return it.", article, request) == []
 
 
+def test_money_formatting_does_not_count_as_a_different_number(make_request, articles):
+    article = next(a for a in articles if a.slug == "returns-policy")  # says "a flat 7 dollar label fee"
+    request = make_request("Return", "do i pay for the label")
+    assert check_draft("A flat $7 label fee is deducted from refunds.", article, request) == []
+    assert check_draft("A flat $7.00 label fee is deducted from refunds.", article, request) == []
+    assert "ungrounded_number" in check_draft("A flat $9 label fee is deducted.", article, request)
+
+
 def test_flagged_draft_goes_to_a_person_but_is_kept(make_request, articles, model_settings):
     client = ScriptedClient([
         json.dumps({"category": "returns_refunds", "confidence": 0.95, "reason": "refund"}),
