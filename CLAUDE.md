@@ -4,9 +4,11 @@
 An internal tool that drafts replies to written support requests for a human to review.
 Two modes share one pipeline (`pipeline.py`, selected with `--mode`):
 - `rules`: keyword routing in `support_assistant/routing.py`, template drafts in `drafting.py`.
-- `model`: the POC prototype from `docs/adr-001-prototype-slice.md`. `model.py` asks a language
-  model for the category and confidence, and for a draft written from the selected article.
+- `model`: `model.py` asks a language model for the category and confidence, and for a draft
+  written from the selected article, through the `LLMClient` interface in `support_assistant/llm/`
+  (`LiveClient` on the SDK, `ReplayClient` on recordings, `ScriptedClient` for tests).
 Knowledge lookup in `knowledge.py` and escalation rules in `escalation.py` apply in both modes.
+Settings come from `ASSISTANT_*` environment variables through `config.py` (ADR 002).
 `cli.py` runs a JSONL batch; `scripts/run_trial.py` measures a mode against the trial labels.
 
 ## Boundaries
@@ -17,8 +19,8 @@ Knowledge lookup in `knowledge.py` and escalation rules in `escalation.py` apply
   `sent`, `confidence` (`None` in rules mode).
 - The model's output is advisory. It never sends, never chooses the route on its own, and every
   escalation rule applies to its output too. Drafts come from the selected article only.
-- Model mode needs `ANTHROPIC_API_KEY` in the environment. Tests must never call the API; fake
-  `model.classify` and `model.draft` instead.
+- Only `llm/live.py` touches the Anthropic SDK; credentials are the SDK's business, not ours. Tests never call the API: use `ScriptedClient` or `ReplayClient`.
+- Configuration is read once in `config.py`. Do not read environment variables anywhere else.
 - Keep intake normalization (trim, collapse whitespace, lowercase). Routing keywords are
   lowercase and depend on it.
 - Categories are `billing`, `account_access`, `returns_refunds`, `orders_shipping`,
@@ -29,7 +31,7 @@ Knowledge lookup in `knowledge.py` and escalation rules in `escalation.py` apply
 ```bash
 python3 -m pytest
 python3 -m support_assistant.cli data/requests.jsonl
-python3 -m support_assistant.cli data/requests.jsonl --mode model
+python3 -m support_assistant.cli data/requests.jsonl --mode model --client replay
 ```
 Run both after any implementation change and report the actual results. The test suite does
 not cover every routing keyword or every escalation rule; when a change touches one, add a test

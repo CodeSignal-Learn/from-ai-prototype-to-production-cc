@@ -18,8 +18,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
+import dataclasses  # noqa: E402
+
+from support_assistant.config import load_settings  # noqa: E402
 from support_assistant.intake import load_requests  # noqa: E402
 from support_assistant.knowledge import load_articles  # noqa: E402
+from support_assistant.llm.factory import build_client  # noqa: E402
 from support_assistant.pipeline import process_request  # noqa: E402
 
 GUARD_WORDS = ("hostile", "legal", "injection")
@@ -32,6 +36,7 @@ def load_labels(path):
 def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--mode", choices=["rules", "model"], default="rules")
+    parser.add_argument("--client", choices=["live", "replay"], default=None, help="overrides ASSISTANT_LLM_CLIENT")
     parser.add_argument("--requests", default=str(ROOT / "data" / "trial.jsonl"))
     parser.add_argument("--labels", default=str(ROOT / "data" / "trial_labels.jsonl"))
     parser.add_argument("--kb", default=str(ROOT / "kb"))
@@ -40,6 +45,8 @@ def main(argv=None):
     parser.add_argument("--output-rate", type=float, default=None, help="dollars per million output tokens")
     args = parser.parse_args(argv)
 
+    settings = dataclasses.replace(load_settings(), mode=args.mode, **({"llm_client": args.client} if args.client else {}))
+    client = build_client(settings) if settings.mode == "model" else None
     requests = load_requests(args.requests)
     labels = load_labels(args.labels)
     articles = load_articles(args.kb)
@@ -49,7 +56,7 @@ def main(argv=None):
     rows = []
     for request in requests:
         started = time.perf_counter()
-        result = process_request(request, articles, mode=args.mode)
+        result = process_request(request, articles, settings, client)
         elapsed = time.perf_counter() - started
         label = labels[request.id]
         row = asdict(result)
@@ -84,13 +91,12 @@ def main(argv=None):
     print(f"over-escalated (expected draft, got human review): {', '.join(over_escalated) if over_escalated else 'none'}")
     print(f"median seconds per request: {median_seconds:.3f}")
 
-    if args.mode == "model":
-        from support_assistant import model  # noqa: E402
-
-        usage = model.USAGE
-        print(f"input tokens: {usage['input_tokens']}  output tokens: {usage['output_tokens']}  calls: {usage['calls']}")
+    if client is not None:
+        usage = client.usage
+        print(f"client: {settings.llm_client}  model: {settings.model}")
+        print(f"input tokens: {usage.input_tokens}  output tokens: {usage.output_tokens}  calls: {usage.calls}")
         if args.input_rate is not None and args.output_rate is not None:
-            cost = usage["input_tokens"] / 1e6 * args.input_rate + usage["output_tokens"] / 1e6 * args.output_rate
+            cost = usage.input_tokens / 1e6 * args.input_rate + usage.output_tokens / 1e6 * args.output_rate
             print(f"estimated cost: ${cost:.4f} total, ${cost / total:.4f} per request")
         else:
             print("estimated cost: not computed (pass --input-rate and --output-rate)")
