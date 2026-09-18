@@ -21,6 +21,7 @@ class Settings:
     retry_base_delay_seconds: float = 0.5
     concurrency: int = 1
     replay_latency_seconds: float = 0.0    # simulated model latency for offline load tests
+    replay_failures: tuple[str, ...] = ()  # failures the replay client raises first, e.g. ("timeout", "timeout")
     recordings_dir: Path = ROOT / "fixtures" / "recordings"
     knowledge_dir: Path = ROOT / "kb"
     api_key: str | None = None             # required to serve the API; requests carry it in X-API-Key
@@ -45,6 +46,7 @@ def load_settings(env=None) -> Settings:
         retry_base_delay_seconds=pick("RETRY_BASE_DELAY_SECONDS", float, defaults.retry_base_delay_seconds),
         concurrency=pick("CONCURRENCY", int, defaults.concurrency),
         replay_latency_seconds=pick("REPLAY_LATENCY_SECONDS", float, defaults.replay_latency_seconds),
+        replay_failures=pick("REPLAY_FAILURES", lambda raw: tuple(part.strip() for part in raw.split(",") if part.strip()), defaults.replay_failures),
         recordings_dir=pick("RECORDINGS_DIR", Path, defaults.recordings_dir),
         knowledge_dir=pick("KNOWLEDGE_DIR", Path, defaults.knowledge_dir),
         api_key=pick("API_KEY", str, defaults.api_key),
@@ -70,3 +72,6 @@ def validate(settings: Settings) -> None:
         raise ValueError("ASSISTANT_CONCURRENCY must be at least 1")
     if settings.replay_latency_seconds < 0:
         raise ValueError("ASSISTANT_REPLAY_LATENCY_SECONDS must be zero or more")
+    unknown = [name for name in settings.replay_failures if name not in ("timeout", "rate_limit", "unavailable", "malformed")]
+    if unknown:
+        raise ValueError(f"ASSISTANT_REPLAY_FAILURES has unknown failure names: {', '.join(unknown)}")
