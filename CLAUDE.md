@@ -9,12 +9,18 @@ Two modes share one pipeline (`pipeline.py`, selected with `--mode`):
   (`LiveClient` on the SDK, `ReplayClient` on recordings, `ScriptedClient` for tests).
 Knowledge lookup in `knowledge.py` and escalation rules in `escalation.py` apply in both modes.
 Settings come from `ASSISTANT_*` environment variables through `config.py` (ADR 002).
-`cli.py` runs a JSONL batch; `scripts/run_trial.py` measures a mode against the trial labels.
+`cli.py` runs a JSONL batch with bounded concurrency; `api.py` serves the same pipeline over
+HTTP; `scripts/run_trial.py` measures a mode against the trial labels; `scripts/load_test.py`
+measures the API. Recordings for the replay client live in `fixtures/recordings/` and are
+refreshed with `scripts/record.py` whenever a prompt changes.
 
 ## Boundaries
 - Drafts are never sent. `Result.sent` stays `False`. The only network calls in this codebase are
   the model calls in model mode; do not add sending, webhooks, or notifications.
-- Dependencies are pinned in `requirements.txt` (`anthropic`, `pytest`). Do not add others.
+- Dependencies are pinned in `requirements.txt` (`anthropic`, `fastapi`, `uvicorn`, `httpx`, `pytest`). Do not add others.
+- The API is served only with `ASSISTANT_API_KEY` set; `POST /requests` and `POST /batches`
+  require it in `X-API-Key`, `GET /health` is open. Do not add an endpoint that takes customer
+  text without the key check.
 - Keep `Result` fields as they are: `id`, `category`, `route`, `reasons`, `article`, `draft`,
   `sent`, `confidence` (`None` in rules mode).
 - The model's output is advisory. It never sends, never chooses the route on its own, and every
@@ -33,6 +39,7 @@ python3 -m pytest
 python3 -m support_assistant.cli data/requests.jsonl
 python3 -m support_assistant.cli data/requests.jsonl --mode model --client replay
 ```
+Model-mode checks run on the replay client. Never run live calls in tests or submission checks.
 Run both after any implementation change and report the actual results. The test suite does
 not cover every routing keyword or every escalation rule; when a change touches one, add a test
 for it and say which cases remain unverified.

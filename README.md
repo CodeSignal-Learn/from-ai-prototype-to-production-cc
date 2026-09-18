@@ -11,12 +11,16 @@ The application never sends messages; a human always does.
 python3 -m pytest
 python3 -m support_assistant.cli data/requests.jsonl
 python3 -m support_assistant.cli data/requests.jsonl --mode model   # needs ANTHROPIC_API_KEY
+python3 -m support_assistant.cli data/requests.jsonl --mode model --client replay --concurrency 4
 python3 scripts/run_trial.py --mode rules
 python3 scripts/run_trial.py --mode model --input-rate 1.00 --output-rate 5.00
+python3 scripts/record.py data/requests.jsonl data/trial.jsonl      # refresh recordings (live)
+ASSISTANT_API_KEY=<secret> uvicorn support_assistant.api:app_factory --factory   # GET /health; POST /requests, POST /batches need X-API-Key
+ASSISTANT_API_KEY=<secret> python3 scripts/load_test.py --base-url http://127.0.0.1:8000 --concurrency 1 4 8
 ```
 
 Settings are read from `ASSISTANT_*` environment variables (mode, model, client, timeouts,
-retries, concurrency, folders); see `support_assistant/config.py`. Flags override them.
+retries, concurrency, folders, the API key); see `support_assistant/config.py`. Flags override them.
 
 Documents for the POC engagement are in `docs/`: the charter, ADR 001, the decision log, the
 trial results, and the go or no-go recommendation.

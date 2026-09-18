@@ -1,0 +1,56 @@
+{
+  "server": {
+    "status": "ok",
+    "mode": "model",
+    "llm_client": "replay",
+    "model": "claude-haiku-4-5",
+    "concurrency": 1,
+    "articles": 9
+  },
+  "levels": [
+    {
+      "concurrency": 1,
+      "requests": 24,
+      "errors": 0,
+      "wall_seconds": 96.361,
+      "throughput_per_second": 0.249,
+      "p50_seconds": 4.014,
+      "p95_seconds": 4.021,
+      "p99_seconds": 4.026,
+      "max_seconds": 4.026
+    },
+    {
+      "concurrency": 4,
+      "requests": 24,
+      "errors": 0,
+      "wall_seconds": 24.122,
+      "throughput_per_second": 0.995,
+      "p50_seconds": 4.016,
+      "p95_seconds": 4.022,
+      "p99_seconds": 4.022,
+      "max_seconds": 4.022
+    },
+    {
+      "concurrency": 8,
+      "requests": 24,
+      "errors": 0,
+      "wall_seconds": 12.092,
+      "throughput_per_second": 1.985,
+      "p50_seconds": 4.022,
+      "p95_seconds": 4.026,
+      "p99_seconds": 4.026,
+      "max_seconds": 4.026
+    },
+    {
+      "concurrency": 16,
+      "requests": 24,
+      "errors": 0,
+      "wall_seconds": 8.082,
+      "throughput_per_second": 2.97,
+      "p50_seconds": 4.026,
+      "p95_seconds": 4.034,
+      "p99_seconds": 4.034,
+      "max_seconds": 4.034
+    }
+  ]
+}
