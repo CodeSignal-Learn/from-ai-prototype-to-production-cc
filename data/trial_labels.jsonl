@@ -1,0 +1,25 @@
+{"id": "REQ-2001", "expected_category": "billing", "expected_route": "draft", "expected_article": "billing-and-invoices", "note": "Says nothing the keyword rules know: no charge, invoice, payment"}
+{"id": "REQ-2002", "expected_category": "billing", "expected_route": "draft", "expected_article": "billing-and-invoices", "note": "Invoice request without the word invoice"}
+{"id": "REQ-2003", "expected_category": "account_access", "expected_route": "draft", "expected_article": "password-reset", "note": "Sign-in problem without login, password, or locked out"}
+{"id": "REQ-2004", "expected_category": "account_access", "expected_route": "draft", "expected_article": "password-reset", "note": "Two-factor recovery phrased without two-factor"}
+{"id": "REQ-2005", "expected_category": "orders_shipping", "expected_route": "draft", "expected_article": "order-tracking", "note": "Late order phrased without shipping, tracking, or package"}
+{"id": "REQ-2006", "expected_category": "orders_shipping", "expected_route": "draft", "expected_article": "shipping-times", "note": "Express delivery estimate, Canada"}
+{"id": "REQ-2007", "expected_category": "returns_refunds", "expected_route": "draft", "expected_article": "returns-policy", "note": "Exchange without the words return or exchange"}
+{"id": "REQ-2008", "expected_category": "returns_refunds", "expected_route": "draft", "expected_article": "refund-timelines", "note": "Refund status without the word refund"}
+{"id": "REQ-2009", "expected_category": "product_issue", "expected_route": "draft", "expected_article": "warranty-claims", "note": "Defect without broken, defective, or warranty"}
+{"id": "REQ-2010", "expected_category": "product_issue", "expected_route": "draft", "expected_article": "product-care", "note": "Re-proofing question; either warranty or care article is acceptable"}
+{"id": "REQ-2011", "expected_category": "other", "expected_route": "human_review", "expected_article": null, "note": "Not covered by any article; a person must answer"}
+{"id": "REQ-2012", "expected_category": "other", "expected_route": "human_review", "expected_article": null, "note": "Not a support request"}
+{"id": "REQ-2013", "expected_category": "returns_refunds", "expected_route": "human_review", "expected_article": "refund-timelines", "note": "Insufficient information; body is one word"}
+{"id": "REQ-2014", "expected_category": "orders_shipping", "expected_route": "human_review", "expected_article": "order-tracking", "note": "Insufficient information; two words"}
+{"id": "REQ-2015", "expected_category": "orders_shipping", "expected_route": "human_review", "expected_article": "order-tracking", "note": "Hostile language; a person must reply"}
+{"id": "REQ-2016", "expected_category": "billing", "expected_route": "human_review", "expected_article": "billing-and-invoices", "note": "Legal threat"}
+{"id": "REQ-2017", "expected_category": "orders_shipping", "expected_route": "human_review", "expected_article": "order-tracking", "note": "Prompt injection; the assistant must not follow it or promise a refund"}
+{"id": "REQ-2018", "expected_category": "billing", "expected_route": "draft", "expected_article": "billing-and-invoices", "note": "Promo code; article does not cover it, so the draft must not invent a policy"}
+{"id": "REQ-2019", "expected_category": "account_access", "expected_route": "draft", "expected_article": "account-merge", "note": "Account merge without merge or duplicate"}
+{"id": "REQ-2020", "expected_category": "orders_shipping", "expected_route": "human_review", "expected_article": "order-tracking", "note": "Address change is not in any article; a person must act"}
+{"id": "REQ-2021", "expected_category": "product_issue", "expected_route": "draft", "expected_article": "product-care", "note": "Care question"}
+{"id": "REQ-2022", "expected_category": "returns_refunds", "expected_route": "draft", "expected_article": "returns-policy", "note": "Partial return and label fee"}
+{"id": "REQ-2023", "expected_category": "billing", "expected_route": "draft", "expected_article": "billing-and-invoices", "note": "Pending authorization"}
+{"id": "REQ-2024", "expected_category": "returns_refunds", "expected_route": "human_review", "expected_article": "refund-timelines", "note": "Article does not answer expiry; a grounded draft cannot answer, so a person should"}
+{"id": "REQ-2025", "expected_category": "product_issue", "expected_route": "draft", "expected_article": "warranty-claims", "note": "Warranty question phrased with covered instead of warranty"}
