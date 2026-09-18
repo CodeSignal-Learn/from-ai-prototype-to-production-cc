@@ -26,11 +26,12 @@ def main(argv=None) -> int:
     parser.add_argument("requests", help="JSONL file with one support request per line")
     parser.add_argument("--kb", default=str(DEFAULT_KB), help="folder of knowledge-base articles")
     parser.add_argument("--out", help="where to write results as JSONL")
+    parser.add_argument("--mode", choices=["rules", "model"], default="rules", help="rules (default) or the model prototype")
     args = parser.parse_args(argv)
 
     requests = load_requests(args.requests)
     articles = load_articles(args.kb)
-    results = process_batch(requests, articles)
+    results = process_batch(requests, articles, mode=args.mode)
 
     for result in results:
         reasons = f" ({', '.join(result.reasons)})" if result.reasons else ""
