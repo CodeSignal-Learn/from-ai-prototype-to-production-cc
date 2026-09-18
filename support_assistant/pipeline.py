@@ -5,8 +5,16 @@ from .models import Article, Result, SupportRequest
 from .routing import classify
 
 
-def process_request(request: SupportRequest, articles: list[Article]) -> Result:
-    """Classify, look up, draft, and route one request. Nothing is sent."""
+MODES = ("rules", "model")
+
+
+def process_request(request: SupportRequest, articles: list[Article], mode: str = "rules") -> Result:
+    """Classify, look up, draft, and route one request. Nothing is sent.
+
+    mode "rules" is the keyword assistant. mode "model" is the POC prototype (see ADR 001).
+    """
+    if mode not in MODES:
+        raise ValueError(f"unknown mode {mode!r}; expected one of {MODES}")
     category = classify(request.text)
     article = find_article(articles, category, request.text)
     reasons = escalation_reasons(request, category, article)
@@ -23,5 +31,5 @@ def process_request(request: SupportRequest, articles: list[Article]) -> Result:
     )
 
 
-def process_batch(requests: list[SupportRequest], articles: list[Article]) -> list[Result]:
-    return [process_request(request, articles) for request in requests]
+def process_batch(requests: list[SupportRequest], articles: list[Article], mode: str = "rules") -> list[Result]:
+    return [process_request(request, articles, mode=mode) for request in requests]
