@@ -30,12 +30,13 @@ def main(argv=None) -> int:
     parser.add_argument("--mode", choices=["rules", "model"], default=None, help="overrides ASSISTANT_MODE")
     parser.add_argument("--client", choices=["live", "replay"], default=None, help="overrides ASSISTANT_LLM_CLIENT")
     parser.add_argument("--resume", action="store_true", help="skip requests already present in --out and append the rest")
+    parser.add_argument("--concurrency", type=int, default=None, help="overrides ASSISTANT_CONCURRENCY")
     args = parser.parse_args(argv)
     if args.resume and not args.out:
         parser.error("--resume needs --out")
 
     settings = load_settings()
-    overrides = {name: value for name, value in (("mode", args.mode), ("llm_client", args.client), ("knowledge_dir", args.kb)) if value}
+    overrides = {name: value for name, value in (("mode", args.mode), ("llm_client", args.client), ("knowledge_dir", args.kb), ("concurrency", args.concurrency)) if value}
     if "knowledge_dir" in overrides:
         overrides["knowledge_dir"] = Path(overrides["knowledge_dir"])
     settings = dataclasses.replace(settings, **overrides)

@@ -78,6 +78,17 @@ def validate_verdict(parsed: dict) -> Verdict:
     return Verdict(category=category, confidence=float(confidence), reason=str(reason)[:300])
 
 
+def numbers_in(text: str) -> set[str]:
+    """Numbers as the customer would read them: "$7", "7", and "7.00" are the same number."""
+    found = set()
+    for raw in NUMBER.findall(text):
+        cleaned = raw.lstrip("$").replace(",", "")
+        if "." in cleaned:
+            cleaned = cleaned.rstrip("0").rstrip(".")
+        found.add(cleaned)
+    return found
+
+
 def check_draft(draft: str, article: Article, request: SupportRequest) -> list[str]:
     """Deterministic checks a draft must pass before it reaches the review queue."""
     problems = []
@@ -88,8 +99,8 @@ def check_draft(draft: str, article: Article, request: SupportRequest) -> list[s
         problems.append("draft_too_long")
     if any(pattern.search(draft) for pattern in PROMISE_PATTERNS):
         problems.append("unverifiable_promise")
-    allowed_numbers = set(NUMBER.findall(article.body)) | set(NUMBER.findall(request.text))
-    if any(number not in allowed_numbers for number in NUMBER.findall(draft)):
+    allowed_numbers = numbers_in(article.body) | numbers_in(request.text)
+    if numbers_in(draft) - allowed_numbers:
         problems.append("ungrounded_number")
     allowed_urls = set(URL.findall(article.body))
     if any(url not in allowed_urls for url in URL.findall(draft)):

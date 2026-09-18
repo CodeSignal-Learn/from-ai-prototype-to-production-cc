@@ -20,8 +20,10 @@ class Settings:
     max_retries: int = 2
     retry_base_delay_seconds: float = 0.5
     concurrency: int = 1
+    replay_latency_seconds: float = 0.0    # simulated model latency for offline load tests
     recordings_dir: Path = ROOT / "fixtures" / "recordings"
     knowledge_dir: Path = ROOT / "kb"
+    api_key: str | None = None             # required to serve the API; requests carry it in X-API-Key
 
 
 def load_settings(env=None) -> Settings:
@@ -42,8 +44,10 @@ def load_settings(env=None) -> Settings:
         max_retries=pick("MAX_RETRIES", int, defaults.max_retries),
         retry_base_delay_seconds=pick("RETRY_BASE_DELAY_SECONDS", float, defaults.retry_base_delay_seconds),
         concurrency=pick("CONCURRENCY", int, defaults.concurrency),
+        replay_latency_seconds=pick("REPLAY_LATENCY_SECONDS", float, defaults.replay_latency_seconds),
         recordings_dir=pick("RECORDINGS_DIR", Path, defaults.recordings_dir),
         knowledge_dir=pick("KNOWLEDGE_DIR", Path, defaults.knowledge_dir),
+        api_key=pick("API_KEY", str, defaults.api_key),
     )
     validate(settings)
     return settings
@@ -64,3 +68,5 @@ def validate(settings: Settings) -> None:
         raise ValueError("ASSISTANT_RETRY_BASE_DELAY_SECONDS must be zero or more")
     if settings.concurrency < 1:
         raise ValueError("ASSISTANT_CONCURRENCY must be at least 1")
+    if settings.replay_latency_seconds < 0:
+        raise ValueError("ASSISTANT_REPLAY_LATENCY_SECONDS must be zero or more")

@@ -1,5 +1,6 @@
 import hashlib
 import json
+import time
 from pathlib import Path
 
 from .client import Completion, LLMError, UsageTotals
@@ -21,16 +22,22 @@ class ReplayClient:
     is noticed immediately.
     """
 
-    def __init__(self, recordings_dir: Path, model: str, failures: list | None = None):
+    def __init__(self, recordings_dir: Path, model: str, failures: list | None = None,
+                 latency_seconds: float = 0.0, sleep=time.sleep):
         self.recordings_dir = Path(recordings_dir)
         self.model = model
         self.usage = UsageTotals()
         # Failure injection: exceptions raised, in order, before any recording is served.
         self.failures = list(failures or [])
+        # Simulated model latency, so offline load tests behave like the real thing.
+        self.latency_seconds = latency_seconds
+        self._sleep = sleep
 
     def complete(self, system: str, user: str, max_tokens: int) -> Completion:
         if self.failures:
             raise self.failures.pop(0)
+        if self.latency_seconds:
+            self._sleep(self.latency_seconds)
         key = recording_key(self.model, system, user, max_tokens)
         path = self.recordings_dir / f"{key}.json"
         if not path.exists():

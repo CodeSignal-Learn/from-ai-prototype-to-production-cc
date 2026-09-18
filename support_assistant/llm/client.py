@@ -1,3 +1,4 @@
+import threading
 from dataclasses import dataclass, field
 from typing import Protocol
 
@@ -19,11 +20,13 @@ class UsageTotals:
     input_tokens: int = 0
     output_tokens: int = 0
     calls: int = 0
+    _lock: threading.Lock = field(default_factory=threading.Lock, repr=False, compare=False)
 
     def add(self, completion: Completion) -> None:
-        self.input_tokens += completion.input_tokens
-        self.output_tokens += completion.output_tokens
-        self.calls += 1
+        with self._lock:
+            self.input_tokens += completion.input_tokens
+            self.output_tokens += completion.output_tokens
+            self.calls += 1
 
 
 class LLMClient(Protocol):
@@ -42,11 +45,14 @@ class ScriptedClient:
     usage: UsageTotals = field(default_factory=UsageTotals)
     calls: list = field(default_factory=list)
 
+    _lock: threading.Lock = field(default_factory=threading.Lock, repr=False, compare=False)
+
     def complete(self, system: str, user: str, max_tokens: int) -> Completion:
-        self.calls.append({"system": system, "user": user, "max_tokens": max_tokens})
-        if not self.answers:
-            raise LLMError("scripted client has no answer left")
-        answer = self.answers.pop(0)
+        with self._lock:
+            self.calls.append({"system": system, "user": user, "max_tokens": max_tokens})
+            if not self.answers:
+                raise LLMError("scripted client has no answer left")
+            answer = self.answers.pop(0)
         if isinstance(answer, Exception):
             raise answer
         completion = Completion(text=answer, input_tokens=len(user) // 4, output_tokens=len(answer) // 4, model=self.model)
