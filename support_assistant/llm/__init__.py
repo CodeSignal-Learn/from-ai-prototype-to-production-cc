@@ -5,9 +5,12 @@ LiveClient is imported from support_assistant.llm.live on demand, so rules mode 
 client work without the SDK installed.
 """
 from .client import Completion, LLMClient, LLMError, ScriptedClient, UsageTotals
+from .errors import LLMFailed, LLMMalformed, LLMRateLimited, LLMTimeout, LLMUnavailable
 from .replay import RecordingClient, RecordingMissing, ReplayClient
+from .retry import RetryPolicy, call_with_retry
 
 __all__ = [
     "Completion", "LLMClient", "LLMError", "ScriptedClient", "UsageTotals",
-    "RecordingClient", "RecordingMissing", "ReplayClient",
+    "LLMFailed", "LLMMalformed", "LLMRateLimited", "LLMTimeout", "LLMUnavailable",
+    "RecordingClient", "RecordingMissing", "ReplayClient", "RetryPolicy", "call_with_retry",
 ]

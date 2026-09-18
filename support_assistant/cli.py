@@ -29,7 +29,10 @@ def main(argv=None) -> int:
     parser.add_argument("--out", help="where to write results as JSONL")
     parser.add_argument("--mode", choices=["rules", "model"], default=None, help="overrides ASSISTANT_MODE")
     parser.add_argument("--client", choices=["live", "replay"], default=None, help="overrides ASSISTANT_LLM_CLIENT")
+    parser.add_argument("--resume", action="store_true", help="skip requests already present in --out and append the rest")
     args = parser.parse_args(argv)
+    if args.resume and not args.out:
+        parser.error("--resume needs --out")
 
     settings = load_settings()
     overrides = {name: value for name, value in (("mode", args.mode), ("llm_client", args.client), ("knowledge_dir", args.kb)) if value}
@@ -38,6 +41,12 @@ def main(argv=None) -> int:
     settings = dataclasses.replace(settings, **overrides)
 
     requests = load_requests(args.requests)
+    done_ids = set()
+    if args.resume and Path(args.out).exists():
+        with Path(args.out).open(encoding="utf-8") as handle:
+            done_ids = {json.loads(line)["id"] for line in handle if line.strip()}
+        requests = [request for request in requests if request.id not in done_ids]
+        print(f"Resuming: {len(done_ids)} already done, {len(requests)} to process")
     articles = load_articles(settings.knowledge_dir)
     client = build_client(settings) if settings.mode == "model" else None
     results = process_batch(requests, articles, settings, client)
@@ -53,7 +62,7 @@ def main(argv=None) -> int:
     if args.out:
         out_path = Path(args.out)
         out_path.parent.mkdir(parents=True, exist_ok=True)
-        with out_path.open("w", encoding="utf-8") as handle:
+        with out_path.open("a" if args.resume else "w", encoding="utf-8") as handle:
             for result in results:
                 handle.write(json.dumps(asdict(result)) + "\n")
         print(f"\nWrote {len(results)} results to {out_path}")
