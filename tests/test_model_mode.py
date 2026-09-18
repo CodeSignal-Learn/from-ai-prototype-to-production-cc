@@ -55,3 +55,20 @@ def test_rules_mode_has_no_confidence(make_request, articles):
 def test_unknown_mode_is_rejected(make_request, articles):
     with pytest.raises(ValueError):
         process_request(make_request("Hi", "hello there friend"), articles, mode="magic")
+
+
+def test_fenced_json_answer_is_parsed(monkeypatch):
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key-never-used")
+    from support_assistant import model
+
+    fenced = '```json\n{"category": "billing", "confidence": 0.95, "reason": "duplicate charge"}\n```'
+    assert model.parse_json_answer(fenced) == {"category": "billing", "confidence": 0.95, "reason": "duplicate charge"}
+
+
+def test_unparseable_answer_becomes_zero_confidence(monkeypatch):
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key-never-used")
+    from support_assistant import model
+
+    verdict = model.parse_json_answer("Sure! This looks like a billing question.")
+    assert verdict["category"] == "other"
+    assert verdict["confidence"] == 0.0
