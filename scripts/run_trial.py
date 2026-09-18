@@ -50,7 +50,7 @@ def main(argv=None):
     requests = load_requests(args.requests)
     labels = load_labels(args.labels)
     articles = load_articles(args.kb)
-    out_path = Path(args.out) if args.out else ROOT / "results" / f"trial-{args.mode}.jsonl"
+    out_path = (Path(args.out) if args.out else ROOT / "results" / f"trial-{args.mode}.jsonl").resolve()
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     rows = []
@@ -100,7 +100,7 @@ def main(argv=None):
             print(f"estimated cost: ${cost:.4f} total, ${cost / total:.4f} per request")
         else:
             print("estimated cost: not computed (pass --input-rate and --output-rate)")
-    print(f"wrote {out_path.relative_to(ROOT)}")
+    print(f"wrote {out_path.relative_to(ROOT) if out_path.is_relative_to(ROOT) else out_path}")
     return 0
 
 

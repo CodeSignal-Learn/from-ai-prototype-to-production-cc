@@ -1,4 +1,5 @@
 import time
+from concurrent.futures import ThreadPoolExecutor
 
 from . import model
 from .config import Settings
@@ -88,4 +89,12 @@ def process_batch(
     client: LLMClient | None = None,
     sleep=time.sleep,
 ) -> list[Result]:
-    return [process_request(request, articles, settings, client, sleep) for request in requests]
+    """Process requests with at most settings.concurrency in flight; results keep input order.
+
+    Concurrency is bounded on purpose: the model service rate-limits, and unbounded parallelism
+    turns a slow batch into a failing one.
+    """
+    if settings.concurrency <= 1 or len(requests) <= 1:
+        return [process_request(request, articles, settings, client, sleep) for request in requests]
+    with ThreadPoolExecutor(max_workers=settings.concurrency) as pool:
+        return list(pool.map(lambda request: process_request(request, articles, settings, client, sleep), requests))
