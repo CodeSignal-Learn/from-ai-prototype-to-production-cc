@@ -1,37 +1,41 @@
+from . import model
+from .config import Settings
 from .drafting import compose_draft
 from .escalation import DRAFT, decide_route, escalation_reasons
 from .knowledge import find_article
+from .llm.client import LLMClient
 from .models import Article, Result, SupportRequest
 from .routing import classify
 
 
-MODES = ("rules", "model")
-
-
-def process_request(request: SupportRequest, articles: list[Article], mode: str = "rules") -> Result:
+def process_request(
+    request: SupportRequest,
+    articles: list[Article],
+    settings: Settings,
+    client: LLMClient | None = None,
+) -> Result:
     """Classify, look up, draft, and route one request. Nothing is sent.
 
-    mode "rules" is the keyword assistant. mode "model" is the POC prototype (see ADR 001).
+    settings.mode "rules" is the keyword assistant and needs no client. Mode "model" asks the
+    client for the category and the draft; every escalation rule still applies to its output.
     """
-    if mode not in MODES:
-        raise ValueError(f"unknown mode {mode!r}; expected one of {MODES}")
     confidence = None
-    if mode == "model":
-        from . import model
-
-        verdict = model.classify(request.text)
+    if settings.mode == "model":
+        if client is None:
+            raise ValueError("model mode needs an LLM client")
+        verdict = model.classify(client, request.text)
         category = verdict["category"]
         confidence = verdict["confidence"]
     else:
         category = classify(request.text)
     article = find_article(articles, category, request.text)
     reasons = escalation_reasons(request, category, article)
-    if confidence is not None and confidence < model.CONFIDENCE_THRESHOLD:
+    if confidence is not None and confidence < settings.confidence_threshold:
         reasons.append("low_confidence")
     route = decide_route(reasons)
     draft = None
     if route == DRAFT and article:
-        draft = model.draft(request, article) if mode == "model" else compose_draft(request, article)
+        draft = model.draft(client, request, article) if settings.mode == "model" else compose_draft(request, article)
     return Result(
         id=request.id,
         category=category,
@@ -44,5 +48,10 @@ def process_request(request: SupportRequest, articles: list[Article], mode: str 
     )
 
 
-def process_batch(requests: list[SupportRequest], articles: list[Article], mode: str = "rules") -> list[Result]:
-    return [process_request(request, articles, mode=mode) for request in requests]
+def process_batch(
+    requests: list[SupportRequest],
+    articles: list[Article],
+    settings: Settings,
+    client: LLMClient | None = None,
+) -> list[Result]:
+    return [process_request(request, articles, settings, client) for request in requests]

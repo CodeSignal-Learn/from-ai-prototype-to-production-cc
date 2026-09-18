@@ -15,6 +15,9 @@ python3 scripts/run_trial.py --mode rules
 python3 scripts/run_trial.py --mode model --input-rate 0.10 --output-rate 0.50
 ```
 
+Settings are read from `ASSISTANT_*` environment variables (mode, model, client, timeouts,
+retries, concurrency, folders); see `support_assistant/config.py`. Flags override them.
+
 Documents for the POC engagement are in `docs/`: the charter, ADR 001, the decision log, the
 trial results, and the go or no-go recommendation.
 

@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pytest
 
+from support_assistant.config import Settings
 from support_assistant.intake import parse_request
 from support_assistant.knowledge import load_articles
 
@@ -29,3 +30,13 @@ def make_request():
         )
 
     return _make
+
+
+@pytest.fixture
+def rules_settings():
+    return Settings(mode="rules")
+
+
+@pytest.fixture
+def model_settings():
+    return Settings(mode="model", llm_client="replay")

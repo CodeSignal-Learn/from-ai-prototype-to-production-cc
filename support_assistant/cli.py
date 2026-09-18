@@ -1,14 +1,15 @@
 import argparse
+import dataclasses
 import json
 from collections import Counter
 from dataclasses import asdict
 from pathlib import Path
 
+from .config import load_settings
 from .intake import load_requests
 from .knowledge import load_articles
+from .llm.factory import build_client
 from .pipeline import process_batch
-
-DEFAULT_KB = Path(__file__).resolve().parent.parent / "kb"
 
 
 def summarize(results) -> str:
@@ -24,20 +25,30 @@ def summarize(results) -> str:
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="Draft replies to support requests for human review.")
     parser.add_argument("requests", help="JSONL file with one support request per line")
-    parser.add_argument("--kb", default=str(DEFAULT_KB), help="folder of knowledge-base articles")
+    parser.add_argument("--kb", default=None, help="folder of knowledge-base articles (default: ASSISTANT_KNOWLEDGE_DIR)")
     parser.add_argument("--out", help="where to write results as JSONL")
-    parser.add_argument("--mode", choices=["rules", "model"], default="rules", help="rules (default) or the model prototype")
+    parser.add_argument("--mode", choices=["rules", "model"], default=None, help="overrides ASSISTANT_MODE")
+    parser.add_argument("--client", choices=["live", "replay"], default=None, help="overrides ASSISTANT_LLM_CLIENT")
     args = parser.parse_args(argv)
 
+    settings = load_settings()
+    overrides = {name: value for name, value in (("mode", args.mode), ("llm_client", args.client), ("knowledge_dir", args.kb)) if value}
+    if "knowledge_dir" in overrides:
+        overrides["knowledge_dir"] = Path(overrides["knowledge_dir"])
+    settings = dataclasses.replace(settings, **overrides)
+
     requests = load_requests(args.requests)
-    articles = load_articles(args.kb)
-    results = process_batch(requests, articles, mode=args.mode)
+    articles = load_articles(settings.knowledge_dir)
+    client = build_client(settings) if settings.mode == "model" else None
+    results = process_batch(requests, articles, settings, client)
 
     for result in results:
         reasons = f" ({', '.join(result.reasons)})" if result.reasons else ""
         print(f"{result.id}  {result.category:<16} {result.route}{reasons}")
     print()
     print(summarize(results))
+    if client is not None:
+        print(f"\nModel calls: {client.usage.calls}, input tokens: {client.usage.input_tokens}, output tokens: {client.usage.output_tokens}")
 
     if args.out:
         out_path = Path(args.out)
