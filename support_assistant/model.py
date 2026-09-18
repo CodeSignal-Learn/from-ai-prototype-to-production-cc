@@ -31,6 +31,22 @@ def ask(prompt: str, max_tokens: int) -> str:
     return response.content[0].text
 
 
+def parse_json_answer(text: str) -> dict:
+    """Parse the model's JSON, tolerating a Markdown code fence around it.
+
+    An answer that still does not parse is treated as no answer: category other with zero
+    confidence, which the pipeline sends to a person. Decision D3 in docs/decision-log.md.
+    """
+    body = text.strip()
+    if body.startswith("```"):
+        body = body.split("\n", 1)[1] if "\n" in body else ""
+        body = body.rsplit("```", 1)[0]
+    try:
+        return json.loads(body)
+    except json.JSONDecodeError:
+        return {"category": "other", "confidence": 0.0, "reason": "model answer was not JSON"}
+
+
 def classify(text: str) -> dict:
     """Return the model's category, confidence, and reason for a request text."""
     prompt = (
@@ -45,7 +61,7 @@ def classify(text: str) -> dict:
         "confidence is your probability, between 0 and 1, that the category is right.\n\n"
         "Request:\n" + text
     )
-    return json.loads(ask(prompt, 200))
+    return parse_json_answer(ask(prompt, 200))
 
 
 def draft(request: SupportRequest, article: Article) -> str:
