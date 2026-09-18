@@ -45,3 +45,4 @@ These are accepted for a three-week POC and are listed so nobody mistakes them f
 - Requests are processed one at a time.
 - There is no configuration layer; nothing can change between environments without editing code.
 - Token usage is counted in a module-level global for the trial report.
+- The SDK client is created when `model.py` is imported.
