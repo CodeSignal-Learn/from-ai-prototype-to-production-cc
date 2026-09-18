@@ -1,0 +1,62 @@
+"""Runtime settings, read from the environment in one place.
+
+Every knob the prototype hardcoded lives here with a default, so a deployment changes behavior
+through configuration and the code stays the same between environments.
+"""
+import os
+from dataclasses import dataclass
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+
+
+@dataclass(frozen=True)
+class Settings:
+    mode: str = "rules"                      # rules | model
+    llm_client: str = "live"                 # live | replay
+    model: str = "claude-haiku-4-5"
+    confidence_threshold: float = 0.6
+    timeout_seconds: float = 20.0
+    max_retries: int = 2
+    concurrency: int = 1
+    recordings_dir: Path = ROOT / "fixtures" / "recordings"
+    knowledge_dir: Path = ROOT / "kb"
+
+
+def load_settings(env=None) -> Settings:
+    """Build Settings from environment variables prefixed ASSISTANT_; unset ones keep defaults."""
+    env = os.environ if env is None else env
+    defaults = Settings()
+
+    def pick(name, cast, default):
+        raw = env.get(f"ASSISTANT_{name}")
+        return default if raw is None or raw == "" else cast(raw)
+
+    settings = Settings(
+        mode=pick("MODE", str, defaults.mode),
+        llm_client=pick("LLM_CLIENT", str, defaults.llm_client),
+        model=pick("MODEL", str, defaults.model),
+        confidence_threshold=pick("CONFIDENCE_THRESHOLD", float, defaults.confidence_threshold),
+        timeout_seconds=pick("TIMEOUT_SECONDS", float, defaults.timeout_seconds),
+        max_retries=pick("MAX_RETRIES", int, defaults.max_retries),
+        concurrency=pick("CONCURRENCY", int, defaults.concurrency),
+        recordings_dir=pick("RECORDINGS_DIR", Path, defaults.recordings_dir),
+        knowledge_dir=pick("KNOWLEDGE_DIR", Path, defaults.knowledge_dir),
+    )
+    validate(settings)
+    return settings
+
+
+def validate(settings: Settings) -> None:
+    if settings.mode not in ("rules", "model"):
+        raise ValueError(f"ASSISTANT_MODE must be rules or model, got {settings.mode!r}")
+    if settings.llm_client not in ("live", "replay"):
+        raise ValueError(f"ASSISTANT_LLM_CLIENT must be live or replay, got {settings.llm_client!r}")
+    if not 0.0 <= settings.confidence_threshold <= 1.0:
+        raise ValueError("ASSISTANT_CONFIDENCE_THRESHOLD must be between 0 and 1")
+    if settings.timeout_seconds <= 0:
+        raise ValueError("ASSISTANT_TIMEOUT_SECONDS must be positive")
+    if settings.max_retries < 0:
+        raise ValueError("ASSISTANT_MAX_RETRIES must be zero or more")
+    if settings.concurrency < 1:
+        raise ValueError("ASSISTANT_CONCURRENCY must be at least 1")
