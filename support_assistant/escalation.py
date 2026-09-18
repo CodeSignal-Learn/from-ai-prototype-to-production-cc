@@ -1,4 +1,5 @@
 from .models import Article, SupportRequest
+from .security import detect_instruction
 
 # Requests that match any of these are sent to a person instead of receiving a draft.
 HOSTILE_TERMS = ("unacceptable", "furious", "disgusted", "worst experience", "scam")
@@ -26,6 +27,10 @@ def escalation_reasons(request: SupportRequest, category: str, article: Article 
         reasons.append("insufficient_information")
     if any(term in request.text for term in LEGAL_TERMS):
         reasons.append("legal_threat")
+    if detect_instruction(request.text):
+        reasons.append("instruction_to_assistant")
+    if "oversized" in request.flags:
+        reasons.append("oversized_request")
     return reasons
 
 
