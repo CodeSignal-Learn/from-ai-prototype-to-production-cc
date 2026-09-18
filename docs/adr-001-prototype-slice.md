@@ -43,5 +43,5 @@ These are accepted for a three-week POC and are listed so nobody mistakes them f
   instructions from customer content.
 - The model's JSON answer is parsed and trusted without validation.
 - Requests are processed one at a time.
-- The API key is read wherever it is needed; there is no configuration layer.
+- There is no configuration layer; nothing can change between environments without editing code.
 - Token usage is counted in a module-level global for the trial report.
