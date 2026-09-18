@@ -40,3 +40,4 @@ class Result:
     article: str | None = None
     draft: str | None = None
     sent: bool = False
+    confidence: float | None = None

@@ -15,11 +15,23 @@ def process_request(request: SupportRequest, articles: list[Article], mode: str 
     """
     if mode not in MODES:
         raise ValueError(f"unknown mode {mode!r}; expected one of {MODES}")
-    category = classify(request.text)
+    confidence = None
+    if mode == "model":
+        from . import model
+
+        verdict = model.classify(request.text)
+        category = verdict["category"]
+        confidence = verdict["confidence"]
+    else:
+        category = classify(request.text)
     article = find_article(articles, category, request.text)
     reasons = escalation_reasons(request, category, article)
+    if confidence is not None and confidence < model.CONFIDENCE_THRESHOLD:
+        reasons.append("low_confidence")
     route = decide_route(reasons)
-    draft = compose_draft(request, article) if route == DRAFT and article else None
+    draft = None
+    if route == DRAFT and article:
+        draft = model.draft(request, article) if mode == "model" else compose_draft(request, article)
     return Result(
         id=request.id,
         category=category,
@@ -28,6 +40,7 @@ def process_request(request: SupportRequest, articles: list[Article], mode: str 
         article=article.slug if article else None,
         draft=draft,
         sent=False,
+        confidence=confidence,
     )
 
 
