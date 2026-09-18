@@ -21,12 +21,16 @@ class ReplayClient:
     is noticed immediately.
     """
 
-    def __init__(self, recordings_dir: Path, model: str):
+    def __init__(self, recordings_dir: Path, model: str, failures: list | None = None):
         self.recordings_dir = Path(recordings_dir)
         self.model = model
         self.usage = UsageTotals()
+        # Failure injection: exceptions raised, in order, before any recording is served.
+        self.failures = list(failures or [])
 
     def complete(self, system: str, user: str, max_tokens: int) -> Completion:
+        if self.failures:
+            raise self.failures.pop(0)
         key = recording_key(self.model, system, user, max_tokens)
         path = self.recordings_dir / f"{key}.json"
         if not path.exists():

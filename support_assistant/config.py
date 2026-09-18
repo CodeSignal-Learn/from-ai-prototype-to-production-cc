@@ -18,6 +18,7 @@ class Settings:
     confidence_threshold: float = 0.6
     timeout_seconds: float = 20.0
     max_retries: int = 2
+    retry_base_delay_seconds: float = 0.5
     concurrency: int = 1
     recordings_dir: Path = ROOT / "fixtures" / "recordings"
     knowledge_dir: Path = ROOT / "kb"
@@ -39,6 +40,7 @@ def load_settings(env=None) -> Settings:
         confidence_threshold=pick("CONFIDENCE_THRESHOLD", float, defaults.confidence_threshold),
         timeout_seconds=pick("TIMEOUT_SECONDS", float, defaults.timeout_seconds),
         max_retries=pick("MAX_RETRIES", int, defaults.max_retries),
+        retry_base_delay_seconds=pick("RETRY_BASE_DELAY_SECONDS", float, defaults.retry_base_delay_seconds),
         concurrency=pick("CONCURRENCY", int, defaults.concurrency),
         recordings_dir=pick("RECORDINGS_DIR", Path, defaults.recordings_dir),
         knowledge_dir=pick("KNOWLEDGE_DIR", Path, defaults.knowledge_dir),
@@ -58,5 +60,7 @@ def validate(settings: Settings) -> None:
         raise ValueError("ASSISTANT_TIMEOUT_SECONDS must be positive")
     if settings.max_retries < 0:
         raise ValueError("ASSISTANT_MAX_RETRIES must be zero or more")
+    if settings.retry_base_delay_seconds < 0:
+        raise ValueError("ASSISTANT_RETRY_BASE_DELAY_SECONDS must be zero or more")
     if settings.concurrency < 1:
         raise ValueError("ASSISTANT_CONCURRENCY must be at least 1")
