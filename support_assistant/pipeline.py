@@ -1,11 +1,22 @@
+import time
+
 from . import model
 from .config import Settings
 from .drafting import compose_draft
 from .escalation import DRAFT, decide_route, escalation_reasons
 from .knowledge import find_article
 from .llm.client import LLMClient
+from .llm.errors import LLMFailed
+from .llm.retry import RetryPolicy, call_with_retry
 from .models import Article, Result, SupportRequest
 from .routing import classify
+
+CLASSIFICATION_UNAVAILABLE = "classification_unavailable"
+DRAFT_UNAVAILABLE = "draft_unavailable"
+
+
+def retry_policy(settings: Settings) -> RetryPolicy:
+    return RetryPolicy(max_retries=settings.max_retries, base_delay_seconds=settings.retry_base_delay_seconds)
 
 
 def process_request(
@@ -13,29 +24,45 @@ def process_request(
     articles: list[Article],
     settings: Settings,
     client: LLMClient | None = None,
+    sleep=time.sleep,
 ) -> Result:
     """Classify, look up, draft, and route one request. Nothing is sent.
 
     settings.mode "rules" is the keyword assistant and needs no client. Mode "model" asks the
     client for the category and the draft; every escalation rule still applies to its output.
+    A model call that fails after the retry policy is exhausted never fails the request: the
+    request goes to a person with a reason that says which step was unavailable.
     """
     confidence = None
+    reasons: list[str] = []
     if settings.mode == "model":
         if client is None:
             raise ValueError("model mode needs an LLM client")
-        verdict = model.classify(client, request.text)
-        category = verdict["category"]
-        confidence = verdict["confidence"]
+        policy = retry_policy(settings)
+        try:
+            verdict = call_with_retry(lambda: model.classify(client, request.text), policy, sleep)
+            category = verdict["category"]
+            confidence = verdict["confidence"]
+        except LLMFailed:
+            category = "other"
+            reasons.append(CLASSIFICATION_UNAVAILABLE)
     else:
         category = classify(request.text)
     article = find_article(articles, category, request.text)
-    reasons = escalation_reasons(request, category, article)
+    reasons += escalation_reasons(request, category, article)
     if confidence is not None and confidence < settings.confidence_threshold:
         reasons.append("low_confidence")
     route = decide_route(reasons)
     draft = None
     if route == DRAFT and article:
-        draft = model.draft(client, request, article) if settings.mode == "model" else compose_draft(request, article)
+        if settings.mode == "model":
+            try:
+                draft = call_with_retry(lambda: model.draft(client, request, article), policy, sleep)
+            except LLMFailed:
+                reasons.append(DRAFT_UNAVAILABLE)
+                route = decide_route(reasons)
+        else:
+            draft = compose_draft(request, article)
     return Result(
         id=request.id,
         category=category,
@@ -53,5 +80,6 @@ def process_batch(
     articles: list[Article],
     settings: Settings,
     client: LLMClient | None = None,
+    sleep=time.sleep,
 ) -> list[Result]:
-    return [process_request(request, articles, settings, client) for request in requests]
+    return [process_request(request, articles, settings, client, sleep) for request in requests]

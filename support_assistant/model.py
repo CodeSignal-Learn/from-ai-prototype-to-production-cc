@@ -6,6 +6,7 @@ parsed here and checked by the caller.
 import json
 
 from .llm.client import LLMClient
+from .llm.errors import LLMMalformed
 from .models import Article, SupportRequest
 
 CATEGORIES = ("billing", "account_access", "returns_refunds", "orders_shipping", "product_issue", "other")
@@ -35,17 +36,20 @@ DRAFT_SYSTEM = (
 def parse_json_answer(text: str) -> dict:
     """Parse the model's JSON, tolerating a Markdown code fence around it.
 
-    An answer that still does not parse is treated as no answer: category other with zero
-    confidence, which the pipeline sends to a person.
+    An answer that still does not parse is a malformed completion: the caller's retry policy
+    decides whether to ask again, and the pipeline falls back to a person after that.
     """
     body = text.strip()
     if body.startswith("```"):
         body = body.split("\n", 1)[1] if "\n" in body else ""
         body = body.rsplit("```", 1)[0]
     try:
-        return json.loads(body)
-    except json.JSONDecodeError:
-        return {"category": "other", "confidence": 0.0, "reason": "model answer was not JSON"}
+        parsed = json.loads(body)
+    except json.JSONDecodeError as error:
+        raise LLMMalformed(f"answer is not JSON: {error}") from error
+    if not isinstance(parsed, dict):
+        raise LLMMalformed("answer is JSON but not an object")
+    return parsed
 
 
 def classify(client: LLMClient, text: str) -> dict:

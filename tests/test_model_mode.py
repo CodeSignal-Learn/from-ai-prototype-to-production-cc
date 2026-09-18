@@ -5,6 +5,7 @@ import pytest
 
 from support_assistant.config import Settings
 from support_assistant.llm.client import ScriptedClient
+from support_assistant.llm.errors import LLMMalformed
 from support_assistant.model import parse_json_answer
 from support_assistant.pipeline import process_request
 
@@ -77,7 +78,6 @@ def test_fenced_json_answer_is_parsed():
     assert parse_json_answer(fenced) == {"category": "billing", "confidence": 0.95, "reason": "duplicate charge"}
 
 
-def test_unparseable_answer_becomes_zero_confidence():
-    verdict_ = parse_json_answer("Sure! This looks like a billing question.")
-    assert verdict_["category"] == "other"
-    assert verdict_["confidence"] == 0.0
+def test_unparseable_answer_is_malformed():
+    with pytest.raises(LLMMalformed):
+        parse_json_answer("Sure! This looks like a billing question.")
