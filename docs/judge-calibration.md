@@ -79,7 +79,7 @@ numbers, which the notes ask of a person, not of the draft.
 
 The runner also counts quotes that do not appear in the draft (`judge_quotes_not_in_draft` in
 every summary; none on this run), and a verdict with such a quote is treated as a flag to read,
-not as evidence.
+not as evidence. The red-team probe runs have none either.
 
 ## How the judge is used, given this
 
@@ -87,8 +87,9 @@ not as evidence.
   judged R3 fail is read by a person before it counts against a release decision. The judge's job
   is to make sure no fail is missed (recall); on this sample it misses four in five, all of them a
   stated rule stretched one step.
-  Nothing deterministic catches that shape: the R5 checks look for promises, numbers, and
-  links, and a stretched rule states none of them. A person reading every draft is the control.
+  Nothing deterministic catches that shape: the outcome-deferral patterns added after the
+  red-team review (`docs/failure-taxonomy.md`) look for promises, and a stretched rule states none.
+  A person reading every draft is the control.
 - **Acceptable rates from a judged run lean optimistic.** The judge is more lenient than the
   reviewer more often than it is stricter: on this sample it passed four R3 fails and scored two
   R4 fails `partial`, which makes three results acceptable that the reviewer does not accept
