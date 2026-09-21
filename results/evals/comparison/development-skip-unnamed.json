@@ -1,0 +1,439 @@
+{
+  "protocol": {
+    "dataset": "v1",
+    "dataset_sha256": "2cf0953962983882b1737d1253c1abe1bc1005bfd1c98f67cef6ba2840b1efb1",
+    "split": "development",
+    "cases": 112,
+    "baseline_prompt": "b65664d16794",
+    "candidate_prompt": "b65664d16794",
+    "baseline_versions": {
+      "draft_policy": "always",
+      "model": "claude-haiku-5-5",
+      "prompt": "b65664d16794",
+      "prompt_variant": "v2"
+    },
+    "candidate_versions": {
+      "draft_policy": "skip_unnamed",
+      "model": "claude-haiku-5-5",
+      "prompt": "b65664d16794",
+      "prompt_variant": "v2"
+    },
+    "baseline_variant": "v2",
+    "candidate_variant": "v2",
+    "judge": {
+      "model": "claude-haiku-5-5",
+      "prompt": "4feda4d1cbbc"
+    },
+    "repeats": {
+      "baseline": 1,
+      "candidate": 1
+    }
+  },
+  "baseline": {
+    "runs": [
+      "v1-development-candidate"
+    ],
+    "per_repeat": [
+      {
+        "acceptable": 83,
+        "R1_pass": 92,
+        "R2_missed": 5,
+        "R2_over": 11,
+        "R3_fail": 8,
+        "R4_fail": 3,
+        "R4_partial": 5,
+        "R5_fail": 4,
+        "drafted": 54,
+        "article_correct": 103
+      }
+    ],
+    "spread": {
+      "acceptable": {
+        "mean": 83.0,
+        "min": 83,
+        "max": 83,
+        "values": [
+          83
+        ]
+      },
+      "R1_pass": {
+        "mean": 92.0,
+        "min": 92,
+        "max": 92,
+        "values": [
+          92
+        ]
+      },
+      "R2_missed": {
+        "mean": 5.0,
+        "min": 5,
+        "max": 5,
+        "values": [
+          5
+        ]
+      },
+      "R2_over": {
+        "mean": 11.0,
+        "min": 11,
+        "max": 11,
+        "values": [
+          11
+        ]
+      },
+      "R3_fail": {
+        "mean": 8.0,
+        "min": 8,
+        "max": 8,
+        "values": [
+          8
+        ]
+      },
+      "R4_fail": {
+        "mean": 3.0,
+        "min": 3,
+        "max": 3,
+        "values": [
+          3
+        ]
+      },
+      "R4_partial": {
+        "mean": 5.0,
+        "min": 5,
+        "max": 5,
+        "values": [
+          5
+        ]
+      },
+      "R5_fail": {
+        "mean": 4.0,
+        "min": 4,
+        "max": 4,
+        "values": [
+          4
+        ]
+      },
+      "drafted": {
+        "mean": 54.0,
+        "min": 54,
+        "max": 54,
+        "values": [
+          54
+        ]
+      },
+      "article_correct": {
+        "mean": 103.0,
+        "min": 103,
+        "max": 103,
+        "values": [
+          103
+        ]
+      }
+    }
+  },
+  "candidate": {
+    "runs": [
+      "v1-development-candidate-skip"
+    ],
+    "per_repeat": [
+      {
+        "acceptable": 83,
+        "R1_pass": 92,
+        "R2_missed": 5,
+        "R2_over": 11,
+        "R3_fail": 8,
+        "R4_fail": 3,
+        "R4_partial": 5,
+        "R5_fail": 4,
+        "drafted": 54,
+        "article_correct": 103
+      }
+    ],
+    "spread": {
+      "acceptable": {
+        "mean": 83.0,
+        "min": 83,
+        "max": 83,
+        "values": [
+          83
+        ]
+      },
+      "R1_pass": {
+        "mean": 92.0,
+        "min": 92,
+        "max": 92,
+        "values": [
+          92
+        ]
+      },
+      "R2_missed": {
+        "mean": 5.0,
+        "min": 5,
+        "max": 5,
+        "values": [
+          5
+        ]
+      },
+      "R2_over": {
+        "mean": 11.0,
+        "min": 11,
+        "max": 11,
+        "values": [
+          11
+        ]
+      },
+      "R3_fail": {
+        "mean": 8.0,
+        "min": 8,
+        "max": 8,
+        "values": [
+          8
+        ]
+      },
+      "R4_fail": {
+        "mean": 3.0,
+        "min": 3,
+        "max": 3,
+        "values": [
+          3
+        ]
+      },
+      "R4_partial": {
+        "mean": 5.0,
+        "min": 5,
+        "max": 5,
+        "values": [
+          5
+        ]
+      },
+      "R5_fail": {
+        "mean": 4.0,
+        "min": 4,
+        "max": 4,
+        "values": [
+          4
+        ]
+      },
+      "drafted": {
+        "mean": 54.0,
+        "min": 54,
+        "max": 54,
+        "values": [
+          54
+        ]
+      },
+      "article_correct": {
+        "mean": 103.0,
+        "min": 103,
+        "max": 103,
+        "values": [
+          103
+        ]
+      }
+    }
+  },
+  "delta_mean": {
+    "acceptable": 0.0,
+    "R1_pass": 0.0,
+    "R2_missed": 0.0,
+    "R2_over": 0.0,
+    "R3_fail": 0.0,
+    "R4_fail": 0.0,
+    "R4_partial": 0.0,
+    "R5_fail": 0.0,
+    "drafted": 0.0,
+    "article_correct": 0.0
+  },
+  "by_category": {
+    "baseline": {
+      "account_access": {
+        "cases": 17,
+        "acceptable_mean": 13.0
+      },
+      "billing": {
+        "cases": 19,
+        "acceptable_mean": 15.0
+      },
+      "orders_shipping": {
+        "cases": 23,
+        "acceptable_mean": 20.0
+      },
+      "other": {
+        "cases": 15,
+        "acceptable_mean": 13.0
+      },
+      "product_issue": {
+        "cases": 17,
+        "acceptable_mean": 11.0
+      },
+      "returns_refunds": {
+        "cases": 21,
+        "acceptable_mean": 11.0
+      }
+    },
+    "candidate": {
+      "account_access": {
+        "cases": 17,
+        "acceptable_mean": 13.0
+      },
+      "billing": {
+        "cases": 19,
+        "acceptable_mean": 15.0
+      },
+      "orders_shipping": {
+        "cases": 23,
+        "acceptable_mean": 20.0
+      },
+      "other": {
+        "cases": 15,
+        "acceptable_mean": 13.0
+      },
+      "product_issue": {
+        "cases": 17,
+        "acceptable_mean": 11.0
+      },
+      "returns_refunds": {
+        "cases": 21,
+        "acceptable_mean": 11.0
+      }
+    }
+  },
+  "by_tag": {
+    "baseline": {
+      "action-required": {
+        "cases": 4,
+        "acceptable_mean": 4.0
+      },
+      "ambiguous": {
+        "cases": 2,
+        "acceptable_mean": 2.0
+      },
+      "hostile": {
+        "cases": 5,
+        "acceptable_mean": 5.0
+      },
+      "injection": {
+        "cases": 2,
+        "acceptable_mean": 2.0
+      },
+      "keywordless": {
+        "cases": 11,
+        "acceptable_mean": 7.0
+      },
+      "legal": {
+        "cases": 3,
+        "acceptable_mean": 3.0
+      },
+      "non-english": {
+        "cases": 1,
+        "acceptable_mean": 0.0
+      },
+      "not-covered": {
+        "cases": 22,
+        "acceptable_mean": 14.0
+      },
+      "not-served": {
+        "cases": 1,
+        "acceptable_mean": 1.0
+      },
+      "overlap": {
+        "cases": 2,
+        "acceptable_mean": 1.0
+      },
+      "pre-sales": {
+        "cases": 3,
+        "acceptable_mean": 3.0
+      },
+      "sensitive": {
+        "cases": 2,
+        "acceptable_mean": 2.0
+      },
+      "three-words": {
+        "cases": 1,
+        "acceptable_mean": 0.0
+      },
+      "two-topics": {
+        "cases": 3,
+        "acceptable_mean": 2.0
+      },
+      "untagged": {
+        "cases": 51,
+        "acceptable_mean": 37.0
+      },
+      "urgent": {
+        "cases": 1,
+        "acceptable_mean": 1.0
+      }
+    },
+    "candidate": {
+      "action-required": {
+        "cases": 4,
+        "acceptable_mean": 4.0
+      },
+      "ambiguous": {
+        "cases": 2,
+        "acceptable_mean": 2.0
+      },
+      "hostile": {
+        "cases": 5,
+        "acceptable_mean": 5.0
+      },
+      "injection": {
+        "cases": 2,
+        "acceptable_mean": 2.0
+      },
+      "keywordless": {
+        "cases": 11,
+        "acceptable_mean": 7.0
+      },
+      "legal": {
+        "cases": 3,
+        "acceptable_mean": 3.0
+      },
+      "non-english": {
+        "cases": 1,
+        "acceptable_mean": 0.0
+      },
+      "not-covered": {
+        "cases": 22,
+        "acceptable_mean": 14.0
+      },
+      "not-served": {
+        "cases": 1,
+        "acceptable_mean": 1.0
+      },
+      "overlap": {
+        "cases": 2,
+        "acceptable_mean": 1.0
+      },
+      "pre-sales": {
+        "cases": 3,
+        "acceptable_mean": 3.0
+      },
+      "sensitive": {
+        "cases": 2,
+        "acceptable_mean": 2.0
+      },
+      "three-words": {
+        "cases": 1,
+        "acceptable_mean": 0.0
+      },
+      "two-topics": {
+        "cases": 3,
+        "acceptable_mean": 2.0
+      },
+      "untagged": {
+        "cases": 51,
+        "acceptable_mean": 37.0
+      },
+      "urgent": {
+        "cases": 1,
+        "acceptable_mean": 1.0
+      }
+    }
+  },
+  "paired": {
+    "improved": [],
+    "regressed": [],
+    "unstable_across_repeats": []
+  }
+}

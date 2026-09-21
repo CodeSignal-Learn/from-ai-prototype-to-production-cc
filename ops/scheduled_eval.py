@@ -31,7 +31,7 @@ from support_assistant.llm.factory import build_client
 SCHEDULED_DIR = RESULTS_DIR / "scheduled"
 NEW_FAILURES = SCHEDULED_DIR / "new-failures.jsonl"
 REFERENCES = {"v1": {"v1": "v1-development-after-repair", "adv-v1": "adv-v1-development-after-repair"},
-              "v2": {"v1": "v1-development-candidate", "adv-v1": None}}
+              "v2": {"v1": "v1-development-candidate", "adv-v1": "adv-v1-development-candidate"}}
 
 
 def compare_with_reference(items: list[dict], reference_items: list[dict]) -> dict:
@@ -116,8 +116,10 @@ def main(argv=None) -> int:
     parser.add_argument("--as-of", required=True, help="date the run stands for, YYYY-MM-DD")
     parser.add_argument("--label", required=True, help="folder name under results/evals/scheduled/")
     parser.add_argument("--traffic", default=None, help="recorded traffic window to score, weighted by request counts")
-    parser.add_argument("--variant", choices=("v1", "v2"), default="v1")
+    parser.add_argument("--variant", choices=("v1", "v2"), default=None,
+                        help="prompt variant to score (default: the configured one, ASSISTANT_PROMPT_VARIANT)")
     args = parser.parse_args(argv)
+    args.variant = args.variant or load_settings().prompt_variant      # the shipped prompts unless told otherwise
     datetime.strptime(args.as_of, "%Y-%m-%d")
 
     settings = dataclasses.replace(load_settings(), mode="model", llm_client="replay", prompt_variant=args.variant)

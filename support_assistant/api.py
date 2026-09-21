@@ -19,7 +19,7 @@ from .llm.client import LLMClient
 from .llm.factory import build_client
 from .pipeline import process_batch, process_request
 from .telemetry.events import EventSink
-from .version import versions
+from .version import APP_VERSION, versions
 
 MAX_BATCH = 200
 
@@ -29,7 +29,7 @@ def create_app(settings: Settings, articles=None, client: LLMClient | None = Non
     if client is None and settings.mode == "model":
         client = build_client(settings)
     sink = EventSink(settings.events_file)
-    app = FastAPI(title="Fernwood support-request assistant", version="2")
+    app = FastAPI(title="Fernwood support-request assistant", version=APP_VERSION)
     app.state.events = sink
 
     def require_key(x_api_key: str | None = Header(default=None)) -> None:

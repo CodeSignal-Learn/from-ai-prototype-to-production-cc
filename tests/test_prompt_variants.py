@@ -32,7 +32,12 @@ def test_v1_prompts_are_unchanged_and_v2_differs():
 def test_versions_carry_the_variant(v2):
     stamped = versions(v2)
     assert stamped["prompt_variant"] == "v2"
-    assert stamped["prompt"] == prompt_version("v2") != versions(Settings(mode="model", llm_client="replay"))["prompt"]
+    assert stamped["prompt"] == prompt_version("v2") != versions(Settings(mode="model", llm_client="replay", prompt_variant="v1"))["prompt"]
+
+
+def test_v2_is_the_default_and_v1_is_one_setting_away():
+    assert Settings().prompt_variant == "v2"
+    assert versions(Settings(mode="model", llm_client="replay", prompt_variant="v1"))["prompt"] == prompt_version("v1")
 
 
 def test_the_variant_is_validated():
@@ -82,7 +87,7 @@ def test_no_answer_in_a_fence_still_counts(make_request, articles, v2):
 
 
 def test_v1_never_interprets_the_marker(make_request, articles):
-    v1 = Settings(mode="model", llm_client="replay")
+    v1 = Settings(mode="model", llm_client="replay", prompt_variant="v1")
     client = ScriptedClient([verdict("billing"), "NO_ANSWER"])
     result = process_request(make_request("Tax", "why was i charged sales tax"), articles, v1, client)
     assert result.draft == "NO_ANSWER" and ARTICLE_DOES_NOT_ANSWER not in result.reasons
@@ -100,3 +105,55 @@ def test_the_recording_salt_separates_repeats_and_an_empty_salt_keeps_old_keys()
     assert recording_key("m", "s", "u", 5, "") == plain
     assert recording_key("m", "s", "u", 5, "repeat-1") != plain
     assert recording_key("m", "s", "u", 5, "repeat-1") != recording_key("m", "s", "u", 5, "repeat-2")
+
+
+# The skip_unnamed draft policy: an optimization measured and rejected (docs/optimization-experiment.md), kept behind a setting.
+
+def test_skip_unnamed_sends_an_unnamed_article_to_a_person_without_a_draft_call(make_request, articles):
+    settings = Settings(mode="model", llm_client="replay", prompt_variant="v2", draft_policy="skip_unnamed")
+    client = ScriptedClient([verdict("billing", None)])   # the classifier names no article; a draft call would find the script empty
+    result = process_request(make_request("Tax", "why was i charged sales tax in oregon"), articles, settings, client)
+    assert result.route == "human_review" and "no_article_named" in result.reasons
+    assert result.draft is None and len(client.calls) == 1
+    assert result.article == "billing-and-invoices"       # the keyword fallback still records which article it would have used
+
+
+def test_skip_unnamed_drafts_when_the_classifier_names_an_article(make_request, articles):
+    settings = Settings(mode="model", llm_client="replay", prompt_variant="v2", draft_policy="skip_unnamed")
+    client = ScriptedClient([verdict("billing", "billing-and-invoices"), "Hi Test, the pending authorization drops off within five business days.\n\nFernwood Outfitters Support"])
+    result = process_request(make_request("Charged twice", "two identical amounts left my account"), articles, settings, client)
+    assert result.route == "draft" and "no_article_named" not in result.reasons and len(client.calls) == 2
+
+
+def test_the_default_policy_still_drafts_from_the_keyword_fallback(make_request, articles):
+    settings = Settings(mode="model", llm_client="replay", prompt_variant="v2")
+    client = ScriptedClient([verdict("billing", None), "NO_ANSWER"])
+    result = process_request(make_request("Tax", "why was i charged sales tax in oregon"), articles, settings, client)
+    assert "no_article_named" not in result.reasons and ARTICLE_DOES_NOT_ANSWER in result.reasons and len(client.calls) == 2
+
+
+def test_the_policy_needs_v2_and_is_stamped_in_versions():
+    with pytest.raises(ValueError, match="needs the v2 prompts"):
+        validate(Settings(prompt_variant="v1", draft_policy="skip_unnamed"))
+    with pytest.raises(ValueError, match="DRAFT_POLICY"):
+        validate(Settings(prompt_variant="v2", draft_policy="sometimes"))
+    assert versions(Settings(mode="model", llm_client="replay", prompt_variant="v2", draft_policy="skip_unnamed"))["draft_policy"] == "skip_unnamed"
+
+
+def test_the_policy_flags_are_validated_like_the_environment(tmp_path, monkeypatch, capsys):
+    """--variant v1 --policy skip_unnamed is refused by the traffic replay and the evaluation runner, as the same
+    values in ASSISTANT_PROMPT_VARIANT and ASSISTANT_DRAFT_POLICY are, before anything runs or is written."""
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    from evals import runner
+    root = Path(__file__).resolve().parent.parent
+    out = tmp_path / "events.jsonl"
+    replay = subprocess.run([sys.executable, "scripts/replay_traffic.py", "data/traffic/week-2.jsonl", "--events", str(out), "--limit", "2",
+                             "--variant", "v1", "--policy", "skip_unnamed"], cwd=root, capture_output=True, text=True)
+    assert replay.returncode == 2 and "needs the v2 prompts" in replay.stderr and not out.exists()
+    monkeypatch.setattr(runner, "run", lambda *args, **kwargs: pytest.fail("the runner ran with an invalid policy"))
+    with pytest.raises(SystemExit) as stopped:
+        runner.main(["--client", "replay", "--no-judge", "--variant", "v1", "--policy", "skip_unnamed", "--label", "never"])
+    assert stopped.value.code == 2 and "needs the v2 prompts" in capsys.readouterr().err

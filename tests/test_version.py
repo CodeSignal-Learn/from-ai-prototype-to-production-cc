@@ -12,7 +12,7 @@ def test_every_result_says_what_produced_it(articles):
     result = process_request(request, articles, settings)
     # No model is called in rules mode; the prompt set is the deployment's, so a containment is not a release.
     assert result.versions == {"app": APP_VERSION, "mode": "rules", "model": None, "prompt": prompt_version(settings.prompt_variant),
-                               "prompt_variant": settings.prompt_variant, "client": None}
+                               "prompt_variant": settings.prompt_variant, "draft_policy": settings.draft_policy, "client": None}
 
 
 def test_model_mode_versions_include_model_prompt_and_client():

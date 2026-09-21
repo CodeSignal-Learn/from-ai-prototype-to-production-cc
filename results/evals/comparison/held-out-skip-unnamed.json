@@ -1,0 +1,523 @@
+{
+  "protocol": {
+    "dataset": "v1",
+    "dataset_sha256": "2cf0953962983882b1737d1253c1abe1bc1005bfd1c98f67cef6ba2840b1efb1",
+    "split": "held_out",
+    "cases": 56,
+    "baseline_prompt": "b65664d16794",
+    "candidate_prompt": "b65664d16794",
+    "baseline_versions": {
+      "draft_policy": "always",
+      "model": "claude-haiku-5-5",
+      "prompt": "b65664d16794",
+      "prompt_variant": "v2"
+    },
+    "candidate_versions": {
+      "draft_policy": "skip_unnamed",
+      "model": "claude-haiku-5-5",
+      "prompt": "b65664d16794",
+      "prompt_variant": "v2"
+    },
+    "baseline_variant": "v2",
+    "candidate_variant": "v2",
+    "judge": {
+      "model": "claude-haiku-5-5",
+      "prompt": "4feda4d1cbbc"
+    },
+    "repeats": {
+      "baseline": 3,
+      "candidate": 3
+    }
+  },
+  "baseline": {
+    "runs": [
+      "v1-held_out-candidate-r1",
+      "v1-held_out-candidate-r2",
+      "v1-held_out-candidate-r3"
+    ],
+    "per_repeat": [
+      {
+        "acceptable": 43,
+        "R1_pass": 46,
+        "R2_missed": 3,
+        "R2_over": 5,
+        "R3_fail": 3,
+        "R4_fail": 0,
+        "R4_partial": 4,
+        "R5_fail": 0,
+        "drafted": 24,
+        "article_correct": 48
+      },
+      {
+        "acceptable": 44,
+        "R1_pass": 47,
+        "R2_missed": 2,
+        "R2_over": 5,
+        "R3_fail": 3,
+        "R4_fail": 0,
+        "R4_partial": 3,
+        "R5_fail": 0,
+        "drafted": 23,
+        "article_correct": 49
+      },
+      {
+        "acceptable": 43,
+        "R1_pass": 47,
+        "R2_missed": 3,
+        "R2_over": 5,
+        "R3_fail": 4,
+        "R4_fail": 1,
+        "R4_partial": 3,
+        "R5_fail": 0,
+        "drafted": 24,
+        "article_correct": 50
+      }
+    ],
+    "spread": {
+      "acceptable": {
+        "mean": 43.33,
+        "min": 43,
+        "max": 44,
+        "values": [
+          43,
+          44,
+          43
+        ]
+      },
+      "R1_pass": {
+        "mean": 46.67,
+        "min": 46,
+        "max": 47,
+        "values": [
+          46,
+          47,
+          47
+        ]
+      },
+      "R2_missed": {
+        "mean": 2.67,
+        "min": 2,
+        "max": 3,
+        "values": [
+          3,
+          2,
+          3
+        ]
+      },
+      "R2_over": {
+        "mean": 5.0,
+        "min": 5,
+        "max": 5,
+        "values": [
+          5,
+          5,
+          5
+        ]
+      },
+      "R3_fail": {
+        "mean": 3.33,
+        "min": 3,
+        "max": 4,
+        "values": [
+          3,
+          3,
+          4
+        ]
+      },
+      "R4_fail": {
+        "mean": 0.33,
+        "min": 0,
+        "max": 1,
+        "values": [
+          0,
+          0,
+          1
+        ]
+      },
+      "R4_partial": {
+        "mean": 3.33,
+        "min": 3,
+        "max": 4,
+        "values": [
+          4,
+          3,
+          3
+        ]
+      },
+      "R5_fail": {
+        "mean": 0.0,
+        "min": 0,
+        "max": 0,
+        "values": [
+          0,
+          0,
+          0
+        ]
+      },
+      "drafted": {
+        "mean": 23.67,
+        "min": 23,
+        "max": 24,
+        "values": [
+          24,
+          23,
+          24
+        ]
+      },
+      "article_correct": {
+        "mean": 49.0,
+        "min": 48,
+        "max": 50,
+        "values": [
+          48,
+          49,
+          50
+        ]
+      }
+    }
+  },
+  "candidate": {
+    "runs": [
+      "v1-held_out-candidate-skip-r1",
+      "v1-held_out-candidate-skip-r2",
+      "v1-held_out-candidate-skip-r3"
+    ],
+    "per_repeat": [
+      {
+        "acceptable": 43,
+        "R1_pass": 46,
+        "R2_missed": 3,
+        "R2_over": 5,
+        "R3_fail": 3,
+        "R4_fail": 0,
+        "R4_partial": 4,
+        "R5_fail": 0,
+        "drafted": 24,
+        "article_correct": 48
+      },
+      {
+        "acceptable": 44,
+        "R1_pass": 47,
+        "R2_missed": 2,
+        "R2_over": 5,
+        "R3_fail": 3,
+        "R4_fail": 0,
+        "R4_partial": 3,
+        "R5_fail": 0,
+        "drafted": 23,
+        "article_correct": 49
+      },
+      {
+        "acceptable": 43,
+        "R1_pass": 47,
+        "R2_missed": 3,
+        "R2_over": 5,
+        "R3_fail": 4,
+        "R4_fail": 1,
+        "R4_partial": 3,
+        "R5_fail": 0,
+        "drafted": 24,
+        "article_correct": 50
+      }
+    ],
+    "spread": {
+      "acceptable": {
+        "mean": 43.33,
+        "min": 43,
+        "max": 44,
+        "values": [
+          43,
+          44,
+          43
+        ]
+      },
+      "R1_pass": {
+        "mean": 46.67,
+        "min": 46,
+        "max": 47,
+        "values": [
+          46,
+          47,
+          47
+        ]
+      },
+      "R2_missed": {
+        "mean": 2.67,
+        "min": 2,
+        "max": 3,
+        "values": [
+          3,
+          2,
+          3
+        ]
+      },
+      "R2_over": {
+        "mean": 5.0,
+        "min": 5,
+        "max": 5,
+        "values": [
+          5,
+          5,
+          5
+        ]
+      },
+      "R3_fail": {
+        "mean": 3.33,
+        "min": 3,
+        "max": 4,
+        "values": [
+          3,
+          3,
+          4
+        ]
+      },
+      "R4_fail": {
+        "mean": 0.33,
+        "min": 0,
+        "max": 1,
+        "values": [
+          0,
+          0,
+          1
+        ]
+      },
+      "R4_partial": {
+        "mean": 3.33,
+        "min": 3,
+        "max": 4,
+        "values": [
+          4,
+          3,
+          3
+        ]
+      },
+      "R5_fail": {
+        "mean": 0.0,
+        "min": 0,
+        "max": 0,
+        "values": [
+          0,
+          0,
+          0
+        ]
+      },
+      "drafted": {
+        "mean": 23.67,
+        "min": 23,
+        "max": 24,
+        "values": [
+          24,
+          23,
+          24
+        ]
+      },
+      "article_correct": {
+        "mean": 49.0,
+        "min": 48,
+        "max": 50,
+        "values": [
+          48,
+          49,
+          50
+        ]
+      }
+    }
+  },
+  "delta_mean": {
+    "acceptable": 0.0,
+    "R1_pass": 0.0,
+    "R2_missed": 0.0,
+    "R2_over": 0.0,
+    "R3_fail": 0.0,
+    "R4_fail": 0.0,
+    "R4_partial": 0.0,
+    "R5_fail": 0.0,
+    "drafted": 0.0,
+    "article_correct": 0.0
+  },
+  "by_category": {
+    "baseline": {
+      "account_access": {
+        "cases": 8,
+        "acceptable_mean": 5.0
+      },
+      "billing": {
+        "cases": 8,
+        "acceptable_mean": 6.33
+      },
+      "orders_shipping": {
+        "cases": 12,
+        "acceptable_mean": 8.67
+      },
+      "other": {
+        "cases": 8,
+        "acceptable_mean": 8.0
+      },
+      "product_issue": {
+        "cases": 10,
+        "acceptable_mean": 8.67
+      },
+      "returns_refunds": {
+        "cases": 10,
+        "acceptable_mean": 6.67
+      }
+    },
+    "candidate": {
+      "account_access": {
+        "cases": 8,
+        "acceptable_mean": 5.0
+      },
+      "billing": {
+        "cases": 8,
+        "acceptable_mean": 6.33
+      },
+      "orders_shipping": {
+        "cases": 12,
+        "acceptable_mean": 8.67
+      },
+      "other": {
+        "cases": 8,
+        "acceptable_mean": 8.0
+      },
+      "product_issue": {
+        "cases": 10,
+        "acceptable_mean": 8.67
+      },
+      "returns_refunds": {
+        "cases": 10,
+        "acceptable_mean": 6.67
+      }
+    }
+  },
+  "by_tag": {
+    "baseline": {
+      "action-required": {
+        "cases": 2,
+        "acceptable_mean": 2.0
+      },
+      "hostile": {
+        "cases": 1,
+        "acceptable_mean": 1.0
+      },
+      "keywordless": {
+        "cases": 1,
+        "acceptable_mean": 0.0
+      },
+      "legal": {
+        "cases": 3,
+        "acceptable_mean": 3.0
+      },
+      "not-covered": {
+        "cases": 10,
+        "acceptable_mean": 6.33
+      },
+      "outside-policy": {
+        "cases": 2,
+        "acceptable_mean": 0.67
+      },
+      "overlap": {
+        "cases": 1,
+        "acceptable_mean": 1.0
+      },
+      "oversized": {
+        "cases": 1,
+        "acceptable_mean": 1.0
+      },
+      "sensitive": {
+        "cases": 3,
+        "acceptable_mean": 3.0
+      },
+      "spam": {
+        "cases": 1,
+        "acceptable_mean": 1.0
+      },
+      "three-words": {
+        "cases": 1,
+        "acceptable_mean": 1.0
+      },
+      "two-topics": {
+        "cases": 2,
+        "acceptable_mean": 1.67
+      },
+      "untagged": {
+        "cases": 28,
+        "acceptable_mean": 21.67
+      },
+      "urgent": {
+        "cases": 2,
+        "acceptable_mean": 2.0
+      }
+    },
+    "candidate": {
+      "action-required": {
+        "cases": 2,
+        "acceptable_mean": 2.0
+      },
+      "hostile": {
+        "cases": 1,
+        "acceptable_mean": 1.0
+      },
+      "keywordless": {
+        "cases": 1,
+        "acceptable_mean": 0.0
+      },
+      "legal": {
+        "cases": 3,
+        "acceptable_mean": 3.0
+      },
+      "not-covered": {
+        "cases": 10,
+        "acceptable_mean": 6.33
+      },
+      "outside-policy": {
+        "cases": 2,
+        "acceptable_mean": 0.67
+      },
+      "overlap": {
+        "cases": 1,
+        "acceptable_mean": 1.0
+      },
+      "oversized": {
+        "cases": 1,
+        "acceptable_mean": 1.0
+      },
+      "sensitive": {
+        "cases": 3,
+        "acceptable_mean": 3.0
+      },
+      "spam": {
+        "cases": 1,
+        "acceptable_mean": 1.0
+      },
+      "three-words": {
+        "cases": 1,
+        "acceptable_mean": 1.0
+      },
+      "two-topics": {
+        "cases": 2,
+        "acceptable_mean": 1.67
+      },
+      "untagged": {
+        "cases": 28,
+        "acceptable_mean": 21.67
+      },
+      "urgent": {
+        "cases": 2,
+        "acceptable_mean": 2.0
+      }
+    }
+  },
+  "paired": {
+    "improved": [],
+    "regressed": [],
+    "unstable_across_repeats": [
+      "EV-3035",
+      "EV-3093",
+      "EV-3097",
+      "EV-3122",
+      "EV-3132",
+      "EV-3141",
+      "EV-3159"
+    ]
+  }
+}

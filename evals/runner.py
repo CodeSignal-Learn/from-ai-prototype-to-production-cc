@@ -23,7 +23,7 @@ from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
-from support_assistant.config import Settings, load_settings
+from support_assistant.config import Settings, load_settings, validate
 from support_assistant.knowledge import load_articles
 from support_assistant.llm.client import LLMClient
 from support_assistant.llm.errors import LLMFailed
@@ -263,6 +263,7 @@ def main(argv=None) -> int:
     parser.add_argument("--no-judge", action="store_true", help="deterministic criteria only")
     parser.add_argument("--variant", choices=("v1", "v2"), default=None, help="prompt variant; overrides ASSISTANT_PROMPT_VARIANT")
     parser.add_argument("--repeat", type=int, default=0, help="repeat number for a variability study; 0 uses the plain recordings")
+    parser.add_argument("--policy", choices=("always", "skip_unnamed"), default=None, help="draft policy; overrides ASSISTANT_DRAFT_POLICY")
     parser.add_argument("--label", required=True, help="run id suffix; the run is written to results/evals/<dataset>-<split>-<label>/")
     args = parser.parse_args(argv)
 
@@ -271,9 +272,15 @@ def main(argv=None) -> int:
         overrides["llm_client"] = args.client
     if args.variant:
         overrides["prompt_variant"] = args.variant
+    if args.policy:
+        overrides["draft_policy"] = args.policy
     if args.repeat:
         overrides["recording_salt"] = f"repeat-{args.repeat}"
     settings = dataclasses.replace(load_settings(), **overrides)
+    try:
+        validate(settings)                   # the flags are checked like the variables they override
+    except ValueError as error:
+        parser.error(f"invalid settings after the flags: {error}")
     if args.record:
         from support_assistant.llm.live import LiveClient
         from support_assistant.llm.replay import RecordingClient

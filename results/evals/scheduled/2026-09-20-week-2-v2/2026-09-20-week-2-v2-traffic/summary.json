@@ -1,0 +1,549 @@
+{
+  "run_id": "2026-09-20-week-2-v2-traffic",
+  "created_at": "2026-10-13T22:45:52+00:00",
+  "dataset": "v1",
+  "dataset_sha256": "2cf0953962983882b1737d1253c1abe1bc1005bfd1c98f67cef6ba2840b1efb1",
+  "split": "all",
+  "case_filter": {
+    "cases": 109,
+    "source": "case_ids"
+  },
+  "versions": {
+    "app": "2.1.0",
+    "mode": "model",
+    "model": "claude-haiku-5-5",
+    "prompt": "b65664d16794",
+    "prompt_variant": "v2",
+    "client": "replay"
+  },
+  "rubric_version": "1.1",
+  "judge": {
+    "model": "claude-haiku-5-5",
+    "prompt": "4feda4d1cbbc"
+  },
+  "judge_quotes_not_in_draft": [],
+  "cases": 109,
+  "drafted": 51,
+  "judged": 109,
+  "unjudged": 0,
+  "acceptable": 80,
+  "acceptable_rate": 0.734,
+  "criteria": {
+    "R1": {
+      "pass": 89,
+      "fail": 20
+    },
+    "R2": {
+      "pass": 93,
+      "over": 11,
+      "missed": 5
+    },
+    "R3": {
+      "pass": 101,
+      "fail": 8
+    },
+    "R4": {
+      "pass": 101,
+      "partial": 5,
+      "fail": 3
+    },
+    "R5": {
+      "pass": 105,
+      "fail": 4
+    }
+  },
+  "article_correct": 100,
+  "by_category": {
+    "account_access": {
+      "cases": 17,
+      "R1_pass": 13,
+      "R2_missed": 1,
+      "R2_over": 3,
+      "R3_fail": 0,
+      "R4_not_pass": 2,
+      "R5_fail": 0,
+      "acceptable": 13
+    },
+    "billing": {
+      "cases": 18,
+      "R1_pass": 16,
+      "R2_missed": 0,
+      "R2_over": 2,
+      "R3_fail": 2,
+      "R4_not_pass": 1,
+      "R5_fail": 1,
+      "acceptable": 14
+    },
+    "orders_shipping": {
+      "cases": 22,
+      "R1_pass": 21,
+      "R2_missed": 0,
+      "R2_over": 1,
+      "R3_fail": 1,
+      "R4_not_pass": 2,
+      "R5_fail": 0,
+      "acceptable": 19
+    },
+    "other": {
+      "cases": 15,
+      "R1_pass": 13,
+      "R2_missed": 0,
+      "R2_over": 0,
+      "R3_fail": 0,
+      "R4_not_pass": 0,
+      "R5_fail": 0,
+      "acceptable": 13
+    },
+    "product_issue": {
+      "cases": 16,
+      "R1_pass": 13,
+      "R2_missed": 1,
+      "R2_over": 1,
+      "R3_fail": 3,
+      "R4_not_pass": 0,
+      "R5_fail": 2,
+      "acceptable": 10
+    },
+    "returns_refunds": {
+      "cases": 21,
+      "R1_pass": 13,
+      "R2_missed": 3,
+      "R2_over": 4,
+      "R3_fail": 2,
+      "R4_not_pass": 3,
+      "R5_fail": 1,
+      "acceptable": 11
+    }
+  },
+  "by_tag": {
+    "action-required": {
+      "cases": 4,
+      "acceptable": 4
+    },
+    "ambiguous": {
+      "cases": 2,
+      "acceptable": 2
+    },
+    "hostile": {
+      "cases": 5,
+      "acceptable": 5
+    },
+    "injection": {
+      "cases": 2,
+      "acceptable": 2
+    },
+    "keywordless": {
+      "cases": 10,
+      "acceptable": 6
+    },
+    "legal": {
+      "cases": 3,
+      "acceptable": 3
+    },
+    "non-english": {
+      "cases": 1,
+      "acceptable": 0
+    },
+    "not-covered": {
+      "cases": 22,
+      "acceptable": 14
+    },
+    "not-served": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "overlap": {
+      "cases": 2,
+      "acceptable": 1
+    },
+    "pre-sales": {
+      "cases": 3,
+      "acceptable": 3
+    },
+    "sensitive": {
+      "cases": 2,
+      "acceptable": 2
+    },
+    "three-words": {
+      "cases": 1,
+      "acceptable": 0
+    },
+    "two-topics": {
+      "cases": 3,
+      "acceptable": 2
+    },
+    "urgent": {
+      "cases": 1,
+      "acceptable": 1
+    }
+  },
+  "failures": [
+    {
+      "id": "EV-3004",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/human_review, expected account_access/draft"
+    },
+    {
+      "id": "EV-3004",
+      "criterion": "R2",
+      "verdict": "over",
+      "evidence": "article_does_not_answer"
+    },
+    {
+      "id": "EV-3007",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "Exchanges for a different size or color can be started from the Orders page: choose the item, then print the prepaid return label.",
+        "Return shipping is free for exchanges, and the replacement ships as soon as the carrier scans your return package.",
+        "For refunds, the 7 dollar label fee is waived when we sent the wrong item."
+      ]
+    },
+    {
+      "id": "EV-3007",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "Our policy doesn't cover how to swap an item we sent in error, so a specialist will follow up with you on the best way to get the women's medium fleece to you."
+    },
+    {
+      "id": "EV-3008",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "Since the carrier delivered your return about two weeks ago, you're past the window in our policy where we check the return with our warehouse."
+      ]
+    },
+    {
+      "id": "EV-3011",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got orders_shipping/human_review, expected other/human_review"
+    },
+    {
+      "id": "EV-3018",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got billing/human_review, expected billing/draft"
+    },
+    {
+      "id": "EV-3018",
+      "criterion": "R2",
+      "verdict": "over",
+      "evidence": "article_does_not_answer"
+    },
+    {
+      "id": "EV-3021",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "Flat or clumpy down can often recover once it is fully dry, so the tennis balls are worth trying during drying."
+      ]
+    },
+    {
+      "id": "EV-3023",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got billing/human_review, expected billing/draft"
+    },
+    {
+      "id": "EV-3023",
+      "criterion": "R2",
+      "verdict": "over",
+      "evidence": "article_does_not_answer"
+    },
+    {
+      "id": "EV-3031",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "Your card may show a pending authorization alongside the settled charge, which can make an amount look different or doubled for a day or two."
+      ]
+    },
+    {
+      "id": "EV-3031",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "The article does not explain a difference of this kind, such as the $4.30 gap between your confirmation and the charge, so a specialist will follow up with you on that."
+    },
+    {
+      "id": "EV-3031",
+      "criterion": "R5",
+      "verdict": "fail",
+      "evidence": "ungrounded_number"
+    },
+    {
+      "id": "EV-3038",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "Hi Agnieszka,"
+      ]
+    },
+    {
+      "id": "EV-3050",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/human_review, expected account_access/draft"
+    },
+    {
+      "id": "EV-3050",
+      "criterion": "R2",
+      "verdict": "over",
+      "evidence": "article_does_not_answer"
+    },
+    {
+      "id": "EV-3059",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/human_review, expected account_access/draft"
+    },
+    {
+      "id": "EV-3059",
+      "criterion": "R2",
+      "verdict": "over",
+      "evidence": "article_does_not_answer"
+    },
+    {
+      "id": "EV-3064",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/draft, expected account_access/human_review"
+    },
+    {
+      "id": "EV-3064",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3064",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "You can change the email address on your account yourself from the Account settings page."
+    },
+    {
+      "id": "EV-3068",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "\"For your order from last week, I don't have order-tracking details available here, so a specialist will follow up with you on that.\""
+    },
+    {
+      "id": "EV-3072",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "The article does not state when orders leave the warehouse, so the draft's deferral is supported, but the reviewer notes say an acceptable reply must state that orders placed after 2 pm or on weekends leave the next business day, which the knowledge base the reviewer expects covers; the draft defers"
+    },
+    {
+      "id": "EV-3086",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "Since your tracking has not changed since Monday, a specialist will follow up with you about your order."
+      ]
+    },
+    {
+      "id": "EV-3092",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "\"If it is more than five business days past its estimate, please contact us again and we will trace it with the carrier.\" The draft covers the tracing rule and weather/peak-season extension, but it does not say that a package more than five business days late can be traced, and it frames the contact"
+    },
+    {
+      "id": "EV-3095",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got orders_shipping/human_review, expected orders_shipping/draft"
+    },
+    {
+      "id": "EV-3095",
+      "criterion": "R2",
+      "verdict": "over",
+      "evidence": "article_does_not_answer"
+    },
+    {
+      "id": "EV-3103",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got returns_refunds/human_review, expected returns_refunds/draft"
+    },
+    {
+      "id": "EV-3103",
+      "criterion": "R2",
+      "verdict": "over",
+      "evidence": "article_does_not_answer"
+    },
+    {
+      "id": "EV-3105",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got returns_refunds/human_review, expected returns_refunds/draft"
+    },
+    {
+      "id": "EV-3105",
+      "criterion": "R2",
+      "verdict": "over",
+      "evidence": "article_does_not_answer"
+    },
+    {
+      "id": "EV-3106",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got returns_refunds/draft, expected returns_refunds/human_review"
+    },
+    {
+      "id": "EV-3106",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3106",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "The article does not cover gift returns without an order, and the draft says so and defers to a specialist, which matches the reviewer notes; however, it pads the reply with unrelated policy details (the 7 dollar refund label fee and exchange shipping rules) that the customer did not ask about, whic"
+    },
+    {
+      "id": "EV-3108",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got returns_refunds/draft, expected returns_refunds/human_review"
+    },
+    {
+      "id": "EV-3108",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3109",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got returns_refunds/human_review, expected returns_refunds/draft"
+    },
+    {
+      "id": "EV-3109",
+      "criterion": "R2",
+      "verdict": "over",
+      "evidence": "unverifiable_promise"
+    },
+    {
+      "id": "EV-3109",
+      "criterion": "R5",
+      "verdict": "fail",
+      "evidence": "unverifiable_promise"
+    },
+    {
+      "id": "EV-3115",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got product_issue/draft, expected returns_refunds/draft"
+    },
+    {
+      "id": "EV-3115",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "The reviewer notes say the reply must say the return can be started from the Orders page and that no label fee applies when an item arrives damaged, but the article only covers warranty claims, so the draft never mentions the Orders page or the label fee and instead treats the issue as a warranty cl"
+    },
+    {
+      "id": "EV-3116",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got returns_refunds/draft, expected returns_refunds/human_review"
+    },
+    {
+      "id": "EV-3116",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3119",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got returns_refunds/human_review, expected returns_refunds/draft"
+    },
+    {
+      "id": "EV-3119",
+      "criterion": "R2",
+      "verdict": "over",
+      "evidence": "low_confidence"
+    },
+    {
+      "id": "EV-3121",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "Since your jacket was bought last January and the zipper split after eight months, it falls within that coverage period."
+      ]
+    },
+    {
+      "id": "EV-3126",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got product_issue/human_review, expected product_issue/draft"
+    },
+    {
+      "id": "EV-3126",
+      "criterion": "R2",
+      "verdict": "over",
+      "evidence": "unverifiable_promise"
+    },
+    {
+      "id": "EV-3126",
+      "criterion": "R5",
+      "verdict": "fail",
+      "evidence": "unverifiable_promise"
+    },
+    {
+      "id": "EV-3135",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "Since your pack was purchased last autumn, it falls within that window."
+      ]
+    },
+    {
+      "id": "EV-3138",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got product_issue/draft, expected product_issue/human_review"
+    },
+    {
+      "id": "EV-3138",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3138",
+      "criterion": "R5",
+      "verdict": "fail",
+      "evidence": "mentions 'without photos'"
+    },
+    {
+      "id": "EV-3154",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got product_issue/human_review, expected other/human_review"
+    },
+    {
+      "id": "EV-3162",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got other/human_review, expected product_issue/human_review"
+    }
+  ],
+  "median_seconds": 0.0,
+  "usage": {
+    "pipeline": {
+      "calls": 416,
+      "input_tokens": 343295,
+      "output_tokens": 38797
+    },
+    "judge": {
+      "calls": 112,
+      "input_tokens": 176854,
+      "output_tokens": 19878
+    }
+  }
+}
