@@ -1,3 +1,4 @@
+from .intake import SENSITIVE_MASKED
 from .models import Article, SupportRequest
 from .security import detect_instruction
 
@@ -31,6 +32,10 @@ def escalation_reasons(request: SupportRequest, category: str, article: Article 
         reasons.append("instruction_to_assistant")
     if "oversized" in request.flags:
         reasons.append("oversized_request")
+    if SENSITIVE_MASKED in request.flags:
+        # The number is already masked. By policy a person answers a request that carried card
+        # data, tells the customer not to send it, and checks what was sent.
+        reasons.append("sensitive_data")
     return reasons
 
 
