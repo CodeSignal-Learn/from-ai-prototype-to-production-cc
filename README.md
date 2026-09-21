@@ -22,6 +22,8 @@ python3 -m evals.runner --dataset v1 --split development --client replay --label
 python3 -m evals.calibration --run v1-development-baseline --human evals/datasets/v1/human_judgments.jsonl
 ASSISTANT_PROMPT_VARIANT=v2 python3 -m support_assistant.cli data/requests.jsonl --mode model   # the candidate prompts (live)
 python3 -m evals.report --baseline v1-held_out-baseline-r1 v1-held_out-baseline-r2 v1-held_out-baseline-r3 --candidate v1-held_out-candidate-r1 v1-held_out-candidate-r2 v1-held_out-candidate-r3
+python3 -m support_assistant.cli data/requests.jsonl --mode model --client replay --events results/events/batch.jsonl   # write a trace per request
+python3 -m support_assistant.telemetry.metrics results/events/batch.jsonl --input-rate 1.00 --output-rate 5.00        # latency, errors, usage, cost
 ```
 
 Settings are read from `ASSISTANT_*` environment variables (mode, model, client, prompt variant,
@@ -34,6 +36,8 @@ trial results, and the go or no-go recommendation. The evaluation suite lives in
 the rubric (`evals/rubric.md`), the versioned datasets, the runner, the judge, the judge
 calibration, and the baseline-versus-candidate report; runs are written under `results/evals/`.
 Evaluation findings are in `docs/eval-baseline.md`, `docs/judge-calibration.md`,
-`docs/failure-taxonomy.md`, and `docs/eval-comparison.md`.
+`docs/failure-taxonomy.md`, and `docs/eval-comparison.md`. Every request emits a trace of
+structured events (`support_assistant/telemetry/`, `docs/telemetry.md`), written to the file in
+`ASSISTANT_EVENTS_FILE`; events carry no customer or draft text.
 
 The requests in `data/` are synthetic samples; no real customer data is stored in this repository.

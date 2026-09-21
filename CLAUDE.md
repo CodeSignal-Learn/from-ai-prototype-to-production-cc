@@ -19,6 +19,10 @@ versioned case set, `evals/runner.py` runs a split and counts the deterministic 
 human judgments, `evals/report.py` compares a baseline and a candidate over repeated runs. Runs
 are written to `results/evals/<run-id>/`. Two prompt variants live in `model.py`: `v1` (shipped)
 and `v2` (the candidate, `ASSISTANT_PROMPT_VARIANT=v2`); results and `/health` stamp the variant.
+`support_assistant/telemetry/` emits one trace per request: a `request` event, one event per
+step with its duration and tokens (`trace.py`), written as JSON lines by `EventSink`
+(`ASSISTANT_EVENTS_FILE`); `telemetry/metrics.py` recomputes latency, errors, usage, and cost
+from explicit rates (`ASSISTANT_INPUT_RATE_PER_MILLION`, `ASSISTANT_OUTPUT_RATE_PER_MILLION`).
 
 ## Boundaries
 - Drafts are never sent. `Result.sent` stays `False`. The only network calls in this codebase are
@@ -38,6 +42,8 @@ and `v2` (the candidate, `ASSISTANT_PROMPT_VARIANT=v2`); results and `/health` s
 - Categories are `billing`, `account_access`, `returns_refunds`, `orders_shipping`,
   `product_issue`, `other`. `other` always goes to human review.
 - Knowledge articles in `kb/` are the support team's content. Do not edit them for a code change.
+- Events carry ids, counts, durations, hashes, and lengths, never customer text or draft text,
+  and never a judgment about draft quality. Clocks and sleeps are injected; tests never wait.
 - Prompts are versioned by content hash and recordings are keyed by prompt. Editing a `v1`
   prompt invalidates every recording and every evaluation run made with it; a new prompt is a
   new variant, compared on the held-out split before it becomes the default.

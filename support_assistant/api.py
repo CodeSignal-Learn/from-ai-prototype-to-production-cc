@@ -18,6 +18,7 @@ from .knowledge import load_articles
 from .llm.client import LLMClient
 from .llm.factory import build_client
 from .pipeline import process_batch, process_request
+from .telemetry.events import EventSink
 from .version import versions
 
 MAX_BATCH = 200
@@ -27,7 +28,9 @@ def create_app(settings: Settings, articles=None, client: LLMClient | None = Non
     articles = load_articles(settings.knowledge_dir) if articles is None else articles
     if client is None and settings.mode == "model":
         client = build_client(settings)
+    sink = EventSink(settings.events_file)
     app = FastAPI(title="Fernwood support-request assistant", version="2")
+    app.state.events = sink
 
     def require_key(x_api_key: str | None = Header(default=None)) -> None:
         if settings.api_key is None:
@@ -45,6 +48,7 @@ def create_app(settings: Settings, articles=None, client: LLMClient | None = Non
             "concurrency": settings.concurrency,
             "articles": len(articles),
             "versions": versions(settings),
+            "events_file": str(settings.events_file) if settings.events_file else None,
         }
 
     @app.post("/requests", dependencies=[Depends(require_key)])
@@ -53,7 +57,7 @@ def create_app(settings: Settings, articles=None, client: LLMClient | None = Non
             request = parse_request(record)
         except IntakeError as error:
             raise HTTPException(status_code=400, detail=str(error)) from error
-        return asdict(process_request(request, articles, settings, client))
+        return asdict(process_request(request, articles, settings, client, sink=sink))
 
     @app.post("/batches", dependencies=[Depends(require_key)])
     def batch(records: list[dict]):
@@ -65,7 +69,7 @@ def create_app(settings: Settings, articles=None, client: LLMClient | None = Non
                 requests.append(parse_request(record))
             except IntakeError as error:
                 rejected.append({"index": index, "reason": str(error)})
-        results = process_batch(requests, articles, settings, client)
+        results = process_batch(requests, articles, settings, client, sink=sink)
         return {"results": [asdict(result) for result in results], "rejected": rejected}
 
     return app

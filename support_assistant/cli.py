@@ -31,14 +31,16 @@ def main(argv=None) -> int:
     parser.add_argument("--client", choices=["live", "replay"], default=None, help="overrides ASSISTANT_LLM_CLIENT")
     parser.add_argument("--resume", action="store_true", help="skip requests already present in --out and append the rest")
     parser.add_argument("--concurrency", type=int, default=None, help="overrides ASSISTANT_CONCURRENCY")
+    parser.add_argument("--events", default=None, help="JSONL event log to append to (overrides ASSISTANT_EVENTS_FILE)")
     args = parser.parse_args(argv)
     if args.resume and not args.out:
         parser.error("--resume needs --out")
 
     settings = load_settings()
-    overrides = {name: value for name, value in (("mode", args.mode), ("llm_client", args.client), ("knowledge_dir", args.kb), ("concurrency", args.concurrency)) if value}
-    if "knowledge_dir" in overrides:
-        overrides["knowledge_dir"] = Path(overrides["knowledge_dir"])
+    overrides = {name: value for name, value in (("mode", args.mode), ("llm_client", args.client), ("knowledge_dir", args.kb), ("concurrency", args.concurrency), ("events_file", args.events)) if value}
+    for name in ("knowledge_dir", "events_file"):
+        if name in overrides:
+            overrides[name] = Path(overrides[name])
     settings = dataclasses.replace(settings, **overrides)
 
     rejected: list = []
@@ -62,6 +64,8 @@ def main(argv=None) -> int:
     print(summarize(results))
     if client is not None:
         print(f"\nModel calls: {client.usage.calls}, input tokens: {client.usage.input_tokens}, output tokens: {client.usage.output_tokens}")
+    if settings.events_file:
+        print(f"Events appended to {settings.events_file}")
 
     if args.out:
         out_path = Path(args.out)
