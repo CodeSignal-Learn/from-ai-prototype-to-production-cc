@@ -80,16 +80,16 @@ R4 made the judge read the reviewer notes more literally, which is why kappa sli
 
 The runner also counts quotes that do not appear in the draft (`judge_quotes_not_in_draft` in
 every summary; none on this run), and a verdict with such a quote is treated as a flag to read,
-not as evidence.
+not as evidence. On the red-team probes it caught one: on ADV-4007 the judge quoted the reviewer
+notes as an unsupported statement instead of a sentence of the draft.
 
 ## How the judge is used, given this
 
 - **R3 fail from the judge is a flag, not a verdict.** Every judged R3 fail is read by a person
   before it counts against a release decision. The judge's job is to make sure no fail is missed
   (recall); on this sample it misses one in six, and the one it missed is the outcome-deferral shape.
-  Nothing deterministic catches that shape yet: the R5 promise patterns in `security.py` only
-  match actions stated as done or promised, and `docs/eval-baseline.md` (finding 3) proposes
-  adding it.
+  Since the red-team repair, the outcome-deferral promise patterns in `security.py` are the
+  deterministic backstop for it (`docs/failure-taxonomy.md`).
 - **Acceptable rates from a judged run lean pessimistic; they are not a guaranteed lower
   bound.** The judge is stricter than the reviewer far more often than it is more lenient: on
   this sample six R3 fails and five R4 verdicts would be passes to a person, while it passed one

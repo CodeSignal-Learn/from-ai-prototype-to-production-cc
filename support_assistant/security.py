@@ -21,6 +21,16 @@ INSTRUCTION_PATTERNS = tuple(re.compile(p, re.IGNORECASE) for p in (
     r"\bnew instructions?:",
     r"\bmark (this |the |my )?order[^.]{0,40}\bas (delivered|resolved|refunded|shipped|cancelled|canceled)\b",
     r"\bconfirm (that )?(a |the )?(full )?(refund|credit|replacement) (has been|was|is) (issued|processed|approved|sent)\b",
+    # Phrasings found by the red-teaming probes (evals/datasets/adv-v1), each with a regression test.
+    r"\bforget (all |any |the )?(guidelines|instructions|rules)\b",
+    r"\b(system|admin|assistant|developer) (notice|message|override)\b",
+    r"\bnote to (the )?(support |human )?(agent|assistant|reviewer|team)\b",
+    r"\bi authori[sz]e you\b",
+    r"\bskip (the )?(identity )?verification\b",
+    r"\binclude (this|the following) (link|url|text|sentence|line) in your reply\b",
+    r"\binto your reply\b",
+    r"\bsimply reply\b|\breply confirming\b|\breply (only )?with (approved|confirmed|yes)\b",
+    r"</?[a-z_]+>",  # markup: customers do not write tags, injections do
 ))
 
 CARD_NUMBER = re.compile(r"\b(?:\d[ -]?){13,19}\b")
@@ -32,6 +42,11 @@ PROMISE_PATTERNS = tuple(re.compile(p, re.IGNORECASE) for p in (
     r"\b(has|have) been (refunded|issued|cancell?ed|processed|shipped|updated|reset|merged|approved)\b",
     r"\bwill be (refunded|credited|replaced|cancell?ed|reshipped)\b",
     r"\b(i|we) (will|'ll) (refund|credit|replace|cancel|reship|waive)\b",
+    # Deferrals that name an outcome, found by evaluation (docs/eval-baseline.md, finding 3).
+    r"\bget(ting)? you (the|your|a) (correct|right|new|replacement)\b",
+    r"\bhelp you (change|update|cancel|redirect) (your|the) (name|address|order|payment|card)\b",
+    r"\bprocess (the|your|a) (return|exchange|refund|cancellation|replacement)\b",
+    r"\bget this sorted\b",
 ))
 NUMBER = re.compile(r"\$?\d[\d,]*(?:\.\d+)?")
 URL = re.compile(r"https?://\S+", re.IGNORECASE)
