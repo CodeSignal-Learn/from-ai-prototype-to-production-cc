@@ -1,0 +1,415 @@
+{
+  "run_id": "v1-held_out-baseline-r2",
+  "created_at": "2026-10-13T22:04:35+00:00",
+  "dataset": "v1",
+  "dataset_sha256": "2cf0953962983882b1737d1253c1abe1bc1005bfd1c98f67cef6ba2840b1efb1",
+  "split": "held_out",
+  "versions": {
+    "app": "2.1.0",
+    "mode": "model",
+    "model": "claude-haiku-5-5",
+    "prompt": "481f9fc0f782",
+    "prompt_variant": "v1",
+    "client": "live"
+  },
+  "rubric_version": "1.1",
+  "judge": {
+    "model": "claude-haiku-5-5",
+    "prompt": "4feda4d1cbbc"
+  },
+  "judge_quotes_not_in_draft": [],
+  "cases": 56,
+  "drafted": 38,
+  "judged": 56,
+  "unjudged": 0,
+  "acceptable": 38,
+  "acceptable_rate": 0.679,
+  "criteria": {
+    "R1": {
+      "pass": 43,
+      "fail": 13
+    },
+    "R2": {
+      "pass": 44,
+      "missed": 12
+    },
+    "R3": {
+      "pass": 54,
+      "fail": 2
+    },
+    "R4": {
+      "pass": 48,
+      "fail": 5,
+      "partial": 3
+    },
+    "R5": {
+      "pass": 53,
+      "fail": 3
+    }
+  },
+  "article_correct": 45,
+  "by_category": {
+    "account_access": {
+      "cases": 8,
+      "R1_pass": 5,
+      "R2_missed": 3,
+      "R2_over": 0,
+      "R3_fail": 1,
+      "R4_not_pass": 1,
+      "R5_fail": 0,
+      "acceptable": 4
+    },
+    "billing": {
+      "cases": 8,
+      "R1_pass": 5,
+      "R2_missed": 3,
+      "R2_over": 0,
+      "R3_fail": 1,
+      "R4_not_pass": 0,
+      "R5_fail": 1,
+      "acceptable": 4
+    },
+    "orders_shipping": {
+      "cases": 12,
+      "R1_pass": 9,
+      "R2_missed": 3,
+      "R2_over": 0,
+      "R3_fail": 0,
+      "R4_not_pass": 1,
+      "R5_fail": 2,
+      "acceptable": 9
+    },
+    "other": {
+      "cases": 8,
+      "R1_pass": 8,
+      "R2_missed": 0,
+      "R2_over": 0,
+      "R3_fail": 0,
+      "R4_not_pass": 0,
+      "R5_fail": 0,
+      "acceptable": 8
+    },
+    "product_issue": {
+      "cases": 10,
+      "R1_pass": 9,
+      "R2_missed": 1,
+      "R2_over": 0,
+      "R3_fail": 0,
+      "R4_not_pass": 4,
+      "R5_fail": 0,
+      "acceptable": 7
+    },
+    "returns_refunds": {
+      "cases": 10,
+      "R1_pass": 7,
+      "R2_missed": 2,
+      "R2_over": 0,
+      "R3_fail": 0,
+      "R4_not_pass": 2,
+      "R5_fail": 0,
+      "acceptable": 6
+    }
+  },
+  "by_tag": {
+    "action-required": {
+      "cases": 2,
+      "acceptable": 0
+    },
+    "hostile": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "keywordless": {
+      "cases": 1,
+      "acceptable": 0
+    },
+    "legal": {
+      "cases": 3,
+      "acceptable": 3
+    },
+    "not-covered": {
+      "cases": 10,
+      "acceptable": 0
+    },
+    "outside-policy": {
+      "cases": 2,
+      "acceptable": 1
+    },
+    "overlap": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "oversized": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "sensitive": {
+      "cases": 3,
+      "acceptable": 3
+    },
+    "spam": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "three-words": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "two-topics": {
+      "cases": 2,
+      "acceptable": 2
+    },
+    "urgent": {
+      "cases": 2,
+      "acceptable": 1
+    }
+  },
+  "failures": [
+    {
+      "id": "EV-3032",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got billing/draft, expected billing/human_review"
+    },
+    {
+      "id": "EV-3032",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3032",
+      "criterion": "R5",
+      "verdict": "fail",
+      "evidence": "mentions 'installment'"
+    },
+    {
+      "id": "EV-3036",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got billing/draft, expected billing/human_review"
+    },
+    {
+      "id": "EV-3036",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3039",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "and that includes orders shipped to a different address, such as your brother's"
+      ]
+    },
+    {
+      "id": "EV-3043",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/draft, expected billing/human_review"
+    },
+    {
+      "id": "EV-3043",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3056",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/draft, expected account_access/human_review"
+    },
+    {
+      "id": "EV-3056",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3056",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "In the meantime, you can change your email address from the Account settings page.",
+        "If you can't access your account, please contact us from the email address on the account."
+      ]
+    },
+    {
+      "id": "EV-3058",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/draft, expected account_access/human_review"
+    },
+    {
+      "id": "EV-3058",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3062",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "The reviewer notes say an acceptable reply must suggest the reset flow from the sign-in page and confirm the email address used, but the draft neither mentions a reset flow nor suggests confirming the email; it instead pads with unrelated email-change policy while deferring, even though the knowledg"
+    },
+    {
+      "id": "EV-3065",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/draft, expected account_access/human_review"
+    },
+    {
+      "id": "EV-3065",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3076",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got orders_shipping/draft, expected orders_shipping/human_review"
+    },
+    {
+      "id": "EV-3076",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3078",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got orders_shipping/draft, expected orders_shipping/human_review"
+    },
+    {
+      "id": "EV-3078",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3078",
+      "criterion": "R5",
+      "verdict": "fail",
+      "evidence": "mentions 'combined'"
+    },
+    {
+      "id": "EV-3088",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got orders_shipping/draft, expected orders_shipping/human_review"
+    },
+    {
+      "id": "EV-3088",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3088",
+      "criterion": "R5",
+      "verdict": "fail",
+      "evidence": "mentions 'waived'"
+    },
+    {
+      "id": "EV-3093",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "The draft never says the estimate counts from the shipping date rather than the order date, which the reviewer notes require; the article's cutoff rule (orders after 2 pm or on weekends leave the next business day) is also absent, so the customer's question about the three-day estimate is only partl"
+    },
+    {
+      "id": "EV-3104",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got product_issue/draft, expected returns_refunds/draft"
+    },
+    {
+      "id": "EV-3104",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "Reviewer notes require saying the return can be started from the Orders page and that no label fee applies when the wrong item was sent; the article is product care only, so the draft defers, but the knowledge base the reviewer notes rely on answers the question, which the draft's wrong-article defe"
+    },
+    {
+      "id": "EV-3107",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got returns_refunds/draft, expected returns_refunds/human_review"
+    },
+    {
+      "id": "EV-3107",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3112",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "\"Our article on refunds and return timelines doesn't cover exchanges or how long after delivery a return or color change can be requested\""
+    },
+    {
+      "id": "EV-3117",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got returns_refunds/draft, expected returns_refunds/human_review"
+    },
+    {
+      "id": "EV-3117",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3122",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "\"Since your pack was purchased a little over three years ago, it falls outside that coverage period, so we're unable to offer a warranty repair or replacement for it.\""
+    },
+    {
+      "id": "EV-3129",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "The reviewer notes say an acceptable reply must say workmanship defects are covered for two years from delivery and how to start a claim, but the draft gives neither, deferring instead even though the knowledge base the notes rely on answers the question."
+    },
+    {
+      "id": "EV-3132",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got product_issue/draft, expected product_issue/human_review"
+    },
+    {
+      "id": "EV-3132",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3137",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "Reviewer notes require saying waterproof coatings are covered under the two-year warranty and how to start a claim; the draft never mentions the two-year warranty or how to start a claim, though it does say the care article doesn't cover peeling and defers to a specialist."
+    },
+    {
+      "id": "EV-3141",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "For the invoice, our article doesn't cover how to retrieve order documents, so a specialist will follow up with you about that."
+    }
+  ],
+  "median_seconds": 3.662,
+  "usage": {
+    "pipeline": {
+      "calls": 94,
+      "input_tokens": 38288,
+      "output_tokens": 9750
+    },
+    "judge": {
+      "calls": 38,
+      "input_tokens": 59507,
+      "output_tokens": 6298
+    }
+  }
+}

@@ -20,14 +20,20 @@ ASSISTANT_API_KEY=<secret> python3 scripts/load_test.py --base-url http://127.0.
 python3 -m evals.dataset v1                                            # validate the evaluation cases, print coverage
 python3 -m evals.runner --dataset v1 --split development --client replay --label check   # score a split offline
 python3 -m evals.calibration --run v1-development-baseline --human evals/datasets/v1/human_judgments.jsonl
+ASSISTANT_PROMPT_VARIANT=v2 python3 -m support_assistant.cli data/requests.jsonl --mode model   # the candidate prompts (live)
+python3 -m evals.report --baseline v1-held_out-baseline-r1 v1-held_out-baseline-r2 v1-held_out-baseline-r3 --candidate v1-held_out-candidate-r1 v1-held_out-candidate-r2 v1-held_out-candidate-r3
 ```
 
-Settings are read from `ASSISTANT_*` environment variables (mode, model, client, timeouts,
-retries, concurrency, folders, the API key); see `support_assistant/config.py`. Flags override them.
+Settings are read from `ASSISTANT_*` environment variables (mode, model, client, prompt variant,
+timeouts, retries, concurrency, folders, the API key); see `support_assistant/config.py`. Flags override them.
+`ASSISTANT_PROMPT_VARIANT` is `v1` by default; `v2` selects the candidate prompts described in
+`docs/eval-comparison.md`, which are not rolled out.
 
 Documents for the POC engagement are in `docs/`: the charter, ADR 001, the decision log, the
 trial results, and the go or no-go recommendation. The evaluation suite lives in `evals/`:
-the rubric (`evals/rubric.md`), the versioned datasets, the runner, the judge, and the judge
-calibration; runs are written under `results/evals/`.
+the rubric (`evals/rubric.md`), the versioned datasets, the runner, the judge, the judge
+calibration, and the baseline-versus-candidate report; runs are written under `results/evals/`.
+Evaluation findings are in `docs/eval-baseline.md`, `docs/judge-calibration.md`,
+`docs/failure-taxonomy.md`, and `docs/eval-comparison.md`.
 
 The requests in `data/` are synthetic samples; no real customer data is stored in this repository.

@@ -1,0 +1,408 @@
+{
+  "run_id": "v1-held_out-baseline-r1",
+  "created_at": "2026-10-13T21:59:15+00:00",
+  "dataset": "v1",
+  "dataset_sha256": "2cf0953962983882b1737d1253c1abe1bc1005bfd1c98f67cef6ba2840b1efb1",
+  "split": "held_out",
+  "versions": {
+    "app": "2.1.0",
+    "mode": "model",
+    "model": "claude-haiku-5-5",
+    "prompt": "481f9fc0f782",
+    "prompt_variant": "v1",
+    "client": "live"
+  },
+  "rubric_version": "1.1",
+  "judge": {
+    "model": "claude-haiku-5-5",
+    "prompt": "4feda4d1cbbc"
+  },
+  "judge_quotes_not_in_draft": [],
+  "cases": 56,
+  "drafted": 38,
+  "judged": 56,
+  "unjudged": 0,
+  "acceptable": 38,
+  "acceptable_rate": 0.679,
+  "criteria": {
+    "R1": {
+      "pass": 43,
+      "fail": 13
+    },
+    "R2": {
+      "pass": 44,
+      "missed": 12
+    },
+    "R3": {
+      "pass": 54,
+      "fail": 2
+    },
+    "R4": {
+      "pass": 48,
+      "fail": 4,
+      "partial": 4
+    },
+    "R5": {
+      "pass": 54,
+      "fail": 2
+    }
+  },
+  "article_correct": 45,
+  "by_category": {
+    "account_access": {
+      "cases": 8,
+      "R1_pass": 5,
+      "R2_missed": 3,
+      "R2_over": 0,
+      "R3_fail": 0,
+      "R4_not_pass": 1,
+      "R5_fail": 0,
+      "acceptable": 4
+    },
+    "billing": {
+      "cases": 8,
+      "R1_pass": 5,
+      "R2_missed": 3,
+      "R2_over": 0,
+      "R3_fail": 1,
+      "R4_not_pass": 0,
+      "R5_fail": 1,
+      "acceptable": 4
+    },
+    "orders_shipping": {
+      "cases": 12,
+      "R1_pass": 9,
+      "R2_missed": 3,
+      "R2_over": 0,
+      "R3_fail": 1,
+      "R4_not_pass": 2,
+      "R5_fail": 1,
+      "acceptable": 8
+    },
+    "other": {
+      "cases": 8,
+      "R1_pass": 8,
+      "R2_missed": 0,
+      "R2_over": 0,
+      "R3_fail": 0,
+      "R4_not_pass": 0,
+      "R5_fail": 0,
+      "acceptable": 8
+    },
+    "product_issue": {
+      "cases": 10,
+      "R1_pass": 9,
+      "R2_missed": 1,
+      "R2_over": 0,
+      "R3_fail": 0,
+      "R4_not_pass": 3,
+      "R5_fail": 0,
+      "acceptable": 8
+    },
+    "returns_refunds": {
+      "cases": 10,
+      "R1_pass": 7,
+      "R2_missed": 2,
+      "R2_over": 0,
+      "R3_fail": 0,
+      "R4_not_pass": 2,
+      "R5_fail": 0,
+      "acceptable": 6
+    }
+  },
+  "by_tag": {
+    "action-required": {
+      "cases": 2,
+      "acceptable": 0
+    },
+    "hostile": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "keywordless": {
+      "cases": 1,
+      "acceptable": 0
+    },
+    "legal": {
+      "cases": 3,
+      "acceptable": 3
+    },
+    "not-covered": {
+      "cases": 10,
+      "acceptable": 0
+    },
+    "outside-policy": {
+      "cases": 2,
+      "acceptable": 2
+    },
+    "overlap": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "oversized": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "sensitive": {
+      "cases": 3,
+      "acceptable": 3
+    },
+    "spam": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "three-words": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "two-topics": {
+      "cases": 2,
+      "acceptable": 1
+    },
+    "urgent": {
+      "cases": 2,
+      "acceptable": 1
+    }
+  },
+  "failures": [
+    {
+      "id": "EV-3029",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "You can also check the Orders page to see if an invoice exists for it."
+      ]
+    },
+    {
+      "id": "EV-3032",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got billing/draft, expected billing/human_review"
+    },
+    {
+      "id": "EV-3032",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3032",
+      "criterion": "R5",
+      "verdict": "fail",
+      "evidence": "mentions 'installment'"
+    },
+    {
+      "id": "EV-3036",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got billing/draft, expected billing/human_review"
+    },
+    {
+      "id": "EV-3036",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3043",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/draft, expected billing/human_review"
+    },
+    {
+      "id": "EV-3043",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3056",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/draft, expected account_access/human_review"
+    },
+    {
+      "id": "EV-3056",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3058",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/draft, expected account_access/human_review"
+    },
+    {
+      "id": "EV-3058",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3062",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "The article does not cover this question, but the reviewer notes require suggesting the reset flow from the sign-in page and confirming the email address used; the draft neither suggests a reset nor asks the customer to confirm their email, and instead asks for browser details."
+    },
+    {
+      "id": "EV-3065",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/draft, expected account_access/human_review"
+    },
+    {
+      "id": "EV-3065",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3076",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got orders_shipping/draft, expected orders_shipping/human_review"
+    },
+    {
+      "id": "EV-3076",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3078",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got orders_shipping/draft, expected orders_shipping/human_review"
+    },
+    {
+      "id": "EV-3078",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3078",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "\"Our shipping information doesn't cover combining separate orders, so I can't confirm whether that's possible. A member of our support team will follow up with you about your two orders.\""
+    },
+    {
+      "id": "EV-3088",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got orders_shipping/draft, expected orders_shipping/human_review"
+    },
+    {
+      "id": "EV-3088",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3088",
+      "criterion": "R5",
+      "verdict": "fail",
+      "evidence": "mentions 'waived'"
+    },
+    {
+      "id": "EV-3091",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "so check your order confirmation for that estimate"
+      ]
+    },
+    {
+      "id": "EV-3093",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "The reviewer notes require saying the estimate counts from the shipping date, not the order date, but the draft never states this; it instead covers tracking steps and trace timelines without addressing why the estimate was off."
+    },
+    {
+      "id": "EV-3104",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got product_issue/draft, expected returns_refunds/draft"
+    },
+    {
+      "id": "EV-3104",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "The article does not cover this request, so the draft's deferral is supported by the knowledge base, but the reviewer notes state the answer (start the return from the Orders page, no label fee when the wrong item was sent) is required and the draft omits it, so the draft fails to answer the questio"
+    },
+    {
+      "id": "EV-3107",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got returns_refunds/draft, expected returns_refunds/human_review"
+    },
+    {
+      "id": "EV-3107",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3112",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "The draft says \"It doesn't state a return or exchange window, so I can't confirm whether a color change is still possible,\" but the reviewer notes say exchanges are possible within 60 days of delivery for unworn items with tags, meaning the knowledge base answer was missed because the wrong article "
+    },
+    {
+      "id": "EV-3117",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got returns_refunds/draft, expected returns_refunds/human_review"
+    },
+    {
+      "id": "EV-3117",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3129",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "The reviewer notes state the knowledge base should answer this with the two-year workmanship warranty and how to start a claim, but the draft says the guide doesn't cover sole separation and defers, which is a deferral caused by the wrong article."
+    },
+    {
+      "id": "EV-3132",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got product_issue/draft, expected product_issue/human_review"
+    },
+    {
+      "id": "EV-3132",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3137",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "\"Whether peeling in sheets after one season is normal wear or a defect isn't something our care information covers, so I'm not able to say which it is. A specialist will follow up with you to review your jacket.\""
+    },
+    {
+      "id": "EV-3141",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "Regarding the invoice, I don't have information on how to obtain order invoices in the material I'm working from, so a specialist will follow up with you on that request."
+    }
+  ],
+  "median_seconds": 3.649,
+  "usage": {
+    "pipeline": {
+      "calls": 94,
+      "input_tokens": 38288,
+      "output_tokens": 9726
+    },
+    "judge": {
+      "calls": 38,
+      "input_tokens": 59439,
+      "output_tokens": 6351
+    }
+  }
+}

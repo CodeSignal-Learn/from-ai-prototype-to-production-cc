@@ -1,0 +1,337 @@
+{
+  "run_id": "v1-held_out-candidate-r1",
+  "created_at": "2026-10-13T22:01:45+00:00",
+  "dataset": "v1",
+  "dataset_sha256": "2cf0953962983882b1737d1253c1abe1bc1005bfd1c98f67cef6ba2840b1efb1",
+  "split": "held_out",
+  "versions": {
+    "app": "2.1.0",
+    "mode": "model",
+    "model": "claude-haiku-5-5",
+    "prompt": "b65664d16794",
+    "prompt_variant": "v2",
+    "client": "live"
+  },
+  "rubric_version": "1.1",
+  "judge": {
+    "model": "claude-haiku-5-5",
+    "prompt": "4feda4d1cbbc"
+  },
+  "judge_quotes_not_in_draft": [],
+  "cases": 56,
+  "drafted": 24,
+  "judged": 56,
+  "unjudged": 0,
+  "acceptable": 43,
+  "acceptable_rate": 0.768,
+  "criteria": {
+    "R1": {
+      "pass": 46,
+      "fail": 10
+    },
+    "R2": {
+      "pass": 48,
+      "over": 5,
+      "missed": 3
+    },
+    "R3": {
+      "pass": 53,
+      "fail": 3
+    },
+    "R4": {
+      "pass": 52,
+      "partial": 4
+    },
+    "R5": {
+      "pass": 56
+    }
+  },
+  "article_correct": 48,
+  "by_category": {
+    "account_access": {
+      "cases": 8,
+      "R1_pass": 5,
+      "R2_missed": 1,
+      "R2_over": 2,
+      "R3_fail": 0,
+      "R4_not_pass": 0,
+      "R5_fail": 0,
+      "acceptable": 5
+    },
+    "billing": {
+      "cases": 8,
+      "R1_pass": 7,
+      "R2_missed": 0,
+      "R2_over": 0,
+      "R3_fail": 1,
+      "R4_not_pass": 1,
+      "R5_fail": 0,
+      "acceptable": 6
+    },
+    "orders_shipping": {
+      "cases": 12,
+      "R1_pass": 10,
+      "R2_missed": 0,
+      "R2_over": 1,
+      "R3_fail": 2,
+      "R4_not_pass": 2,
+      "R5_fail": 0,
+      "acceptable": 8
+    },
+    "other": {
+      "cases": 8,
+      "R1_pass": 8,
+      "R2_missed": 0,
+      "R2_over": 0,
+      "R3_fail": 0,
+      "R4_not_pass": 0,
+      "R5_fail": 0,
+      "acceptable": 8
+    },
+    "product_issue": {
+      "cases": 10,
+      "R1_pass": 9,
+      "R2_missed": 1,
+      "R2_over": 0,
+      "R3_fail": 0,
+      "R4_not_pass": 1,
+      "R5_fail": 0,
+      "acceptable": 9
+    },
+    "returns_refunds": {
+      "cases": 10,
+      "R1_pass": 7,
+      "R2_missed": 1,
+      "R2_over": 2,
+      "R3_fail": 0,
+      "R4_not_pass": 0,
+      "R5_fail": 0,
+      "acceptable": 7
+    }
+  },
+  "by_tag": {
+    "action-required": {
+      "cases": 2,
+      "acceptable": 2
+    },
+    "hostile": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "keywordless": {
+      "cases": 1,
+      "acceptable": 0
+    },
+    "legal": {
+      "cases": 3,
+      "acceptable": 3
+    },
+    "not-covered": {
+      "cases": 10,
+      "acceptable": 6
+    },
+    "outside-policy": {
+      "cases": 2,
+      "acceptable": 1
+    },
+    "overlap": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "oversized": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "sensitive": {
+      "cases": 3,
+      "acceptable": 3
+    },
+    "spam": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "three-words": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "two-topics": {
+      "cases": 2,
+      "acceptable": 2
+    },
+    "urgent": {
+      "cases": 2,
+      "acceptable": 2
+    }
+  },
+  "failures": [
+    {
+      "id": "EV-3029",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "\"Our billing guidance says that if a charge doesn't match an order in your account, you should contact us with the amount and date so it can be investigated, which is what you've done.\""
+    },
+    {
+      "id": "EV-3035",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "An invoice from the Orders page may serve as proof of purchase for the manufacturer's registration."
+      ]
+    },
+    {
+      "id": "EV-3043",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/human_review, expected billing/human_review"
+    },
+    {
+      "id": "EV-3054",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/human_review, expected account_access/draft"
+    },
+    {
+      "id": "EV-3054",
+      "criterion": "R2",
+      "verdict": "over",
+      "evidence": "article_does_not_answer"
+    },
+    {
+      "id": "EV-3062",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/human_review, expected account_access/draft"
+    },
+    {
+      "id": "EV-3062",
+      "criterion": "R2",
+      "verdict": "over",
+      "evidence": "article_does_not_answer"
+    },
+    {
+      "id": "EV-3065",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/draft, expected account_access/human_review"
+    },
+    {
+      "id": "EV-3065",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3073",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "\"The article doesn't list individual provinces, so I can't confirm specifically for Alberta; a specialist will follow up on that.\""
+    },
+    {
+      "id": "EV-3080",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "Since your order was marked shipped two days ago, the tracking details may still be on their way."
+      ]
+    },
+    {
+      "id": "EV-3083",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got orders_shipping/human_review, expected orders_shipping/draft"
+    },
+    {
+      "id": "EV-3083",
+      "criterion": "R2",
+      "verdict": "over",
+      "evidence": "article_does_not_answer"
+    },
+    {
+      "id": "EV-3093",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "A specialist will follow up with you on your order."
+      ]
+    },
+    {
+      "id": "EV-3093",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "The reviewer notes require saying the estimate counts from the shipping date, not the order date, and the article's shipping-cutoff rule (\"Orders placed later, or on weekends, leave the next business day\") is never mentioned, so the draft does not address the customer's timing question about the est"
+    },
+    {
+      "id": "EV-3102",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got returns_refunds/human_review, expected returns_refunds/draft"
+    },
+    {
+      "id": "EV-3102",
+      "criterion": "R2",
+      "verdict": "over",
+      "evidence": "article_does_not_answer"
+    },
+    {
+      "id": "EV-3104",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got product_issue/human_review, expected returns_refunds/draft"
+    },
+    {
+      "id": "EV-3104",
+      "criterion": "R2",
+      "verdict": "over",
+      "evidence": "article_does_not_answer"
+    },
+    {
+      "id": "EV-3107",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got returns_refunds/draft, expected returns_refunds/human_review"
+    },
+    {
+      "id": "EV-3107",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3132",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got product_issue/draft, expected product_issue/human_review"
+    },
+    {
+      "id": "EV-3132",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3141",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "\"I'm not able to provide invoices through this message, so a specialist will follow up with you about the invoice for your records.\""
+    },
+    {
+      "id": "EV-3159",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got other/human_review, expected orders_shipping/human_review"
+    }
+  ],
+  "median_seconds": 2.187,
+  "usage": {
+    "pipeline": {
+      "calls": 94,
+      "input_tokens": 79205,
+      "output_tokens": 8445
+    },
+    "judge": {
+      "calls": 24,
+      "input_tokens": 37808,
+      "output_tokens": 4016
+    }
+  }
+}
