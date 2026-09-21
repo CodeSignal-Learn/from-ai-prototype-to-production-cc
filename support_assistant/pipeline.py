@@ -33,6 +33,8 @@ def process_request(
     sleep=time.sleep,
     sink: EventSink | None = None,
     clock=time.perf_counter,
+    now=None,
+    trace_id: str | None = None,
 ) -> Result:
     """Classify, look up, draft, and route one request. Nothing is sent.
 
@@ -42,9 +44,11 @@ def process_request(
     request goes to a person with a reason that says which step was unavailable.
 
     Every step emits an event on the sink (in memory when none is given) under one trace id, with
-    its duration and the tokens it used. Events carry no customer or draft text.
+    its duration and the tokens it used. Events carry no customer or draft text. The trace id is
+    random unless the caller passes one; a traffic replay derives its own so its logs reproduce.
     """
-    trace = Trace(request.id, sink if sink is not None else EventSink(), clock)
+    trace = Trace(request.id, sink if sink is not None else EventSink(), clock, **({"now": now} if now else {}),
+                  **({"trace_id": trace_id} if trace_id else {}))
     metered = trace.meter(client)
     trace.emit("request", "received", channel=request.channel, flags=list(request.flags), body=text_fingerprint(request.body))
     confidence = None

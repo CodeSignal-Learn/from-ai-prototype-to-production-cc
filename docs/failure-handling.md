@@ -23,8 +23,8 @@ assert on the delays that would have been slept. End-to-end failure paths run of
 scripts exceptions between answers, and `ReplayClient(failures=[...])` raises them before serving a recording.
 
 ## Still open
-- A run of repeated `classification_unavailable` results is now recorded: each unavailable step's
-  event carries its attempts and last error (`docs/telemetry.md`). Nothing alerts on it yet.
+- A run of repeated `classification_unavailable` results fires the `model_unavailable` alert
+  (`docs/ops-report.md`), but only once requests already reach a person; nothing warns earlier.
 - The latency of retries shows in step durations, but a retry that succeeded leaves no field on
   the event, so retries that recover are not counted.
 - Results are written only when the batch finishes, so a run that dies halfway has nothing on disk
