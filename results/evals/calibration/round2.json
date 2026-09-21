@@ -1,0 +1,149 @@
+{
+  "judged_by_both": 44,
+  "skipped": [],
+  "criteria": {
+    "R3": {
+      "items": 44,
+      "agreement": 0.841,
+      "kappa": 0.5,
+      "confusion": {
+        "human=fail judge=fail": 5,
+        "human=fail judge=pass": 1,
+        "human=pass judge=fail": 6,
+        "human=pass judge=pass": 32
+      },
+      "judge_stricter": 6,
+      "judge_lenient": 1,
+      "disagreements": [
+        {
+          "id": "EV-3021",
+          "human": "pass",
+          "judge": "fail",
+          "human_evidence": "'likely isn't ruined' is a hedged reading of 'tennis balls restore loft'; every instruction is the article's.",
+          "judge_evidence": [
+            "Don't worry—your jacket likely isn't ruined!"
+          ]
+        },
+        {
+          "id": "EV-3028",
+          "human": "pass",
+          "judge": "fail",
+          "human_evidence": "'it may indicate your order hasn't shipped yet' follows directly from 'receipts are emailed when the order ships'; hedged, not a new policy.",
+          "judge_evidence": [
+            "it may indicate your order hasn't shipped yet, or there could be another issue"
+          ]
+        },
+        {
+          "id": "EV-3055",
+          "human": "fail",
+          "judge": "pass",
+          "human_evidence": "'to help you change your name in the system' says a name change is possible; no article says so.",
+          "judge_evidence": []
+        },
+        {
+          "id": "EV-3059",
+          "human": "pass",
+          "judge": "fail",
+          "human_evidence": "'it may still be processing' and 'should update once the merge is fully complete' follow from 'the merge takes one business day'.",
+          "judge_evidence": [
+            "Your rewards points should update once the merge is fully complete."
+          ]
+        },
+        {
+          "id": "EV-3094",
+          "human": "pass",
+          "judge": "fail",
+          "human_evidence": "Tracking instructions are the article's; 'a specialist will follow up with you shortly' is a deferral and nothing else is claimed.",
+          "judge_evidence": [
+            "a specialist will follow up with you shortly"
+          ]
+        },
+        {
+          "id": "EV-3119",
+          "human": "pass",
+          "judge": "fail",
+          "human_evidence": "Return steps are the article's; the password deferral claims nothing.",
+          "judge_evidence": [
+            "a specialist will follow up with you separately to help resolve that"
+          ]
+        },
+        {
+          "id": "EV-3135",
+          "human": "pass",
+          "judge": "fail",
+          "human_evidence": "'discuss your pack and find the best solution' is a deferral.",
+          "judge_evidence": [
+            "A specialist will follow up with you shortly to discuss your pack and find the best solution."
+          ]
+        }
+      ]
+    },
+    "R4": {
+      "items": 44,
+      "agreement": 0.841,
+      "kappa": 0.698,
+      "confusion": {
+        "human=fail judge=fail": 12,
+        "human=partial judge=fail": 1,
+        "human=partial judge=partial": 1,
+        "human=partial judge=pass": 1,
+        "human=pass judge=fail": 2,
+        "human=pass judge=partial": 3,
+        "human=pass judge=pass": 24
+      },
+      "judge_stricter": 6,
+      "judge_lenient": 1,
+      "disagreements": [
+        {
+          "id": "EV-3023",
+          "human": "pass",
+          "judge": "fail",
+          "human_evidence": "Explains the pending authorization and the five business days.",
+          "judge_evidence": "The reviewer notes state the reply 'must not: State what happens after a cancellation; the article does not say.' The draft states 'Even after cancellation, a pending authorization can remain visible for a day or two before dropping off automatically,' which is a conclusion about post-cancellation b"
+        },
+        {
+          "id": "EV-3046",
+          "human": "partial",
+          "judge": "fail",
+          "human_evidence": "Answers delivery from the shipping article but defers the invoice question the knowledge base answers.",
+          "judge_evidence": "The draft defers the invoice question to a specialist, but the reviewer notes state an acceptable reply must 'Answer the invoice question from the Orders page'; the draft answers the wrong question about delivery timing instead of addressing how to get the invoice from the Orders page."
+        },
+        {
+          "id": "EV-3059",
+          "human": "pass",
+          "judge": "partial",
+          "human_evidence": "Answers with the one-business-day rule.",
+          "judge_evidence": "According to our information, account merges take one business day to complete."
+        },
+        {
+          "id": "EV-3090",
+          "human": "pass",
+          "judge": "partial",
+          "human_evidence": "Gives express timing and the customs allowance.",
+          "judge_evidence": "Express shipping typically arrives in one to two business days. Since you're shipping to Canada, please add two to four additional business days for customs processing"
+        },
+        {
+          "id": "EV-3094",
+          "human": "pass",
+          "judge": "fail",
+          "human_evidence": "Gives the tracking steps for the order number asked about.",
+          "judge_evidence": "The reviewer notes require that 'A person answers and tells the customer not to send card numbers; the number was masked at intake.' The draft does not tell the customer not to send card numbers in the future."
+        },
+        {
+          "id": "EV-3119",
+          "human": "pass",
+          "judge": "partial",
+          "human_evidence": "Answers the return and defers the second topic explicitly.",
+          "judge_evidence": "The draft answers the return question fully with support from the article ('you can start the process from the Orders page by selecting the items you'd like to return and printing the prepaid label' and 'We accept unworn items with tags attached within 60 days of delivery'), but the sign-in help ans"
+        },
+        {
+          "id": "EV-3138",
+          "human": "partial",
+          "judge": "pass",
+          "human_evidence": "Acknowledges the photo requirement but then invites a claim without photos, which the article does not allow.",
+          "judge_evidence": "The article states 'To start a claim, send us your order number, a description of the problem, and two photos showing the defect' but offers no alternative when photos are unavailable. The draft correctly acknowledges the photo requirement and defers to a specialist without waiving the requirement o"
+        }
+      ]
+    }
+  }
+}

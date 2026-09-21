@@ -13,6 +13,10 @@ Settings come from `ASSISTANT_*` environment variables through `config.py` (ADR 
 HTTP; `scripts/run_trial.py` measures a mode against the trial labels; `scripts/load_test.py`
 measures the API. Recordings for the replay client live in `fixtures/recordings/` and are
 refreshed with `scripts/record.py` whenever a prompt changes.
+`evals/` scores the assistant against the rubric in `evals/rubric.md`: `evals/dataset.py` loads a
+versioned case set, `evals/runner.py` runs a split and counts the deterministic criteria,
+`evals/judge.py` asks a model the judged ones, `evals/calibration.py` compares the judge with
+human judgments. Runs are written to `results/evals/<run-id>/`.
 
 ## Boundaries
 - Drafts are never sent. `Result.sent` stays `False`. The only network calls in this codebase are
@@ -43,6 +47,10 @@ Model-mode checks run on the replay client. Never run live calls in tests or sub
 Run both after any implementation change and report the actual results. The test suite does
 not cover every routing keyword or every escalation rule; when a change touches one, add a test
 for it and say which cases remain unverified.
+Evaluation runs on the replay client are free and deterministic; `--record` runs live, costs
+money, and is how recordings are made after a prompt change. Cases in `evals/datasets/` never
+change inside a version; add a new version folder instead. Held-out cases are not read while
+fixing a failure.
 
 ## Working agreements
 - Propose a plan and list the files you will touch before editing.
