@@ -30,7 +30,7 @@ One gate stays open; release is not recommended until it closes.
 
 | Gate | Why it is open | What closes it |
 | --- | --- | --- |
-| Monitoring | Structured events, five objectives and five alert rules over windows (`docs/ops-report.md`), drift reports between traffic windows, and the suites re-run on a schedule against their reference runs (`docs/drift-report.md`) are in place. No procedure says how to work an incident, and none has been rehearsed | An incident runbook rehearsed on an outage, and a release watched through the monitoring |
+| Monitoring | Structured events, five objectives and six alert rules, drift reports, the scheduled evaluation, and the incident runbook are in place, and a provider outage was rehearsed with them (`ops/runbook.md`, `docs/incident-2026-09-15.md`). None of it has watched a release yet: the v2 candidate still waits for its controlled rollout (`docs/eval-comparison.md`) | The candidate's rollout read on the objectives, alerts, drift report, and scheduled evaluation |
 
 ## Known limits, not blocking
 - Confidence is uncalibrated (20 of 25 values at 0.95 in the POC trial, 18 of 25 on the hardened

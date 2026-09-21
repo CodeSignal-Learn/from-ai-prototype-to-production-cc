@@ -31,11 +31,11 @@ durations are the replay client's, not the model's):
 | Step | Status | Duration | Attributes |
 | --- | --- | --- | --- |
 | request | received | | channel, flags, body fingerprint |
-| classify | ok | 0.1 ms | category `orders_shipping`, confidence 0.95, 1 call, 256 in / 55 out tokens |
+| classify | ok | 0.2 ms | category `orders_shipping`, confidence 0.95, 1 call, 256 in / 55 out tokens |
 | lookup | ok | 0.0 ms | article `order-tracking`, method `keyword` |
 | draft | ok | 0.1 ms | draft fingerprint, 1 call, 349 in / 118 out tokens |
 | checks | ok | 0.1 ms | problems `[]` |
-| request | ok | 0.8 ms | route `draft`, reasons `[]`, drafted, 2 calls, 605 in / 173 out tokens, versions |
+| request | ok | 1.0 ms | route `draft`, reasons `[]`, drafted, 2 calls, 605 in / 173 out tokens, versions |
 
 Every event carries the same `trace_id`, so a log with concurrent requests interleaved is read
 per request by grouping on it. Token usage is attributed to the step that made the call through a
@@ -49,14 +49,14 @@ the first request's three classification attempts time out and the fourth attemp
 request, is rate-limited once and then served.
 
 ```text
-classify  status unavailable  duration 35.6 ms  attempts 3  last_error LLMTimeout  category other
+classify  status unavailable  duration 37.6 ms  attempts 3  last_error LLMTimeout  category other
 lookup    status ok           article null  method keyword
 request   status escalated    route human_review  reasons [classification_unavailable, unknown_category, no_reference_article]  calls 0
 ```
 
 The request completes: a person receives it with the reason that says which step was
 unavailable, the trace records three attempts and the error type, and the batch continues. The
-35.6 ms is the retry policy's backoff at a 0.01 s base delay; in production it is 0.5 s, 1 s.
+37.6 ms is the retry policy's backoff at a 0.01 s base delay; in production it is 0.5 s, 1 s.
 
 ## Measurements
 
@@ -67,7 +67,7 @@ on the 40-request batch, replay client, concurrency 4:
 | --- | --- |
 | Requests completed / failed | 40 / 0 |
 | Requests with a model step unavailable | 0 |
-| Latency p50 / p95 / max | 2.2 / 2.9 / 3.3 ms (replay; live is about 2.4 s per request) |
+| Latency p50 / p95 / max | 2.1 / 2.8 / 2.9 ms (replay; live is about 2.4 s per request) |
 | Model calls, input tokens, output tokens | 75, 22,658, 6,293 |
 | Estimated cost at $1.00 / $5.00 per million | $0.0541 total, $0.00135 per request |
 | Routes | 33 draft, 7 human review; 35 drafts produced, 2 flagged |
@@ -78,8 +78,8 @@ Durations in the batch and trial logs are the replay client's wall time on one r
 on every run; the counts, tokens, and cost do not.
 
 The trial run with the injected outage: 25 requests, 1 with classification unavailable, 42
-calls, $0.0281, p95 13.5 ms from REQ-2002 (served after one
-rate limit) and max 36.2 ms from REQ-2001 (three timed-out attempts). That is the shape an
+completed calls and 4 failed attempts (three timeouts, one rate limit), $0.0281, p95 13.4 ms and
+max 38.4 ms, both from the retried requests. That is the shape an
 outage has in this log: a small number of slow, escalated requests with `attempts` on their
 classify event, not a failed batch.
 
@@ -96,8 +96,13 @@ calls' cost; the provider's invoice is the record of what was spent.
 ## Limits
 - Durations in a replay log are the replay client's. Live latency is measured live: the
   evaluation runs record wall time per case, and the held-out runs in `results/evals/` carry it.
-- A step whose retries ran out carries `attempts` and `last_error`. A retry that succeeded leaves
-  no field on the event; it shows only as a longer step duration.
+- A step whose retries ran out carries `attempts`, `failed_calls`, and `last_error`; a step that
+  succeeded after a retry carries `failed_calls` and the `last_error` of its failed attempt.
+  There are no separate events per attempt.
+- `failed_calls` counts attempts that raised in the client. An answer that arrives and then fails
+  to parse or validate (`LLMMalformed`) counts as a completed call, and the step's retry adds a
+  second call with no failed attempt, so for a retry that succeeds, `retry_rate` and
+  `model_call_failure_rate` do not see it.
 - A CLI or API run draws a random trace id per request and stamps events from the wall clock, so
   two runs of the same requests agree in every field except `trace_id`, `ts`, and `duration_ms`
   (and, with concurrency, in the order events are written); reports and alerts key on
