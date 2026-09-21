@@ -30,7 +30,7 @@ One gate stays open; release is not recommended until it closes.
 
 | Gate | Why it is open | What closes it |
 | --- | --- | --- |
-| Monitoring | Nothing records or alerts on the rate of `classification_unavailable`, flagged drafts, latency, or cost in production. Version stamps exist but nothing reads them | Structured events, objectives, alerts, drift reports, and recurring evaluation |
+| Monitoring | Every request records structured events with step durations, tokens, and versions, and the metrics report recomputes latency, routes, and cost from a log (`docs/telemetry.md`). Nothing judges those numbers against a target or alerts on the rate of `classification_unavailable`, flagged drafts, latency, or cost; nothing compares one week's traffic with another's; the evaluation suites run only by hand | Objectives and alerts over event windows, drift reports, recurring evaluation, an incident runbook rehearsed on an outage, and a release watched through them |
 
 ## Known limits, not blocking
 - Confidence is uncalibrated (the wrong category got 0.90 in the POC trial and 0.95 on the hardened
