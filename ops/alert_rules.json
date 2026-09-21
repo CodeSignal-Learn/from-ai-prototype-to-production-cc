@@ -47,10 +47,10 @@
     "owner": "support lead",
     "inspect": [
       "the reasons mix in the window: unknown_category, no_reference_article, hostile, legal, or model steps unavailable",
-      "the category mix in the window against the clean week's (categories in the metrics summary, --json)",
+      "the category mix against the baseline week (drift report)",
       "whether a prompt variant or version changed in the window (versions on request events)"
     ],
-    "respond": "Find out what changed in the requests: compare the window's categories and escalation reasons with the clean week's. Do not roll anything back on this alert alone: a change in what customers ask is not a fault in the assistant, and the fix may be a knowledge article.",
+    "respond": "Open a drift investigation. Do not roll anything back on this alert alone: a change in what customers ask is not a fault in the assistant, and the fix may be a knowledge article.",
     "why": "Escalation share moves with the traffic mix as much as with the assistant, so it is judged over four-hour windows and needs two in a row before anyone is told, and its response is an investigation, not a switch."
   },
   {

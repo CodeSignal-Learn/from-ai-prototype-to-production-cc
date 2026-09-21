@@ -1,0 +1,397 @@
+{
+  "baseline": {
+    "requests": 500,
+    "categories": {
+      "account_access": 0.16,
+      "billing": 0.204,
+      "orders_shipping": 0.262,
+      "other": 0.04,
+      "product_issue": 0.12,
+      "returns_refunds": 0.214
+    },
+    "channels": {
+      "chat": 0.262,
+      "email": 0.49,
+      "web_form": 0.248
+    },
+    "body_chars_p50": 89,
+    "escalation_rate": 0.178,
+    "drafted_rate": 0.832,
+    "flagged_rate": 0.01,
+    "unavailable_rate": 0.0,
+    "reasons": {
+      "hostile_language": 0.036,
+      "instruction_to_assistant": 0.014,
+      "insufficient_information": 0.036,
+      "legal_threat": 0.03,
+      "low_confidence": 0.04,
+      "no_reference_article": 0.04,
+      "sensitive_data": 0.012,
+      "ungrounded_number": 0.01,
+      "unknown_category": 0.04
+    },
+    "articles": {
+      "none": 0.04,
+      "account-merge": 0.112,
+      "billing-and-invoices": 0.204,
+      "order-tracking": 0.158,
+      "password-reset": 0.048,
+      "product-care": 0.08,
+      "refund-timelines": 0.108,
+      "returns-policy": 0.106,
+      "shipping-times": 0.104,
+      "warranty-claims": 0.04
+    },
+    "lookup_method": {
+      "keyword": 1.0
+    },
+    "latency_p50_ms": 4687.5,
+    "latency_p95_ms": 5720.0,
+    "tokens_per_request": {
+      "input": 728.754,
+      "output": 202.128
+    },
+    "cost_per_request_usd": 0.000174,
+    "versions": [
+      {
+        "app": "2.1.0",
+        "client": "replay",
+        "mode": "model",
+        "model": "claude-haiku-5-5",
+        "prompt": "481f9fc0f782",
+        "prompt_variant": "v1"
+      }
+    ]
+  },
+  "recent": {
+    "requests": 500,
+    "categories": {
+      "account_access": 0.26,
+      "billing": 0.154,
+      "orders_shipping": 0.168,
+      "other": 0.15,
+      "product_issue": 0.112,
+      "returns_refunds": 0.156
+    },
+    "channels": {
+      "chat": 0.214,
+      "email": 0.458,
+      "web_form": 0.328
+    },
+    "body_chars_p50": 88,
+    "escalation_rate": 0.292,
+    "drafted_rate": 0.716,
+    "flagged_rate": 0.008,
+    "unavailable_rate": 0.0,
+    "reasons": {
+      "hostile_language": 0.042,
+      "instruction_to_assistant": 0.02,
+      "insufficient_information": 0.05,
+      "legal_threat": 0.04,
+      "low_confidence": 0.038,
+      "no_reference_article": 0.15,
+      "sensitive_data": 0.014,
+      "ungrounded_number": 0.008,
+      "unknown_category": 0.15
+    },
+    "articles": {
+      "none": 0.15,
+      "account-merge": 0.162,
+      "billing-and-invoices": 0.154,
+      "order-tracking": 0.118,
+      "password-reset": 0.098,
+      "product-care": 0.058,
+      "refund-timelines": 0.068,
+      "returns-policy": 0.088,
+      "shipping-times": 0.05,
+      "warranty-claims": 0.054
+    },
+    "lookup_method": {
+      "keyword": 1.0
+    },
+    "latency_p50_ms": 4491.4,
+    "latency_p95_ms": 5685.4,
+    "tokens_per_request": {
+      "input": 677.502,
+      "output": 182.474
+    },
+    "cost_per_request_usd": 0.000159,
+    "versions": [
+      {
+        "app": "2.1.0",
+        "client": "replay",
+        "mode": "model",
+        "model": "claude-haiku-5-5",
+        "prompt": "481f9fc0f782",
+        "prompt_variant": "v1"
+      }
+    ]
+  },
+  "comparison": {
+    "enough_data": true,
+    "versions_changed": false,
+    "categories": {
+      "account_access": {
+        "before": 0.16,
+        "after": 0.26,
+        "delta": 0.1
+      },
+      "billing": {
+        "before": 0.204,
+        "after": 0.154,
+        "delta": -0.05
+      },
+      "orders_shipping": {
+        "before": 0.262,
+        "after": 0.168,
+        "delta": -0.094
+      },
+      "other": {
+        "before": 0.04,
+        "after": 0.15,
+        "delta": 0.11
+      },
+      "product_issue": {
+        "before": 0.12,
+        "after": 0.112,
+        "delta": -0.008
+      },
+      "returns_refunds": {
+        "before": 0.214,
+        "after": 0.156,
+        "delta": -0.058
+      }
+    },
+    "reasons": {
+      "hostile_language": {
+        "before": 0.036,
+        "after": 0.042,
+        "delta": 0.006
+      },
+      "instruction_to_assistant": {
+        "before": 0.014,
+        "after": 0.02,
+        "delta": 0.006
+      },
+      "insufficient_information": {
+        "before": 0.036,
+        "after": 0.05,
+        "delta": 0.014
+      },
+      "legal_threat": {
+        "before": 0.03,
+        "after": 0.04,
+        "delta": 0.01
+      },
+      "low_confidence": {
+        "before": 0.04,
+        "after": 0.038,
+        "delta": -0.002
+      },
+      "no_reference_article": {
+        "before": 0.04,
+        "after": 0.15,
+        "delta": 0.11
+      },
+      "sensitive_data": {
+        "before": 0.012,
+        "after": 0.014,
+        "delta": 0.002
+      },
+      "ungrounded_number": {
+        "before": 0.01,
+        "after": 0.008,
+        "delta": -0.002
+      },
+      "unknown_category": {
+        "before": 0.04,
+        "after": 0.15,
+        "delta": 0.11
+      }
+    },
+    "articles": {
+      "account-merge": {
+        "before": 0.112,
+        "after": 0.162,
+        "delta": 0.05
+      },
+      "billing-and-invoices": {
+        "before": 0.204,
+        "after": 0.154,
+        "delta": -0.05
+      },
+      "none": {
+        "before": 0.04,
+        "after": 0.15,
+        "delta": 0.11
+      },
+      "order-tracking": {
+        "before": 0.158,
+        "after": 0.118,
+        "delta": -0.04
+      },
+      "password-reset": {
+        "before": 0.048,
+        "after": 0.098,
+        "delta": 0.05
+      },
+      "product-care": {
+        "before": 0.08,
+        "after": 0.058,
+        "delta": -0.022
+      },
+      "refund-timelines": {
+        "before": 0.108,
+        "after": 0.068,
+        "delta": -0.04
+      },
+      "returns-policy": {
+        "before": 0.106,
+        "after": 0.088,
+        "delta": -0.018
+      },
+      "shipping-times": {
+        "before": 0.104,
+        "after": 0.05,
+        "delta": -0.054
+      },
+      "warranty-claims": {
+        "before": 0.04,
+        "after": 0.054,
+        "delta": 0.014
+      }
+    },
+    "rates": {
+      "escalation_rate": {
+        "before": 0.178,
+        "after": 0.292
+      },
+      "drafted_rate": {
+        "before": 0.832,
+        "after": 0.716
+      },
+      "flagged_rate": {
+        "before": 0.01,
+        "after": 0.008
+      },
+      "unavailable_rate": {
+        "before": 0.0,
+        "after": 0.0
+      }
+    },
+    "latency_p95_ms": {
+      "before": 5720.0,
+      "after": 5685.4
+    },
+    "tokens_per_request": {
+      "before": {
+        "input": 728.754,
+        "output": 202.128
+      },
+      "after": {
+        "input": 677.502,
+        "output": 182.474
+      }
+    },
+    "signals": [
+      {
+        "kind": "input_shift",
+        "statement": "The share of account_access requests moved from 16% to 26%.",
+        "evidence": {
+          "category": "account_access",
+          "before": 0.16,
+          "after": 0.26,
+          "delta": 0.1
+        },
+        "does_not_prove": "that the assistant handles this category worse; it says more of the traffic is this category"
+      },
+      {
+        "kind": "input_shift",
+        "statement": "The share of billing requests moved from 20% to 15%.",
+        "evidence": {
+          "category": "billing",
+          "before": 0.204,
+          "after": 0.154,
+          "delta": -0.05
+        },
+        "does_not_prove": "that the assistant handles this category worse; it says more of the traffic is this category"
+      },
+      {
+        "kind": "input_shift",
+        "statement": "The share of orders_shipping requests moved from 26% to 17%.",
+        "evidence": {
+          "category": "orders_shipping",
+          "before": 0.262,
+          "after": 0.168,
+          "delta": -0.094
+        },
+        "does_not_prove": "that the assistant handles this category worse; it says more of the traffic is this category"
+      },
+      {
+        "kind": "input_shift",
+        "statement": "The share of other requests moved from 4% to 15%.",
+        "evidence": {
+          "category": "other",
+          "before": 0.04,
+          "after": 0.15,
+          "delta": 0.11
+        },
+        "does_not_prove": "that the assistant handles this category worse; it says more of the traffic is this category"
+      },
+      {
+        "kind": "input_shift",
+        "statement": "The share of returns_refunds requests moved from 21% to 16%.",
+        "evidence": {
+          "category": "returns_refunds",
+          "before": 0.214,
+          "after": 0.156,
+          "delta": -0.058
+        },
+        "does_not_prove": "that the assistant handles this category worse; it says more of the traffic is this category"
+      },
+      {
+        "kind": "input_shift",
+        "statement": "escalation rate moved from 18% to 29%.",
+        "evidence": {
+          "before": 0.178,
+          "after": 0.292,
+          "delta": 0.114
+        },
+        "does_not_prove": "a fault in the assistant when the category mix also moved; a mix that needs a person more often escalates more often"
+      },
+      {
+        "kind": "input_shift",
+        "statement": "drafted rate moved from 83% to 72%.",
+        "evidence": {
+          "before": 0.832,
+          "after": 0.716,
+          "delta": -0.116
+        },
+        "does_not_prove": "a fault in the assistant when the category mix also moved; a mix that needs a person more often escalates more often"
+      },
+      {
+        "kind": "input_shift",
+        "statement": "Escalation reason no_reference_article moved from 4% to 15% of requests.",
+        "evidence": {
+          "reason": "no_reference_article",
+          "before": 0.04,
+          "after": 0.15,
+          "delta": 0.11
+        },
+        "does_not_prove": "which requests were mishandled; the reason names the rule, not the customer's need"
+      },
+      {
+        "kind": "input_shift",
+        "statement": "Escalation reason unknown_category moved from 4% to 15% of requests.",
+        "evidence": {
+          "reason": "unknown_category",
+          "before": 0.04,
+          "after": 0.15,
+          "delta": 0.11
+        },
+        "does_not_prove": "which requests were mishandled; the reason names the rule, not the customer's need"
+      }
+    ],
+    "next_step": "Run the recurring evaluation on the cases behind the recent window and compare its rubric results with the baseline window's; a mix shift with unchanged per-case quality needs knowledge articles, not a rollback; a quality drop with an unchanged mix needs the version history."
+  }
+}

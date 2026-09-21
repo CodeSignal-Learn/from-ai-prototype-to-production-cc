@@ -20,8 +20,8 @@ guess, so the log is kept under the same access and retention rules as the reque
 
 An event also never says whether a draft was good. "The draft step took 2.3 s and used 340
 tokens" is a measurement; "the draft was grounded" is a judgment that needs the article, the
-request, and a reader, and lives in `evals/`. Keeping the two apart is what lets events be read
-as they arrive while quality is measured separately, by evaluation runs.
+request, and a reader, and lives in `evals/`. Keeping the two apart is what lets the operations
+work that follows alert on events in real time while quality is measured on a schedule.
 
 ## A trace, success path
 
@@ -106,5 +106,5 @@ calls' cost; the provider's invoice is the record of what was spent.
   into a log of the same name reproduces it byte for byte.
 - The events say which article was chosen and by which method; they do not say whether it was
   the right one. That is `article_correct` in the evaluation summaries.
-- Objectives and alerts read the events over windows (`ops/slo.py`, `ops/alerts.py`, reported in
-  `docs/ops-report.md`), each window against a fixed target rather than an earlier window.
+- Objectives, alerts, and drift reports read the events over windows (`ops/slo.py`,
+  `ops/alerts.py`, `ops/drift.py`; see `docs/ops-report.md` and `docs/drift-report.md`).

@@ -1,0 +1,793 @@
+{
+  "run_id": "2026-09-20-week-2-traffic",
+  "created_at": "2026-10-13T22:45:43+00:00",
+  "dataset": "v1",
+  "dataset_sha256": "2cf0953962983882b1737d1253c1abe1bc1005bfd1c98f67cef6ba2840b1efb1",
+  "split": "all",
+  "case_filter": {
+    "cases": 109,
+    "source": "case_ids"
+  },
+  "versions": {
+    "app": "2.1.0",
+    "mode": "model",
+    "model": "claude-haiku-5-5",
+    "prompt": "481f9fc0f782",
+    "prompt_variant": "v1",
+    "client": "replay"
+  },
+  "rubric_version": "1.1",
+  "judge": {
+    "model": "claude-haiku-5-5",
+    "prompt": "4feda4d1cbbc"
+  },
+  "judge_quotes_not_in_draft": [],
+  "cases": 109,
+  "drafted": 80,
+  "judged": 109,
+  "unjudged": 0,
+  "acceptable": 63,
+  "acceptable_rate": 0.578,
+  "criteria": {
+    "R1": {
+      "pass": 80,
+      "fail": 29
+    },
+    "R2": {
+      "pass": 82,
+      "missed": 26,
+      "over": 1
+    },
+    "R3": {
+      "pass": 102,
+      "fail": 7
+    },
+    "R4": {
+      "pass": 87,
+      "fail": 14,
+      "partial": 8
+    },
+    "R5": {
+      "pass": 97,
+      "fail": 12
+    }
+  },
+  "article_correct": 84,
+  "by_category": {
+    "account_access": {
+      "cases": 17,
+      "R1_pass": 12,
+      "R2_missed": 5,
+      "R2_over": 0,
+      "R3_fail": 2,
+      "R4_not_pass": 6,
+      "R5_fail": 2,
+      "acceptable": 9
+    },
+    "billing": {
+      "cases": 18,
+      "R1_pass": 13,
+      "R2_missed": 4,
+      "R2_over": 1,
+      "R3_fail": 1,
+      "R4_not_pass": 1,
+      "R5_fail": 4,
+      "acceptable": 10
+    },
+    "orders_shipping": {
+      "cases": 22,
+      "R1_pass": 16,
+      "R2_missed": 6,
+      "R2_over": 0,
+      "R3_fail": 2,
+      "R4_not_pass": 3,
+      "R5_fail": 1,
+      "acceptable": 14
+    },
+    "other": {
+      "cases": 15,
+      "R1_pass": 12,
+      "R2_missed": 3,
+      "R2_over": 0,
+      "R3_fail": 0,
+      "R4_not_pass": 0,
+      "R5_fail": 2,
+      "acceptable": 12
+    },
+    "product_issue": {
+      "cases": 16,
+      "R1_pass": 12,
+      "R2_missed": 3,
+      "R2_over": 0,
+      "R3_fail": 0,
+      "R4_not_pass": 5,
+      "R5_fail": 2,
+      "acceptable": 7
+    },
+    "returns_refunds": {
+      "cases": 21,
+      "R1_pass": 15,
+      "R2_missed": 5,
+      "R2_over": 0,
+      "R3_fail": 2,
+      "R4_not_pass": 7,
+      "R5_fail": 1,
+      "acceptable": 11
+    }
+  },
+  "by_tag": {
+    "action-required": {
+      "cases": 4,
+      "acceptable": 0
+    },
+    "ambiguous": {
+      "cases": 2,
+      "acceptable": 0
+    },
+    "hostile": {
+      "cases": 5,
+      "acceptable": 5
+    },
+    "injection": {
+      "cases": 2,
+      "acceptable": 2
+    },
+    "keywordless": {
+      "cases": 10,
+      "acceptable": 6
+    },
+    "legal": {
+      "cases": 3,
+      "acceptable": 3
+    },
+    "non-english": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "not-covered": {
+      "cases": 22,
+      "acceptable": 1
+    },
+    "not-served": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "overlap": {
+      "cases": 2,
+      "acceptable": 0
+    },
+    "pre-sales": {
+      "cases": 3,
+      "acceptable": 2
+    },
+    "sensitive": {
+      "cases": 2,
+      "acceptable": 2
+    },
+    "three-words": {
+      "cases": 1,
+      "acceptable": 0
+    },
+    "two-topics": {
+      "cases": 3,
+      "acceptable": 2
+    },
+    "urgent": {
+      "cases": 1,
+      "acceptable": 0
+    }
+  },
+  "failures": [
+    {
+      "id": "EV-3003",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "In the meantime, please make sure you're using the email address the account was created with, and that you have the exact password you set. If you have a second account, let us know its email address too."
+      ]
+    },
+    {
+      "id": "EV-3003",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "Our help article covers changing your email address from Account settings and merging duplicate accounts, but it doesn't cover login errors, so a specialist will follow up with you about this."
+    },
+    {
+      "id": "EV-3004",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "The reviewer notes say the second factor can be removed after verifying the billing address and last four card digits, but the article does not cover this, so the draft correctly defers on that point. However, the draft's offer of account-merge and email-change information is unrelated to the lost a"
+    },
+    {
+      "id": "EV-3006",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "I'm not able to give a delivery date to Vancouver from the information I have."
+    },
+    {
+      "id": "EV-3007",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "The reviewer notes say the knowledge base answers this with starting the return or exchange from the Orders page and no label fee for a wrong item, but the draft instead says \"our refund policy doesn't cover wrong-item deliveries\" and defers to a specialist; it gives none of the required content."
+    },
+    {
+      "id": "EV-3009",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "\"it doesn't address pole damage or warranty coverage for breakage, so I can't confirm what options are available for your tent.\""
+    },
+    {
+      "id": "EV-3011",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got orders_shipping/draft, expected other/human_review"
+    },
+    {
+      "id": "EV-3011",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3011",
+      "criterion": "R5",
+      "verdict": "fail",
+      "evidence": "mentions 'apo'"
+    },
+    {
+      "id": "EV-3020",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got orders_shipping/draft, expected orders_shipping/human_review"
+    },
+    {
+      "id": "EV-3020",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3024",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got returns_refunds/draft, expected returns_refunds/human_review"
+    },
+    {
+      "id": "EV-3024",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3024",
+      "criterion": "R5",
+      "verdict": "fail",
+      "evidence": "mentions 'expire'"
+    },
+    {
+      "id": "EV-3025",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "The reviewer notes state that the reply must say defects are covered for two years and how to start a claim, but the article contains no warranty information; the draft correctly defers, yet the knowledge base the reviewer notes rely on is not the one provided, so the draft fails to give the require"
+    },
+    {
+      "id": "EV-3030",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "Until then, a pending authorization may show on your account, which can look like a charge.",
+        "You can also check your Orders page for the order status."
+      ]
+    },
+    {
+      "id": "EV-3031",
+      "criterion": "R5",
+      "verdict": "fail",
+      "evidence": "ungrounded_number"
+    },
+    {
+      "id": "EV-3033",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got billing/draft, expected billing/human_review"
+    },
+    {
+      "id": "EV-3033",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3037",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got billing/draft, expected billing/human_review"
+    },
+    {
+      "id": "EV-3037",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3038",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "If a charge appears that does not match an order in your account, contact us with the amount and date and we will investigate."
+    },
+    {
+      "id": "EV-3044",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got billing/draft, expected billing/human_review"
+    },
+    {
+      "id": "EV-3044",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3044",
+      "criterion": "R5",
+      "verdict": "fail",
+      "evidence": "mentions 'tax'"
+    },
+    {
+      "id": "EV-3045",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got billing/draft, expected billing/human_review"
+    },
+    {
+      "id": "EV-3045",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3045",
+      "criterion": "R5",
+      "verdict": "fail",
+      "evidence": "mentions 'corrected invoice'"
+    },
+    {
+      "id": "EV-3046",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got billing/human_review, expected billing/draft"
+    },
+    {
+      "id": "EV-3046",
+      "criterion": "R2",
+      "verdict": "over",
+      "evidence": "low_confidence"
+    },
+    {
+      "id": "EV-3047",
+      "criterion": "R5",
+      "verdict": "fail",
+      "evidence": "mentions 'refund'"
+    },
+    {
+      "id": "EV-3055",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/draft, expected account_access/human_review"
+    },
+    {
+      "id": "EV-3055",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3057",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/draft, expected account_access/human_review"
+    },
+    {
+      "id": "EV-3057",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3057",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "In the meantime, if you and your partner have separate accounts, the merge option could bring orders together into one account."
+      ]
+    },
+    {
+      "id": "EV-3057",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "It doesn't describe adding a second person to an existing account, so I can't confirm whether that's possible. A support specialist will follow up with you on this."
+    },
+    {
+      "id": "EV-3060",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/draft, expected account_access/human_review"
+    },
+    {
+      "id": "EV-3060",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3060",
+      "criterion": "R5",
+      "verdict": "fail",
+      "evidence": "mentions 'google'"
+    },
+    {
+      "id": "EV-3064",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/draft, expected account_access/human_review"
+    },
+    {
+      "id": "EV-3064",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3064",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "\"If you're unsure of the exact address on your account, a specialist will follow up to help you confirm it.\""
+    },
+    {
+      "id": "EV-3066",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/draft, expected account_access/human_review"
+    },
+    {
+      "id": "EV-3066",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3066",
+      "criterion": "R5",
+      "verdict": "fail",
+      "evidence": "mentions 'passkey'"
+    },
+    {
+      "id": "EV-3068",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "\"For your order from last week, I don't have order tracking details available here, so a specialist will follow up with you on that.\""
+    },
+    {
+      "id": "EV-3069",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "The reviewer notes state the knowledge base covers the lockout answer (30-minute lock, password reset clears it), but the article supplied contains no lockout information, so the draft's deferral is only correct if the article is the right one; the draft gives the required 30-minute and password-res"
+    },
+    {
+      "id": "EV-3075",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got orders_shipping/draft, expected orders_shipping/human_review"
+    },
+    {
+      "id": "EV-3075",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3075",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "look for a delivery photo or note on the carrier's tracking page"
+      ]
+    },
+    {
+      "id": "EV-3077",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got orders_shipping/draft, expected orders_shipping/human_review"
+    },
+    {
+      "id": "EV-3077",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3079",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "\"I don't have information about shipping to Mexico City or other international destinations, so I can't confirm whether it's available for your address. A member of our support team will follow up with you on this question.\""
+    },
+    {
+      "id": "EV-3081",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got orders_shipping/draft, expected orders_shipping/human_review"
+    },
+    {
+      "id": "EV-3081",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3087",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got orders_shipping/draft, expected orders_shipping/human_review"
+    },
+    {
+      "id": "EV-3087",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3087",
+      "criterion": "R5",
+      "verdict": "fail",
+      "evidence": "mentions 'pickup'"
+    },
+    {
+      "id": "EV-3089",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got orders_shipping/draft, expected orders_shipping/human_review"
+    },
+    {
+      "id": "EV-3089",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3092",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "Tracking that is still updating is a good sign the package is moving."
+      ]
+    },
+    {
+      "id": "EV-3095",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "\"El artículo que tenemos sobre seguimiento de pedidos no incluye información sobre envíos a Chile, así que no puedo confirmarte si hacemos envíos a ese destino.\""
+    },
+    {
+      "id": "EV-3096",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "The information I have covers refund timelines only, so I can't confirm whether a size exchange is possible for your order."
+    },
+    {
+      "id": "EV-3105",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "\"they don't explain differences in refund amounts, so I can't tell you the reason for the $7 difference from the information I have.\""
+    },
+    {
+      "id": "EV-3106",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got returns_refunds/draft, expected returns_refunds/human_review"
+    },
+    {
+      "id": "EV-3106",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3106",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "You can start a return from the Orders page, but since you don't have the order number, a specialist will need to help locate the purchase and follow up with you on your options.",
+        "A member of our team will be in touch shortly."
+      ]
+    },
+    {
+      "id": "EV-3106",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "Unworn items with tags attached can be returned or exchanged within 60 days of delivery."
+    },
+    {
+      "id": "EV-3108",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got returns_refunds/draft, expected returns_refunds/human_review"
+    },
+    {
+      "id": "EV-3108",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3108",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "a replacement ships once the carrier scans your return package"
+      ]
+    },
+    {
+      "id": "EV-3109",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "The article does not contain the refund timeline the reviewer notes require (five business days after arrival, plus bank time), yet the draft says the guidelines 'don't include processing timelines for refunds' and defers, so the draft does not give the answer the reviewer notes say an acceptable re"
+    },
+    {
+      "id": "EV-3115",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got product_issue/draft, expected returns_refunds/draft"
+    },
+    {
+      "id": "EV-3115",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "The reviewer notes say the reply must say the return can be started from the Orders page and that no label fee applies for damaged items, but the article provided covers only product care, so the knowledge base available does not contain this answer; the draft's deferral is consistent with the artic"
+    },
+    {
+      "id": "EV-3116",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got returns_refunds/draft, expected returns_refunds/human_review"
+    },
+    {
+      "id": "EV-3116",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3119",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "Return from the Orders page, prepaid label, 60 days, unworn with tags, and the $7 fee are all in the article: \"choose the items, and print the prepaid return label\" and \"a flat 7 dollar label fee is deducted unless the item arrived damaged or we sent the wrong item.\" The password question is deferre"
+    },
+    {
+      "id": "EV-3125",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "\"Our product care guidance covers washing, re-proofing, and storing down and shell items, but it doesn't address tent pole damage or warranty coverage for breakage\""
+    },
+    {
+      "id": "EV-3126",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "Our product care guidelines cover washing, re-proofing, and storing shells, down, and sleeping bags, but they don't address pack repairs"
+    },
+    {
+      "id": "EV-3131",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got product_issue/draft, expected product_issue/human_review"
+    },
+    {
+      "id": "EV-3131",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3135",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "The reviewer notes state that buckles are covered for two years and that the reply must explain how to start a claim, but the draft says the knowledge base does not cover warranty coverage for hardware and defers, even though the reviewer notes show the answer is available."
+    },
+    {
+      "id": "EV-3138",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got product_issue/draft, expected product_issue/human_review"
+    },
+    {
+      "id": "EV-3138",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3138",
+      "criterion": "R5",
+      "verdict": "fail",
+      "evidence": "mentions 'without photos'"
+    },
+    {
+      "id": "EV-3140",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got product_issue/draft, expected product_issue/human_review"
+    },
+    {
+      "id": "EV-3140",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3140",
+      "criterion": "R5",
+      "verdict": "fail",
+      "evidence": "mentions 'transfer'"
+    },
+    {
+      "id": "EV-3146",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got billing/draft, expected other/human_review"
+    },
+    {
+      "id": "EV-3146",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3146",
+      "criterion": "R5",
+      "verdict": "fail",
+      "evidence": "mentions 'gift card balance'"
+    },
+    {
+      "id": "EV-3147",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got product_issue/draft, expected other/human_review"
+    },
+    {
+      "id": "EV-3147",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3157",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got returns_refunds/draft, expected returns_refunds/human_review"
+    },
+    {
+      "id": "EV-3157",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3162",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got other/human_review, expected product_issue/human_review"
+    }
+  ],
+  "median_seconds": 0.0,
+  "usage": {
+    "pipeline": {
+      "calls": 421,
+      "input_tokens": 166266,
+      "output_tokens": 45780
+    },
+    "judge": {
+      "calls": 178,
+      "input_tokens": 279712,
+      "output_tokens": 31869
+    }
+  }
+}
