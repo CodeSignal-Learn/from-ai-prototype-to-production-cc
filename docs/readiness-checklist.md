@@ -1,7 +1,7 @@
 # Production readiness checklist
 
-State of the hardened assistant at the end of the hardening phase. Every closed item names its
-evidence. Two gates stay open on purpose; release is not recommended until they close.
+State of the assistant after hardening and evaluation. Every closed item names its evidence.
+One gate stays open; release is not recommended until it closes.
 
 ## Closed
 
@@ -23,25 +23,27 @@ evidence. Two gates stay open on purpose; release is not recommended until they 
 | Operability | Every result carries app, prompt, model, and mode versions | `version.py`, `tests/test_version.py` |
 | Operability | Rollback to rules mode by configuration, rehearsed | `docs/recovery-rehearsal.md` |
 | Operability | Model outages can be injected for drills | `ASSISTANT_REPLAY_FAILURES`, `tests/test_version.py` |
+| Evaluation | Quality is defined and measured: rubric, 168-case dataset with a held-out split, runner with deterministic checks and a judge calibrated against a reviewer, 22 adversarial probes kept as regressions, baseline versus candidate comparison over repeated runs | `evals/`, `docs/eval-baseline.md`, `docs/judge-calibration.md`, `docs/failure-taxonomy.md`, `docs/eval-comparison.md` |
+| Security | Paraphrased instructions found by red-teaming are detected; pasted card numbers reach a person; deferrals that name an outcome are treated as promises | `tests/test_regressions.py`, `docs/failure-taxonomy.md` |
 
 ## Open gates
 
 | Gate | Why it is open | What closes it |
 | --- | --- | --- |
-| Semantic evaluation | The deterministic checks catch numbers, links, and promises. The two ungrounded statements found in the POC review were stated in words and would pass them. Nobody has measured how often the hardened prompts invent policy, on how many requests, with what held-out set | An evaluation suite: rubric, labeled dataset with a held-out split, a calibrated judge, adversarial cases, and a baseline versus candidate comparison |
 | Monitoring | Nothing records or alerts on the rate of `classification_unavailable`, flagged drafts, latency, or cost in production. Version stamps exist but nothing reads them | Structured events, objectives, alerts, drift reports, and recurring evaluation |
 
-## Known limits, not blocking hardening
+## Known limits, not blocking
 - Confidence is uncalibrated (20 of 25 values at 0.95 in the POC trial, 18 of 25 on the hardened
-  rerun); escalation does not rely on it.
-- Article selection inside a category is keyword-based and chose the wrong article for 5 of 25
-  trial requests; the model then correctly deferred. To be measured and fixed with evaluation.
-- Three trial requests the labels send to a person were drafted instead (REQ-2011, REQ-2020,
-  REQ-2024). Each draft defers to a specialist and an agent reviews every draft, so none reaches
-  a customer unread; REQ-2020's draft also implies an address change a specialist can make,
-  which no article states. The semantic evaluation gate measures how often this happens.
-- Instruction detection matches phrasing; adversarial cases that go around it are for the
-  evaluation suite to find.
+  rerun). A confidence below the threshold still escalates, as an extra conservative trigger; no
+  other routing decision depends on it.
+- Article selection inside a category is keyword-based and chose the wrong article for 18 of 57
+  answerable development cases (`docs/eval-baseline.md`, finding 2); the v2 candidate prompts
+  address it; `docs/eval-comparison.md` recommends adopting them through a controlled rollout,
+  and v1 stays the default until then.
+- A request the knowledge base does not answer receives a drafted deferral instead of an
+  escalation (finding 1); same candidate, same decision.
+- Instruction detection matches phrasing; the known paraphrases are pinned in
+  `tests/test_regressions.py`, and new ones need new probes.
 - Load numbers come from a simulated model; live provider limits are unmeasured.
 - Results are written when a batch finishes, so a run that dies halfway starts over; `--resume`
   skips only what a finished run wrote.

@@ -74,6 +74,7 @@ class Verdict:
     category: str
     confidence: float
     reason: str
+    article: str | None = None   # v2 classifier: the slug it says answers the request
 
 
 class InvalidVerdict(ValueError):
@@ -90,7 +91,10 @@ def validate_verdict(parsed: dict) -> Verdict:
     if not 0.0 <= float(confidence) <= 1.0:
         raise InvalidVerdict(f"confidence {confidence} is outside 0..1")
     reason = parsed.get("reason", "")
-    return Verdict(category=category, confidence=float(confidence), reason=str(reason)[:300])
+    article = parsed.get("article")
+    if article is not None and not isinstance(article, str):
+        raise InvalidVerdict(f"article {article!r} is not a slug")
+    return Verdict(category=category, confidence=float(confidence), reason=str(reason)[:300], article=article)
 
 
 def numbers_in(text: str) -> set[str]:
