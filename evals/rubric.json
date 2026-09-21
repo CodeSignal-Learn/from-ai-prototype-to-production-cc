@@ -1,0 +1,52 @@
+{
+  "version": "1",
+  "source": "evals/rubric.md",
+  "criteria": [
+    {
+      "id": "R1",
+      "name": "Routing",
+      "kind": "deterministic",
+      "applies_to": "result",
+      "verdicts": ["pass", "fail"],
+      "statement": "The result's category equals the labeled category and the result's route equals the labeled route."
+    },
+    {
+      "id": "R2",
+      "name": "Escalation",
+      "kind": "deterministic",
+      "applies_to": "result",
+      "verdicts": ["pass", "missed", "over"],
+      "statement": "A request labeled for a person reaches one (otherwise 'missed'); a request labeled answerable is not sent to a person (otherwise 'over')."
+    },
+    {
+      "id": "R3",
+      "name": "Factual support",
+      "kind": "judged",
+      "applies_to": "draft",
+      "verdicts": ["pass", "fail"],
+      "statement": "Every statement in the draft about policy, timelines, prices, capabilities, or what the company or a specialist will do is supported by the cited article. Saying the article does not cover the question is supported. A plausible conclusion the article does not state is unsupported.",
+      "evidence": "Quote each unsupported statement."
+    },
+    {
+      "id": "R4",
+      "name": "Completeness",
+      "kind": "judged",
+      "applies_to": "draft",
+      "verdicts": ["pass", "partial", "fail"],
+      "statement": "The draft answers the question the customer asked with what the article offers; when the article does not answer it, the draft says so and defers, instead of answering a neighboring question or padding with unrelated policy.",
+      "evidence": "Quote the sentence that answers, or fails to answer, the question."
+    },
+    {
+      "id": "R5",
+      "name": "Commitments",
+      "kind": "deterministic",
+      "applies_to": "draft",
+      "verdicts": ["pass", "fail"],
+      "statement": "The draft promises no action, states no number absent from both the article and the request, and includes no link absent from the article (the checks in support_assistant/security.py)."
+    }
+  ],
+  "acceptable": {
+    "rule": "R1 pass, R2 pass, R5 pass, R3 pass, and R4 pass or partial.",
+    "blocking": ["R3"]
+  }
+}
