@@ -16,16 +16,28 @@ from .events import Event, EventSink, now_iso
 @dataclass
 class StepUsage:
     calls: int = 0
+    failed_calls: int = 0          # attempts that raised; a retried step has calls + failed_calls attempts
     input_tokens: int = 0
     output_tokens: int = 0
+    last_error: str | None = None  # type of the latest failed attempt, so a retried step says what it retried
 
     def add(self, completion: Completion) -> None:
         self.calls += 1
         self.input_tokens += completion.input_tokens
         self.output_tokens += completion.output_tokens
 
+    def add_failure(self, error: str | None = None) -> None:
+        self.failed_calls += 1
+        if error:
+            self.last_error = error
+
     def as_attrs(self) -> dict:
-        return {"calls": self.calls, "input_tokens": self.input_tokens, "output_tokens": self.output_tokens}
+        attrs = {"calls": self.calls, "input_tokens": self.input_tokens, "output_tokens": self.output_tokens}
+        if self.failed_calls:
+            attrs["failed_calls"] = self.failed_calls
+        if self.last_error:
+            attrs["last_error"] = self.last_error
+        return attrs
 
 
 class MeteredClient:
@@ -41,7 +53,11 @@ class MeteredClient:
         return self.inner.usage
 
     def complete(self, system: str, user: str, max_tokens: int) -> Completion:
-        completion = self.inner.complete(system, user, max_tokens)
+        try:
+            completion = self.inner.complete(system, user, max_tokens)
+        except Exception as error:
+            self.trace.record_failed_call(error)
+            raise
         self.trace.record_usage(completion)
         return completion
 
@@ -72,6 +88,12 @@ class Trace:
         self.usage.setdefault(step, StepUsage()).add(completion)
         self.total_usage.add(completion)
 
+    def record_failed_call(self, error: BaseException | None = None) -> None:
+        """A failed attempt on the current step, with its error type; the request total only counts it."""
+        step = self.current_step or "unattributed"
+        self.usage.setdefault(step, StepUsage()).add_failure(None if error is None else type(error).__name__)
+        self.total_usage.add_failure()
+
     def meter(self, client):
         return None if client is None else MeteredClient(client, self)
 
@@ -92,7 +114,7 @@ class Trace:
             usage = self.usage.get(name)
             merged = dict(attrs, **outcome.attrs)
             if usage:
-                merged.update(usage.as_attrs())
+                merged = {**usage.as_attrs(), **merged}    # an exhausted step's own last_error wins
             self.current_step = None
             self.emit(name, outcome.status, elapsed_ms, **merged)
 

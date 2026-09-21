@@ -23,10 +23,13 @@ assert on the delays that would have been slept. End-to-end failure paths run of
 scripts exceptions between answers, and `ReplayClient(failures=[...])` raises them before serving a recording.
 
 ## Still open
-- A run of repeated `classification_unavailable` results fires the `model_unavailable` alert
-  (`docs/ops-report.md`), but only once requests already reach a person; nothing warns earlier.
-- The latency of retries shows in step durations, but a retry that succeeded leaves no field on
-  the event, so retries that recover are not counted.
+- A run of repeated `classification_unavailable` results fires the `model_unavailable` alert, and
+  `retries_rising` warns before it while retries still succeed (`ops/runbook.md`). Both were
+  rehearsed on replayed traffic only.
+- Every attempt that raises is recorded, including the ones a retry recovered (`failed_calls`,
+  `last_error`). A malformed answer that a retry recovered is not: the client returned it before
+  it failed to parse. Replayed waits come from a simulated clock; the live latency of retries is
+  unmeasured.
 - Results are written only when the batch finishes, so a run that dies halfway has nothing on disk
   and starts over. Writing each result as it arrives is not scheduled.
 - Retry delays have no jitter and ignore `Retry-After` on a 429; both matter once several
