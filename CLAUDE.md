@@ -23,6 +23,10 @@ and `v2` (the candidate, `ASSISTANT_PROMPT_VARIANT=v2`); results and `/health` s
 step with its duration and tokens (`trace.py`), written as JSON lines by `EventSink`
 (`ASSISTANT_EVENTS_FILE`); `telemetry/metrics.py` recomputes latency, errors, usage, and cost
 from explicit rates (`ASSISTANT_INPUT_RATE_PER_MILLION`, `ASSISTANT_OUTPUT_RATE_PER_MILLION`).
+`ops/slo.py` evaluates the objectives in `ops/objectives.json` over tumbling windows of an event
+log; `ops/alerts.py` evaluates `ops/alert_rules.json` (threshold, window, consecutive windows,
+owner, what to inspect, what to do). `scripts/replay_traffic.py` replays `data/traffic/*.jsonl`
+on the replay client with simulated time and optional injected outages or slow stretches.
 
 ## Boundaries
 - Drafts are never sent. `Result.sent` stays `False`. The only network calls in this codebase are
@@ -44,6 +48,8 @@ from explicit rates (`ASSISTANT_INPUT_RATE_PER_MILLION`, `ASSISTANT_OUTPUT_RATE_
 - Knowledge articles in `kb/` are the support team's content. Do not edit them for a code change.
 - Events carry ids, counts, durations, hashes, and lengths, never customer text or draft text,
   and never a judgment about draft quality. Clocks and sleeps are injected; tests never wait.
+- Objectives and alert rules are data, not code; a rule change is an edit to the JSON with its
+  `why`, tested by replaying a week and checking what fires. Alerts name an owner and a response.
 - Prompts are versioned by content hash and recordings are keyed by prompt. Editing a `v1`
   prompt invalidates every recording and every evaluation run made with it; a new prompt is a
   new variant, compared on the held-out split before it becomes the default.

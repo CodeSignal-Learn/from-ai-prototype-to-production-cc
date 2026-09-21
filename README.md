@@ -24,6 +24,9 @@ ASSISTANT_PROMPT_VARIANT=v2 python3 -m support_assistant.cli data/requests.jsonl
 python3 -m evals.report --baseline v1-held_out-baseline-r1 v1-held_out-baseline-r2 v1-held_out-baseline-r3 --candidate v1-held_out-candidate-r1 v1-held_out-candidate-r2 v1-held_out-candidate-r3
 python3 -m support_assistant.cli data/requests.jsonl --mode model --client replay --events results/events/batch.jsonl   # write a trace per request
 python3 -m support_assistant.telemetry.metrics results/events/batch.jsonl --input-rate 1.00 --output-rate 5.00        # latency, errors, usage, cost
+python3 scripts/replay_traffic.py data/traffic/week-1.jsonl --events results/events/week-1.jsonl [--outage 200:30] [--slow 320:360:12000] [--variant v2]
+python3 -m ops.slo results/events/week-1.jsonl --input-rate 1.00 --output-rate 5.00      # objectives over daily windows
+python3 -m ops.alerts results/events/week-1-incidents.jsonl --input-rate 1.00 --output-rate 5.00   # which rules fire, for whom, what to do
 ```
 
 Settings are read from `ASSISTANT_*` environment variables (mode, model, client, prompt variant,
@@ -38,6 +41,9 @@ calibration, and the baseline-versus-candidate report; runs are written under `r
 Evaluation findings are in `docs/eval-baseline.md`, `docs/judge-calibration.md`,
 `docs/failure-taxonomy.md`, and `docs/eval-comparison.md`. Every request emits a trace of
 structured events (`support_assistant/telemetry/`, `docs/telemetry.md`), written to the file in
-`ASSISTANT_EVENTS_FILE`; events carry no customer or draft text.
+`ASSISTANT_EVENTS_FILE`; events carry no customer or draft text. `ops/` holds the service
+objectives (`ops/objectives.json`) and alert rules (`ops/alert_rules.json`) evaluated over event
+windows, with the report in `docs/ops-report.md`; `data/traffic/` holds two recorded weeks that
+`scripts/replay_traffic.py` replays with simulated time.
 
 The requests in `data/` are synthetic samples; no real customer data is stored in this repository.

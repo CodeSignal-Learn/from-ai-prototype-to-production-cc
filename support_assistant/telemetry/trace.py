@@ -51,6 +51,7 @@ class Trace:
     request_id: str
     sink: EventSink
     clock: callable = time.perf_counter
+    now: callable = now_iso                  # wall-clock stamp; replays of recorded traffic inject their own
     trace_id: str = field(default_factory=lambda: uuid.uuid4().hex[:16])
     started: float | None = None
     current_step: str | None = None
@@ -61,7 +62,7 @@ class Trace:
         self.started = self.clock()
 
     def emit(self, step: str, status: str, duration_ms: float | None = None, **attrs) -> Event:
-        event = Event(ts=now_iso(), trace_id=self.trace_id, request_id=self.request_id, step=step,
+        event = Event(ts=self.now(), trace_id=self.trace_id, request_id=self.request_id, step=step,
                       status=status, duration_ms=None if duration_ms is None else round(duration_ms, 1), attrs=attrs)
         self.sink.emit(event)
         return event

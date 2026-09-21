@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Availability",
+    "indicator": "availability",
+    "target": 0.99,
+    "comparison": ">=",
+    "window_minutes": 1440,
+    "min_requests": 20,
+    "why": "A request whose model step is unavailable still reaches a person, but every one costs an agent the time the draft would have saved. One in a hundred is the level the team agreed to absorb."
+  },
+  {
+    "name": "Latency",
+    "indicator": "latency_p95_ms",
+    "target": 8000,
+    "comparison": "<=",
+    "window_minutes": 1440,
+    "min_requests": 20,
+    "why": "Drafts must be ready when an agent opens the queue. Two model calls at the live median of 2.4 s each leave room under 8 s for retries on a minority of requests."
+  },
+  {
+    "name": "Escalation share",
+    "indicator": "escalation_rate",
+    "target": 0.45,
+    "comparison": "<=",
+    "window_minutes": 1440,
+    "min_requests": 20,
+    "why": "The share of requests a person handles without a draft is the agents' workload. Above this, the assistant is not paying for itself; it is also the first place a change in the traffic mix shows."
+  },
+  {
+    "name": "Flagged drafts",
+    "indicator": "flagged_draft_rate",
+    "target": 0.1,
+    "comparison": "<=",
+    "window_minutes": 1440,
+    "min_requests": 20,
+    "why": "A flagged draft promised something or stated a number the article does not contain; it still reaches a person, with the draft attached. Under the shipped prompts the checks flag 4 to 6 percent of drafts on ordinary weeks, most of them deferrals that name an outcome, so the target is set above that and a rising rate is the signal, not the level."
+  },
+  {
+    "name": "Spend",
+    "indicator": "cost_per_request_usd",
+    "target": 0.01,
+    "comparison": "<=",
+    "window_minutes": 1440,
+    "min_requests": 20,
+    "why": "The POC charter's cost gate, at the operator-supplied rates. Without rates the objective reports insufficient data rather than a guess."
+  }
+]

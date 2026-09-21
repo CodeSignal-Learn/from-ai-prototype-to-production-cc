@@ -1,0 +1,91 @@
+[
+  {
+    "name": "model_unavailable",
+    "indicator": "model_unavailable_rate",
+    "threshold": 0.05,
+    "comparison": ">",
+    "window_minutes": 60,
+    "for_windows": 1,
+    "min_requests": 5,
+    "severity": "high",
+    "owner": "on-call engineer",
+    "inspect": [
+      "classify and draft events with status unavailable in the window: attempts and last_error",
+      "the provider's status page and the retry backoff in the step durations",
+      "/health for the running mode, client, and versions"
+    ],
+    "respond": "If the rate stays above threshold for a second window, switch the deployment to rules mode (ASSISTANT_MODE=rules) per the runbook; requests are still answered from templates and a person still sends. Switch back when two consecutive windows on the model are clean.",
+    "why": "An unavailable model step is the failure the retry policy could not fix. One window is enough to act because every affected request costs an agent the draft."
+  },
+  {
+    "name": "latency_p95",
+    "indicator": "latency_p95_ms",
+    "threshold": 8000,
+    "comparison": ">",
+    "window_minutes": 120,
+    "for_windows": 2,
+    "min_requests": 8,
+    "severity": "medium",
+    "owner": "on-call engineer",
+    "inspect": [
+      "per-step p50 durations: is it classify, draft, or both",
+      "output token counts on draft events: longer drafts or a slower provider",
+      "attempts on step events: retries add backoff to the total"
+    ],
+    "respond": "Confirm it is the provider and not a batch with unusual concurrency. If the provider, lower ASSISTANT_CONCURRENCY and raise ASSISTANT_TIMEOUT_SECONDS within the objective; if p95 stays above 8 s for two more windows, rules mode.",
+    "why": "One slow window is noise; two consecutive two-hour windows over the objective is a change agents will feel. At the assistant's volume (about seven requests an hour) a one-hour window rarely holds enough requests to judge a percentile."
+  },
+  {
+    "name": "escalation_share",
+    "indicator": "escalation_rate",
+    "threshold": 0.6,
+    "comparison": ">",
+    "window_minutes": 240,
+    "for_windows": 2,
+    "min_requests": 20,
+    "severity": "low",
+    "owner": "support lead",
+    "inspect": [
+      "the reasons mix in the window: unknown_category, no_reference_article, hostile, legal, or model steps unavailable",
+      "the category mix against the baseline week (drift report)",
+      "whether a prompt variant or version changed in the window (versions on request events)"
+    ],
+    "respond": "Open a drift investigation. Do not roll anything back on this alert alone: a change in what customers ask is not a fault in the assistant, and the fix may be a knowledge article.",
+    "why": "Escalation share moves with the traffic mix as much as with the assistant, so it is judged over half-day windows and needs two in a row before anyone is told, and its response is an investigation, not a switch."
+  },
+  {
+    "name": "flagged_drafts",
+    "indicator": "flagged_draft_rate",
+    "threshold": 0.15,
+    "comparison": ">",
+    "window_minutes": 120,
+    "for_windows": 2,
+    "min_requests": 8,
+    "severity": "medium",
+    "owner": "on-call engineer",
+    "inspect": [
+      "checks events: which problems fire (unverifiable_promise, ungrounded_number, ungrounded_link)",
+      "the prompt version on request events: did it change",
+      "the model name: did the provider move the alias"
+    ],
+    "respond": "Pin the prompt and model versions that were running before the change; if the model alias moved, set ASSISTANT_MODEL to the previous version. Run the development split of the evaluation suite on the replay client to confirm the drafts changed.",
+    "why": "The checks catch promises and invented numbers deterministically; a rising rate is the earliest sign that the drafts changed shape."
+  },
+  {
+    "name": "spend",
+    "indicator": "cost_per_request_usd",
+    "threshold": 0.01,
+    "comparison": ">",
+    "window_minutes": 1440,
+    "for_windows": 1,
+    "min_requests": 20,
+    "severity": "low",
+    "owner": "product owner",
+    "inspect": [
+      "input and output tokens per step over the day: longer prompts, longer drafts, or more retries",
+      "the prompt variant running: v2 sends the article list on every classification"
+    ],
+    "respond": "No automatic action. Confirm the rates, then decide with the owner whether the spend is the new normal or a regression to fix.",
+    "why": "Cost needs a day to mean anything and is measured against the charter's gate, at rates the operator supplies."
+  }
+]

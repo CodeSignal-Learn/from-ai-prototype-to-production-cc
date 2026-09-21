@@ -33,6 +33,7 @@ def process_request(
     sleep=time.sleep,
     sink: EventSink | None = None,
     clock=time.perf_counter,
+    now=None,
 ) -> Result:
     """Classify, look up, draft, and route one request. Nothing is sent.
 
@@ -44,7 +45,7 @@ def process_request(
     Every step emits an event on the sink (in memory when none is given) under one trace id, with
     its duration and the tokens it used. Events carry no customer or draft text.
     """
-    trace = Trace(request.id, sink if sink is not None else EventSink(), clock)
+    trace = Trace(request.id, sink if sink is not None else EventSink(), clock, **({"now": now} if now else {}))
     metered = trace.meter(client)
     trace.emit("request", "received", channel=request.channel, flags=list(request.flags), body=text_fingerprint(request.body))
     confidence = None
