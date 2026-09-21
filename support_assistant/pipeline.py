@@ -16,6 +16,7 @@ from .version import versions
 
 CLASSIFICATION_UNAVAILABLE = "classification_unavailable"
 DRAFT_UNAVAILABLE = "draft_unavailable"
+ARTICLE_DOES_NOT_ANSWER = "article_does_not_answer"
 
 
 def retry_policy(settings: Settings) -> RetryPolicy:
@@ -38,20 +39,24 @@ def process_request(
     """
     confidence = None
     reasons: list[str] = []
+    chosen: Article | None = None
+    variant = settings.prompt_variant
     if settings.mode == "model":
         if client is None:
             raise ValueError("model mode needs an LLM client")
         policy = retry_policy(settings)
         try:
-            verdict = call_with_retry(lambda: model.classify(client, request), policy, sleep)
+            verdict = call_with_retry(lambda: model.classify(client, request, variant, articles), policy, sleep)
             category = verdict.category
             confidence = verdict.confidence
+            # v2 names the article; it is used only if it exists and belongs to the category.
+            chosen = next((a for a in articles if a.slug == verdict.article and a.category == category), None)
         except LLMFailed:
             category = "other"
             reasons.append(CLASSIFICATION_UNAVAILABLE)
     else:
         category = classify(request.text)
-    article = find_article(articles, category, request.text)
+    article = chosen or find_article(articles, category, request.text)
     reasons += escalation_reasons(request, category, article)
     if confidence is not None and confidence < settings.confidence_threshold:
         reasons.append("low_confidence")
@@ -60,15 +65,21 @@ def process_request(
     if route == DRAFT and article:
         if settings.mode == "model":
             try:
-                draft = call_with_retry(lambda: model.draft(client, request, article), policy, sleep)
+                draft = call_with_retry(lambda: model.draft(client, request, article, variant), policy, sleep)
             except LLMFailed:
                 reasons.append(DRAFT_UNAVAILABLE)
                 route = decide_route(reasons)
             else:
-                problems = check_draft(draft, article, request)
-                if problems:
-                    reasons += problems
+                if draft is None:
+                    # v2: the model said the article does not answer. No deferral is drafted;
+                    # the request goes to a person as an escalation, not as a draft to review.
+                    reasons.append(ARTICLE_DOES_NOT_ANSWER)
                     route = decide_route(reasons)
+                else:
+                    problems = check_draft(draft, article, request)
+                    if problems:
+                        reasons += problems
+                        route = decide_route(reasons)
         else:
             draft = compose_draft(request, article)
     return Result(

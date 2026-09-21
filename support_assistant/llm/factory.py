@@ -16,7 +16,7 @@ def build_client(settings: Settings) -> LLMClient:
     if settings.llm_client == "replay":
         failures = [FAILURES[name]() for name in settings.replay_failures]
         return ReplayClient(settings.recordings_dir, settings.model, failures=failures,
-                            latency_seconds=settings.replay_latency_seconds)
+                            latency_seconds=settings.replay_latency_seconds, salt=settings.recording_salt)
     from .live import LiveClient  # the SDK is only needed for live calls
 
     return LiveClient(settings.model, settings.timeout_seconds)

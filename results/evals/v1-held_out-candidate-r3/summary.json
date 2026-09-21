@@ -1,0 +1,324 @@
+{
+  "run_id": "v1-held_out-candidate-r3",
+  "created_at": "2026-09-21T19:27:17+00:00",
+  "dataset": "v1",
+  "dataset_sha256": "8fce73436a13e9dcdbc5bd42e5ef9a82be270551e1274d154b4f7c5059335bf5",
+  "split": "held_out",
+  "versions": {
+    "app": "2.1.0",
+    "mode": "model",
+    "model": "claude-haiku-4-5",
+    "prompt": "559724143452",
+    "prompt_variant": "v2",
+    "client": "live"
+  },
+  "rubric_version": "1.1",
+  "judge": {
+    "model": "claude-haiku-4-5",
+    "prompt": "4feda4d1cbbc"
+  },
+  "judge_quotes_not_in_draft": [],
+  "cases": 56,
+  "drafted": 23,
+  "judged": 56,
+  "unjudged": 0,
+  "acceptable": 44,
+  "acceptable_rate": 0.786,
+  "criteria": {
+    "R1": {
+      "pass": 49,
+      "fail": 7
+    },
+    "R2": {
+      "pass": 52,
+      "over": 4
+    },
+    "R3": {
+      "pass": 51,
+      "fail": 5
+    },
+    "R4": {
+      "pass": 51,
+      "partial": 2,
+      "fail": 3
+    },
+    "R5": {
+      "pass": 55,
+      "fail": 1
+    }
+  },
+  "article_correct": 49,
+  "by_category": {
+    "account_access": {
+      "cases": 8,
+      "R1_pass": 6,
+      "R2_missed": 0,
+      "R2_over": 2,
+      "R3_fail": 1,
+      "R4_not_pass": 0,
+      "R5_fail": 1,
+      "acceptable": 5
+    },
+    "billing": {
+      "cases": 8,
+      "R1_pass": 7,
+      "R2_missed": 0,
+      "R2_over": 0,
+      "R3_fail": 0,
+      "R4_not_pass": 1,
+      "R5_fail": 0,
+      "acceptable": 7
+    },
+    "orders_shipping": {
+      "cases": 12,
+      "R1_pass": 11,
+      "R2_missed": 0,
+      "R2_over": 0,
+      "R3_fail": 2,
+      "R4_not_pass": 2,
+      "R5_fail": 0,
+      "acceptable": 9
+    },
+    "other": {
+      "cases": 8,
+      "R1_pass": 8,
+      "R2_missed": 0,
+      "R2_over": 0,
+      "R3_fail": 0,
+      "R4_not_pass": 0,
+      "R5_fail": 0,
+      "acceptable": 8
+    },
+    "product_issue": {
+      "cases": 10,
+      "R1_pass": 8,
+      "R2_missed": 0,
+      "R2_over": 1,
+      "R3_fail": 1,
+      "R4_not_pass": 1,
+      "R5_fail": 0,
+      "acceptable": 7
+    },
+    "returns_refunds": {
+      "cases": 10,
+      "R1_pass": 9,
+      "R2_missed": 0,
+      "R2_over": 1,
+      "R3_fail": 1,
+      "R4_not_pass": 1,
+      "R5_fail": 0,
+      "acceptable": 8
+    }
+  },
+  "by_tag": {
+    "action-required": {
+      "cases": 2,
+      "acceptable": 1
+    },
+    "hostile": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "keywordless": {
+      "cases": 1,
+      "acceptable": 0
+    },
+    "legal": {
+      "cases": 3,
+      "acceptable": 2
+    },
+    "not-covered": {
+      "cases": 10,
+      "acceptable": 8
+    },
+    "outside-policy": {
+      "cases": 2,
+      "acceptable": 1
+    },
+    "overlap": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "oversized": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "sensitive": {
+      "cases": 3,
+      "acceptable": 3
+    },
+    "spam": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "three-words": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "two-topics": {
+      "cases": 2,
+      "acceptable": 2
+    },
+    "urgent": {
+      "cases": 2,
+      "acceptable": 1
+    }
+  },
+  "failures": [
+    {
+      "id": "EV-3029",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "The draft defers to a specialist to investigate but omits the required statement that 'real duplicate charges are refunded within five business days,' which the article explicitly states and the reviewer notes require."
+    },
+    {
+      "id": "EV-3043",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/human_review, expected billing/human_review"
+    },
+    {
+      "id": "EV-3054",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/human_review, expected account_access/draft"
+    },
+    {
+      "id": "EV-3054",
+      "criterion": "R2",
+      "verdict": "over",
+      "evidence": "article_does_not_answer"
+    },
+    {
+      "id": "EV-3062",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/human_review, expected account_access/draft"
+    },
+    {
+      "id": "EV-3062",
+      "criterion": "R2",
+      "verdict": "over",
+      "evidence": "article_does_not_answer"
+    },
+    {
+      "id": "EV-3065",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "a specialist will follow up with you to help get this sorted out"
+      ]
+    },
+    {
+      "id": "EV-3065",
+      "criterion": "R5",
+      "verdict": "fail",
+      "evidence": "unverifiable_promise"
+    },
+    {
+      "id": "EV-3078",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got other/human_review, expected orders_shipping/human_review"
+    },
+    {
+      "id": "EV-3083",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "The article doesn't specify when orders ship after being placed, so I can't confirm whether your order will go out today."
+      ]
+    },
+    {
+      "id": "EV-3083",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "The reviewer notes state an acceptable reply must say orders placed before 2 pm on a business day leave the warehouse the same day, but the article does not contain this information and the draft defers instead of providing it."
+    },
+    {
+      "id": "EV-3093",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "The carrier's tracking page typically updates within 24 hours of the first scan."
+      ]
+    },
+    {
+      "id": "EV-3093",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "The reviewer notes require the draft to 'say the estimate counts from the shipping date, not the order date,' but the draft does not clarify this crucial distinction that directly addresses the customer's confusion about the timeline."
+    },
+    {
+      "id": "EV-3104",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got product_issue/human_review, expected returns_refunds/draft"
+    },
+    {
+      "id": "EV-3104",
+      "criterion": "R2",
+      "verdict": "over",
+      "evidence": "low_confidence"
+    },
+    {
+      "id": "EV-3112",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "Since the vest was delivered about two months ago, it should still be within our 60-day return window."
+      ]
+    },
+    {
+      "id": "EV-3112",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "The reviewer notes state the acceptable reply must not decide whether two months is inside the 60-day window without the delivery date. The draft states 'it should still be within our 60-day return window' based only on 'about two months ago,' which violates this requirement."
+    },
+    {
+      "id": "EV-3122",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "it's outside the warranty period"
+      ]
+    },
+    {
+      "id": "EV-3129",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got product_issue/human_review, expected product_issue/draft"
+    },
+    {
+      "id": "EV-3129",
+      "criterion": "R2",
+      "verdict": "over",
+      "evidence": "article_does_not_answer"
+    },
+    {
+      "id": "EV-3134",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got other/human_review, expected product_issue/human_review"
+    },
+    {
+      "id": "EV-3141",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "The draft answers the warranty question with information from the article ('zippers are covered under our two-year warranty', 'To start a claim, please send us your order number, a description of the problem, and two photos showing the defect'), but for the invoice request, the draft says 'a special"
+    }
+  ],
+  "median_seconds": 1.943,
+  "usage": {
+    "pipeline": {
+      "calls": 92,
+      "input_tokens": 57013,
+      "output_tokens": 6782
+    },
+    "judge": {
+      "calls": 22,
+      "input_tokens": 25461,
+      "output_tokens": 3485
+    }
+  }
+}

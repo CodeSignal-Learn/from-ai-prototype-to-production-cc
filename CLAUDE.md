@@ -16,7 +16,9 @@ refreshed with `scripts/record.py` whenever a prompt changes.
 `evals/` scores the assistant against the rubric in `evals/rubric.md`: `evals/dataset.py` loads a
 versioned case set, `evals/runner.py` runs a split and counts the deterministic criteria,
 `evals/judge.py` asks a model the judged ones, `evals/calibration.py` compares the judge with
-human judgments. Runs are written to `results/evals/<run-id>/`.
+human judgments, `evals/report.py` compares a baseline and a candidate over repeated runs. Runs
+are written to `results/evals/<run-id>/`. Two prompt variants live in `model.py`: `v1` (shipped)
+and `v2` (the candidate, `ASSISTANT_PROMPT_VARIANT=v2`); results and `/health` stamp the variant.
 
 ## Boundaries
 - Drafts are never sent. `Result.sent` stays `False`. The only network calls in this codebase are
@@ -36,6 +38,9 @@ human judgments. Runs are written to `results/evals/<run-id>/`.
 - Categories are `billing`, `account_access`, `returns_refunds`, `orders_shipping`,
   `product_issue`, `other`. `other` always goes to human review.
 - Knowledge articles in `kb/` are the support team's content. Do not edit them for a code change.
+- Prompts are versioned by content hash and recordings are keyed by prompt. Editing a `v1`
+  prompt invalidates every recording and every evaluation run made with it; a new prompt is a
+  new variant, compared on the held-out split before it becomes the default.
 
 ## How to verify a change
 ```bash

@@ -243,19 +243,29 @@ def main(argv=None) -> int:
     parser.add_argument("--client", choices=("live", "replay"), default=None, help="overrides ASSISTANT_LLM_CLIENT")
     parser.add_argument("--record", action="store_true", help="run live and record every completion for replay")
     parser.add_argument("--no-judge", action="store_true", help="deterministic criteria only")
+    parser.add_argument("--variant", choices=("v1", "v2"), default=None, help="prompt variant; overrides ASSISTANT_PROMPT_VARIANT")
+    parser.add_argument("--repeat", type=int, default=0, help="repeat number for a variability study; 0 uses the plain recordings")
     parser.add_argument("--label", required=True, help="run id suffix; the run is written to results/evals/<dataset>-<split>-<label>/")
     args = parser.parse_args(argv)
 
-    settings = dataclasses.replace(load_settings(), mode="model", **({"llm_client": args.client} if args.client else {}))
+    overrides = {"mode": "model"}
+    if args.client:
+        overrides["llm_client"] = args.client
+    if args.variant:
+        overrides["prompt_variant"] = args.variant
+    if args.repeat:
+        overrides["recording_salt"] = f"repeat-{args.repeat}"
+    settings = dataclasses.replace(load_settings(), **overrides)
     if args.record:
         from support_assistant.llm.live import LiveClient
         from support_assistant.llm.replay import RecordingClient
         settings = dataclasses.replace(settings, llm_client="live")
-        client = RecordingClient(LiveClient(settings.model, settings.timeout_seconds), settings.recordings_dir)
+        client = RecordingClient(LiveClient(settings.model, settings.timeout_seconds), settings.recordings_dir, salt=settings.recording_salt)
+        # The judge's answers are not the thing under study, so they are never salted.
         judge = None if args.no_judge else RecordingClient(LiveClient(settings.model, settings.timeout_seconds), settings.recordings_dir)
     else:
         client = build_client(settings)
-        judge = None if args.no_judge else build_client(settings)
+        judge = None if args.no_judge else build_client(dataclasses.replace(settings, recording_salt=""))
     run_id = f"{args.dataset}-{args.split}-{args.label}"
     summary = run(args.dataset, args.split, settings, client, judge, run_id)
     print_summary(summary)

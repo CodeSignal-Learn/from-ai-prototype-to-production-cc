@@ -1,0 +1,383 @@
+{
+  "run_id": "v1-held_out-candidate-r2",
+  "created_at": "2026-09-21T19:21:30+00:00",
+  "dataset": "v1",
+  "dataset_sha256": "8fce73436a13e9dcdbc5bd42e5ef9a82be270551e1274d154b4f7c5059335bf5",
+  "split": "held_out",
+  "versions": {
+    "app": "2.1.0",
+    "mode": "model",
+    "model": "claude-haiku-4-5",
+    "prompt": "559724143452",
+    "prompt_variant": "v2",
+    "client": "live"
+  },
+  "rubric_version": "1.1",
+  "judge": {
+    "model": "claude-haiku-4-5",
+    "prompt": "4feda4d1cbbc"
+  },
+  "judge_quotes_not_in_draft": [],
+  "cases": 56,
+  "drafted": 26,
+  "judged": 56,
+  "unjudged": 0,
+  "acceptable": 40,
+  "acceptable_rate": 0.714,
+  "criteria": {
+    "R1": {
+      "pass": 48,
+      "fail": 8
+    },
+    "R2": {
+      "pass": 50,
+      "over": 3,
+      "missed": 3
+    },
+    "R3": {
+      "pass": 48,
+      "fail": 8
+    },
+    "R4": {
+      "pass": 48,
+      "partial": 5,
+      "fail": 3
+    },
+    "R5": {
+      "pass": 56
+    }
+  },
+  "article_correct": 49,
+  "by_category": {
+    "account_access": {
+      "cases": 8,
+      "R1_pass": 6,
+      "R2_missed": 0,
+      "R2_over": 2,
+      "R3_fail": 0,
+      "R4_not_pass": 0,
+      "R5_fail": 0,
+      "acceptable": 6
+    },
+    "billing": {
+      "cases": 8,
+      "R1_pass": 7,
+      "R2_missed": 0,
+      "R2_over": 0,
+      "R3_fail": 1,
+      "R4_not_pass": 2,
+      "R5_fail": 0,
+      "acceptable": 6
+    },
+    "orders_shipping": {
+      "cases": 12,
+      "R1_pass": 12,
+      "R2_missed": 0,
+      "R2_over": 0,
+      "R3_fail": 2,
+      "R4_not_pass": 2,
+      "R5_fail": 0,
+      "acceptable": 10
+    },
+    "other": {
+      "cases": 8,
+      "R1_pass": 8,
+      "R2_missed": 0,
+      "R2_over": 0,
+      "R3_fail": 0,
+      "R4_not_pass": 0,
+      "R5_fail": 0,
+      "acceptable": 8
+    },
+    "product_issue": {
+      "cases": 10,
+      "R1_pass": 8,
+      "R2_missed": 1,
+      "R2_over": 0,
+      "R3_fail": 2,
+      "R4_not_pass": 2,
+      "R5_fail": 0,
+      "acceptable": 6
+    },
+    "returns_refunds": {
+      "cases": 10,
+      "R1_pass": 7,
+      "R2_missed": 2,
+      "R2_over": 1,
+      "R3_fail": 3,
+      "R4_not_pass": 2,
+      "R5_fail": 0,
+      "acceptable": 4
+    }
+  },
+  "by_tag": {
+    "action-required": {
+      "cases": 2,
+      "acceptable": 2
+    },
+    "hostile": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "keywordless": {
+      "cases": 1,
+      "acceptable": 0
+    },
+    "legal": {
+      "cases": 3,
+      "acceptable": 2
+    },
+    "not-covered": {
+      "cases": 10,
+      "acceptable": 6
+    },
+    "outside-policy": {
+      "cases": 2,
+      "acceptable": 1
+    },
+    "overlap": {
+      "cases": 1,
+      "acceptable": 0
+    },
+    "oversized": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "sensitive": {
+      "cases": 3,
+      "acceptable": 3
+    },
+    "spam": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "three-words": {
+      "cases": 1,
+      "acceptable": 1
+    },
+    "two-topics": {
+      "cases": 2,
+      "acceptable": 2
+    },
+    "urgent": {
+      "cases": 2,
+      "acceptable": 1
+    }
+  },
+  "failures": [
+    {
+      "id": "EV-3029",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "A specialist will follow up with you about the $128.00 charge from September 3rd."
+      ]
+    },
+    {
+      "id": "EV-3029",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "The draft addresses the charge but does not state that real duplicate charges are refunded within five business days, which the reviewer notes require as part of an acceptable reply."
+    },
+    {
+      "id": "EV-3035",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "The draft states 'You can download an invoice for order 49233 from the Orders page' which is supported by 'you can download an invoice for any order from the Orders page.' However, the draft does not mention that 'Receipts are emailed when the order ships,' which the reviewer notes require an accept"
+    },
+    {
+      "id": "EV-3043",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/human_review, expected billing/human_review"
+    },
+    {
+      "id": "EV-3054",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/human_review, expected account_access/draft"
+    },
+    {
+      "id": "EV-3054",
+      "criterion": "R2",
+      "verdict": "over",
+      "evidence": "article_does_not_answer"
+    },
+    {
+      "id": "EV-3062",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got account_access/human_review, expected account_access/draft"
+    },
+    {
+      "id": "EV-3062",
+      "criterion": "R2",
+      "verdict": "over",
+      "evidence": "article_does_not_answer"
+    },
+    {
+      "id": "EV-3083",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "The article doesn't specify whether orders placed at particular times ship the same day."
+      ]
+    },
+    {
+      "id": "EV-3083",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "The reviewer notes state an acceptable reply must say orders placed before 2 pm on a business day leave the warehouse the same day, but the article does not contain this information and the draft defers instead of providing it."
+    },
+    {
+      "id": "EV-3093",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "You can check your order status on the Orders page of your account.",
+        "Once your package left our warehouse, you should see the carrier name and tracking number there.",
+        "The carrier's tracking page typically updates within 24 hours of the first scan.",
+        "If the tracking hasn't updated for more than three business days, the package may be delayed at a carrier hub.",
+        "a specialist can open a trace with the carrier, which usually resolves within five business days."
+      ]
+    },
+    {
+      "id": "EV-3093",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "The reviewer notes require the reply to state that 'the estimate counts from the shipping date, not the order date,' but the draft never clarifies this distinction, leaving the customer's confusion unaddressed."
+    },
+    {
+      "id": "EV-3102",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "your item is outside the return window"
+      ]
+    },
+    {
+      "id": "EV-3102",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "The draft states the 60-day window ('returns are accepted within 60 days of delivery') as required, but it goes beyond the article by declaring the item ineligible rather than deferring the eligibility decision to a specialist."
+    },
+    {
+      "id": "EV-3104",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got product_issue/human_review, expected returns_refunds/draft"
+    },
+    {
+      "id": "EV-3104",
+      "criterion": "R2",
+      "verdict": "over",
+      "evidence": "article_does_not_answer"
+    },
+    {
+      "id": "EV-3107",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got returns_refunds/draft, expected returns_refunds/human_review"
+    },
+    {
+      "id": "EV-3107",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3112",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "you should still be within our return window",
+        "Since your vest arrived about two months ago, you're right at that timeframe"
+      ]
+    },
+    {
+      "id": "EV-3112",
+      "criterion": "R4",
+      "verdict": "fail",
+      "evidence": "The reviewer notes state: 'An acceptable reply must not: Decide whether two months is inside the window without the delivery date.' The draft concludes 'you're right at that timeframe' without knowing the exact delivery date, which violates the instruction."
+    },
+    {
+      "id": "EV-3114",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "This means your new items will begin shipping once your return is picked up, rather than waiting for us to receive it back."
+      ]
+    },
+    {
+      "id": "EV-3117",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got returns_refunds/draft, expected returns_refunds/human_review"
+    },
+    {
+      "id": "EV-3117",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3129",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "the article specifically lists zippers, seams, buckles, and waterproof coatings as covered components, and doesn't mention sole separation"
+      ]
+    },
+    {
+      "id": "EV-3129",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "The draft says 'Fernwood gear is covered against defects in materials and workmanship for two years from delivery' and asks the customer to prepare 'your order number, a description of the problem, and two photos of the defect', which are the required elements. However, it introduces unsupported rea"
+    },
+    {
+      "id": "EV-3132",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got product_issue/draft, expected product_issue/human_review"
+    },
+    {
+      "id": "EV-3132",
+      "criterion": "R2",
+      "verdict": "missed",
+      "evidence": "no escalation reason"
+    },
+    {
+      "id": "EV-3134",
+      "criterion": "R1",
+      "verdict": "fail",
+      "evidence": "got other/human_review, expected product_issue/human_review"
+    },
+    {
+      "id": "EV-3137",
+      "criterion": "R3",
+      "verdict": "fail",
+      "evidence": [
+        "A specialist will follow up with you directly to assess your jacket."
+      ]
+    },
+    {
+      "id": "EV-3141",
+      "criterion": "R4",
+      "verdict": "partial",
+      "evidence": "The draft answers the warranty question fully ('zippers are covered under our two-year warranty') with article details, but for the invoice it only says 'a specialist will follow up with you on that' without stating where invoices are located (Orders page) as the reviewer notes require."
+    }
+  ],
+  "median_seconds": 2.389,
+  "usage": {
+    "pipeline": {
+      "calls": 94,
+      "input_tokens": 58032,
+      "output_tokens": 6961
+    },
+    "judge": {
+      "calls": 26,
+      "input_tokens": 29949,
+      "output_tokens": 4596
+    }
+  }
+}

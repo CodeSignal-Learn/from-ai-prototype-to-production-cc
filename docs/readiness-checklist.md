@@ -1,7 +1,7 @@
 # Production readiness checklist
 
-State of the hardened assistant at the end of the hardening phase. Every closed item names its
-evidence. Two gates stay open on purpose; release is not recommended until they close.
+State of the assistant after hardening and evaluation. Every closed item names its evidence.
+One gate stays open; release is not recommended until it closes.
 
 ## Closed
 
@@ -23,18 +23,22 @@ evidence. Two gates stay open on purpose; release is not recommended until they 
 | Operability | Every result carries app, prompt, model, and mode versions | `version.py`, `tests/test_version.py` |
 | Operability | Rollback to rules mode by configuration, rehearsed | `docs/recovery-rehearsal.md` |
 | Operability | Model outages can be injected for drills | `ASSISTANT_REPLAY_FAILURES`, `tests/test_version.py` |
+| Evaluation | Quality is defined and measured: rubric, 168-case dataset with a held-out split, runner with deterministic checks and a judge calibrated against a reviewer, 22 adversarial probes kept as regressions, baseline versus candidate comparison over repeated runs | `evals/`, `docs/eval-baseline.md`, `docs/judge-calibration.md`, `docs/failure-taxonomy.md`, `docs/eval-comparison.md` |
+| Security | Paraphrased instructions found by red-teaming are detected; pasted card numbers reach a person; deferrals that name an outcome are treated as promises | `tests/test_regressions.py`, `docs/failure-taxonomy.md` |
 
 ## Open gates
 
 | Gate | Why it is open | What closes it |
 | --- | --- | --- |
-| Semantic evaluation | The deterministic checks catch numbers, links, and promises. The two ungrounded statements found in the POC review were stated in words and would pass them. Nobody has measured how often the hardened prompts invent policy, on how many requests, with what held-out set | An evaluation suite: rubric, labeled dataset with a held-out split, a calibrated judge, adversarial cases, and a baseline versus candidate comparison |
 | Monitoring | Nothing records or alerts on the rate of `classification_unavailable`, flagged drafts, latency, or cost in production. Version stamps exist but nothing reads them | Structured events, objectives, alerts, drift reports, and recurring evaluation |
 
-## Known limits, not blocking hardening
+## Known limits, not blocking
 - Confidence is uncalibrated (21 of 25 trial values at 0.95); escalation does not rely on it.
-- Article selection inside a category is keyword-based and chose the wrong article for 5 of 25
-  trial requests; the model then correctly deferred. To be measured and fixed with evaluation.
-- Instruction detection matches phrasing; adversarial cases that go around it are for the
-  evaluation suite to find.
+- Article selection inside a category is keyword-based and chose the wrong article for 18 of 57
+  answerable development cases (`docs/eval-baseline.md`, finding 2); the v2 candidate prompts
+  address it and are pending the decision in `docs/eval-comparison.md`.
+- A request the knowledge base does not answer receives a drafted deferral instead of an
+  escalation (finding 1); same candidate, same decision.
+- Instruction detection matches phrasing; the red-team probes run with every evaluation and the
+  next paraphrase will show up there first.
 - Load numbers come from a simulated model; live provider limits are unmeasured.
