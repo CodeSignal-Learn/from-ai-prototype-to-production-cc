@@ -1,7 +1,7 @@
 # Production readiness checklist
 
-State of the assistant after hardening and evaluation. Every closed item names its evidence.
-One gate stays open; release is not recommended until it closes.
+State of the assistant at app version 3.0.0, after hardening, evaluation, and the operations
+work. Every closed item names its evidence. One gate stays open, and only live traffic closes it.
 
 ## Closed
 
@@ -25,23 +25,32 @@ One gate stays open; release is not recommended until it closes.
 | Operability | Model outages can be injected for drills | `ASSISTANT_REPLAY_FAILURES`, `tests/test_version.py` |
 | Evaluation | Quality is defined and measured: rubric, 168-case dataset with a held-out split, runner with deterministic checks and a judge calibrated against a reviewer, 22 adversarial probes kept as regressions, baseline versus candidate comparison over repeated runs | `evals/`, `docs/eval-baseline.md`, `docs/judge-calibration.md`, `docs/failure-taxonomy.md`, `docs/eval-comparison.md` |
 | Security | Paraphrased instructions found by red-teaming are detected; pasted card numbers reach a person; deferrals that name an outcome are treated as promises | `tests/test_regressions.py`, `docs/failure-taxonomy.md` |
+| Observability | Every request emits a trace of structured events with step durations, token usage, failed attempts, versions, and cost from explicit rates; events carry no customer or draft text | `support_assistant/telemetry/`, `docs/telemetry.md`, `tests/test_telemetry.py` |
+| Operations | Five objectives and six alert rules over event windows, each with an owner, evidence to inspect, and a response; tested on a clean week and a week with injected incidents | `ops/objectives.json`, `ops/alert_rules.json`, `docs/ops-report.md`, `tests/test_ops.py` |
+| Operations | Drift between traffic windows reported as investigation signals; the suites re-run on a schedule against their reference runs and every regression is kept | `ops/drift.py`, `ops/scheduled_eval.py`, `docs/drift-report.md`, `tests/test_drift.py` |
+| Operations | A provider outage rehearsed end to end: warning an hour ahead, containment in rules mode by configuration, recovery verified, impact compared with the same outage uncontained | `ops/runbook.md`, `docs/incident-2026-09-15.md` |
+| Release | The v2 prompts adopted after a held-out comparison and a replayed rollout; a call-saving policy measured and rejected; `v1` is the rollback | `docs/eval-comparison.md`, `docs/optimization-experiment.md` |
 
 ## Open gates
 
 | Gate | Why it is open | What closes it |
 | --- | --- | --- |
-| Monitoring | Structured events, five objectives and six alert rules, drift reports, the scheduled evaluation, and the incident runbook are in place, and a provider outage was rehearsed with them (`ops/runbook.md`, `docs/incident-2026-09-15.md`). None of it has watched a release yet: the v2 candidate still waits for its controlled rollout (`docs/eval-comparison.md`) | The candidate's rollout read on the objectives, alerts, drift report, and scheduled evaluation |
+| Live traffic | Every number in this checklist comes from recorded traffic replayed with simulated latency and from recordings of the model. The live tail latency, the provider's real failure shape, and how agents work the v2 queue are unmeasured | The first live week: the objectives report and the alert history on real events, and the scheduled evaluation on a labeled sample of the week's requests, added to the dataset as cases |
 
 ## Known limits, not blocking
 - Confidence is uncalibrated (20 of 25 values at 0.95 in the POC trial, 18 of 25 on the hardened
   rerun). A confidence below the threshold still escalates, as an extra conservative trigger; no
   other routing decision depends on it.
-- Article selection inside a category is keyword-based and chose the wrong article for 18 of 57
-  answerable development cases (`docs/eval-baseline.md`, finding 2); the v2 candidate prompts
-  address it; `docs/eval-comparison.md` recommends adopting them through a controlled rollout,
-  and v1 stays the default until then.
-- A request the knowledge base does not answer receives a drafted deferral instead of an
-  escalation (finding 1); same candidate, same decision.
+- Under v2 the classifier names the article and the drafter declines when the article does not
+  answer, which reduced the wrong-article and drafted-deferral findings on the held-out split
+  and on replayed traffic without closing them (`docs/optimization-experiment.md`,
+  `docs/failure-taxonomy.md`). The drafting prompt's action list still names account deletion,
+  which the knowledge base covers, so an account-deletion request reaches a person without a
+  draft (EV-3054, over-escalated in 3 of 3 held-out runs). This is the comparison's second
+  condition, deferred at the rollout: fixing the wording is a new candidate and needs a new
+  held-out set.
+- The escalation-share objective was re-baselined to 0.80 for v2's behavior; agents' experience
+  of fewer drafts and more labeled escalations is unmeasured until the first live week.
 - Instruction detection matches phrasing; the known paraphrases are pinned in
   `tests/test_regressions.py`, and new ones need new probes.
 - Load numbers come from a simulated model; live provider limits are unmeasured.

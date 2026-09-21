@@ -1,7 +1,7 @@
 """Replay a recorded traffic window through the assistant and write its event log.
 
-    python3 scripts/replay_traffic.py data/traffic/week-1.jsonl --events results/events/week-1.jsonl
-    python3 scripts/replay_traffic.py data/traffic/week-1.jsonl --events results/events/week-1-outage.jsonl --outage 60:63
+    python3 scripts/replay_traffic.py data/traffic/week-1.jsonl --events results/events/week-1.jsonl --variant v1
+    python3 scripts/replay_traffic.py data/traffic/week-1.jsonl --events results/events/week-1-outage.jsonl --outage 60:63 --variant v1
     python3 scripts/replay_traffic.py data/traffic/week-2.jsonl --events results/events/week-2-v2.jsonl --variant v2
 
 The requests run on the replay client, so the drafts and routes are the recorded ones and the
@@ -32,7 +32,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from support_assistant.config import load_settings  # noqa: E402
+from support_assistant.config import load_settings, validate  # noqa: E402
 from support_assistant.intake import load_requests  # noqa: E402
 from support_assistant.knowledge import load_articles  # noqa: E402
 from support_assistant.llm.errors import LLMRateLimited, LLMTimeout, LLMUnavailable  # noqa: E402
@@ -128,6 +128,7 @@ def main(argv=None) -> int:
     parser.add_argument("traffic", help="JSONL requests with created_at, in the order they arrived")
     parser.add_argument("--events", required=True, help="event log to write (overwritten)")
     parser.add_argument("--variant", choices=("v1", "v2"), default=None)
+    parser.add_argument("--policy", choices=("always", "skip_unnamed"), default=None, help="draft policy (skip_unnamed needs --variant v2)")
     parser.add_argument("--latency-ms", type=float, default=2400.0, help="base latency per call; a call takes half of it, spread by the prompt hash, plus 8 ms per output token")
     parser.add_argument("--outage", default=None, help="START:END, every model call times out from the arrival of request START until the arrival of request END (1-based)")
     parser.add_argument("--failures", action="append", default=[], help="START:END:KIND, every model call fails with KIND (timeout|rate_limit|unavailable) from the arrival of request START until the arrival of request END; repeatable")
@@ -138,7 +139,12 @@ def main(argv=None) -> int:
     args = parser.parse_args(argv)
 
     settings = dataclasses.replace(load_settings(), mode="model", llm_client="replay", events_file=None,
-                                   **({"prompt_variant": args.variant} if args.variant else {}))
+                                   **({"prompt_variant": args.variant} if args.variant else {}),
+                                   **({"draft_policy": args.policy} if args.policy else {}))
+    try:
+        validate(settings)                   # the flags are checked like the variables they override
+    except ValueError as error:
+        parser.error(f"invalid settings after the flags: {error}")
     clock = SimulatedClock()
     slow = parse_span(args.slow, 3) if args.slow else None
     contain = parse_span(args.rules_from, 2) if args.rules_from else None

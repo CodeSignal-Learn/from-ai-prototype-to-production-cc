@@ -5,8 +5,8 @@
                             --out results/evals/comparison/held-out.json
 
 The protocol is fixed here so that nobody compares unlike things: every run must be on the same
-dataset version, checksum, and split; all baseline runs must share one prompt version and all
-candidate runs another. Repeats are live runs of the same prompts, so the spread across repeats
+dataset version, checksum, and split; all baseline runs must share one prompt version, variant,
+model, and draft policy, and all candidate runs another. Repeats are live runs of the same prompts, so the spread across repeats
 shows the model's run-to-run variability on these cases, and a difference between baseline and
 candidate smaller than that spread cannot be told apart from it. The report prints counts per repeat, mean and range per side,
 per-category and per-tag deltas, and the paired list of cases that improved or regressed. It
@@ -37,12 +37,16 @@ def check_protocol(baseline: list[tuple[list[dict], dict]], candidate: list[tupl
     ids = [tuple(sorted(i["id"] for i in items)) for items, _ in runs]
     if len(set(ids)) != 1:
         raise ProtocolError("runs do not cover the same cases")
-    base_prompts = {s["versions"]["prompt"] for _, s in baseline}
-    cand_prompts = {s["versions"]["prompt"] for _, s in candidate}
+    def identity(summary):
+        # A run made before a setting existed ran with its default: the v1 prompts, a draft call for every request.
+        v = {"prompt_variant": "v1", "draft_policy": "always", **summary["versions"]}
+        return json.dumps({k: v.get(k) for k in ("prompt", "prompt_variant", "model", "draft_policy")}, sort_keys=True)
+    base_prompts = {identity(s) for _, s in baseline}
+    cand_prompts = {identity(s) for _, s in candidate}
     if len(base_prompts) != 1 or len(cand_prompts) != 1:
-        raise ProtocolError("each side must use one prompt version across its repeats")
+        raise ProtocolError("each side must use one prompt version, prompt variant, model, and draft policy across its repeats")
     if base_prompts == cand_prompts:
-        raise ProtocolError("baseline and candidate use the same prompt version; nothing to compare")
+        raise ProtocolError("baseline and candidate use the same prompt version, prompt variant, model, and draft policy; nothing to compare")
     judges = {json.dumps(s["judge"], sort_keys=True) for _, s in runs}
     if len(judges) != 1:
         raise ProtocolError("runs were judged by different judges")
@@ -50,7 +54,8 @@ def check_protocol(baseline: list[tuple[list[dict], dict]], candidate: list[tupl
         raise ProtocolError("a run has unjudged items; every item must carry a verdict")
     dataset, sha, split = next(iter(keys))
     return {"dataset": dataset, "dataset_sha256": sha, "split": split, "cases": len(ids[0]),
-            "baseline_prompt": next(iter(base_prompts)), "candidate_prompt": next(iter(cand_prompts)),
+            "baseline_prompt": baseline[0][1]["versions"]["prompt"], "candidate_prompt": candidate[0][1]["versions"]["prompt"],
+            "baseline_versions": json.loads(next(iter(base_prompts))), "candidate_versions": json.loads(next(iter(cand_prompts))),
             "baseline_variant": baseline[0][1]["versions"].get("prompt_variant") or "v1",
             "candidate_variant": candidate[0][1]["versions"].get("prompt_variant") or "v1",
             "judge": runs[0][1]["judge"], "repeats": {"baseline": len(baseline), "candidate": len(candidate)}}
@@ -143,8 +148,8 @@ def compare(baseline: list[tuple[list[dict], dict]], candidate: list[tuple[list[
 def render(report: dict) -> str:
     p = report["protocol"]
     lines = [f"Protocol: dataset {p['dataset']} ({p['dataset_sha256'][:12]}), split {p['split']}, {p['cases']} cases; "
-             f"baseline {p['baseline_variant']} prompt {p['baseline_prompt']} x{p['repeats']['baseline']} repeats; "
-             f"candidate {p['candidate_variant']} prompt {p['candidate_prompt']} x{p['repeats']['candidate']} repeats; judge {p['judge']}",
+             f"baseline {p['baseline_variant']} prompt {p['baseline_prompt']} policy {p['baseline_versions'].get('draft_policy') or 'always'} x{p['repeats']['baseline']} repeats; "
+             f"candidate {p['candidate_variant']} prompt {p['candidate_prompt']} policy {p['candidate_versions'].get('draft_policy') or 'always'} x{p['repeats']['candidate']} repeats; judge {p['judge']}",
              "", "| Measure | Baseline mean (min-max) | Candidate mean (min-max) | Delta |", "| --- | --- | --- | --- |"]
     for name, _ in MEASURES:
         b, c = report["baseline"]["spread"][name], report["candidate"]["spread"][name]

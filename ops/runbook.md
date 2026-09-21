@@ -31,7 +31,7 @@ change and confirm with `/health`.
 | Switch | Effect | Use when |
 | --- | --- | --- |
 | `ASSISTANT_MODE=rules` | Keyword routing and template drafts; no model calls; identical to the POC control | The model is unavailable or slow for more than one window, or drafts are wrong in a way the checks do not catch |
-| `ASSISTANT_PROMPT_VARIANT=v1` | Back to the shipped prompts after a candidate rollout | The candidate's escalation, decline, or flagged rates move beyond what its comparison predicted |
+| `ASSISTANT_PROMPT_VARIANT=v1` | Back to the previous prompts (the rollback after the v2 rollout) | v2's escalation, decline, or flagged rates move beyond what its comparison and the replayed rollout predicted |
 | `ASSISTANT_MODEL=<previous model id>` | Pin the model | The provider moved an alias and drafts changed shape (flagged rate up, prompt version unchanged) |
 | `ASSISTANT_CONCURRENCY=1`, `ASSISTANT_TIMEOUT_SECONDS=30` | One request in flight for batch runs (`/batches`, the CLI; single requests are not bounded by it, and 1 is the default), more patience per call | Rate limits during batch work, or a slow provider, before falling back to rules |
 | `ASSISTANT_MAX_RETRIES=0` | Fail fast to a person instead of waiting out three timeouts | A confirmed outage where retries only add a minute per request |
