@@ -30,7 +30,9 @@ on the replay client with simulated time and optional injected outages or slow s
 `ops/drift.py` compares a recent event window with a baseline (mix, rates, reasons, latency,
 versions) and emits signals that say what they do not prove; `ops/scheduled_eval.py` re-runs the
 suites against the reference runs, scores a traffic window's cases weighted by request counts,
-and appends regressions to `results/evals/scheduled/new-failures.jsonl`.
+and appends regressions to `results/evals/scheduled/new-failures.jsonl`. `ops/runbook.md` names the
+containment switches (all environment variables) and the procedure per alert; step events carry
+`failed_calls` so retries that succeed are visible before an outage (`retry_rate`, the warning rule).
 
 ## Boundaries
 - Drafts are never sent. `Result.sent` stays `False`. The only network calls in this codebase are
@@ -56,6 +58,8 @@ and appends regressions to `results/evals/scheduled/new-failures.jsonl`.
   `why`, tested by replaying a week and checking what fires. Alerts name an owner and a response.
 - A drift signal is a reason to run the evaluation on the window's cases, never a reason to roll
   back by itself. Quality is measured by the rubric on labeled cases, not inferred from events.
+- Containment is configuration (`ASSISTANT_MODE=rules`, a pinned model, the previous variant),
+  confirmed by `/health` and the next window's events; nothing is edited under pressure.
 - Prompts are versioned by content hash and recordings are keyed by prompt. Editing a `v1`
   prompt invalidates every recording and every evaluation run made with it; a new prompt is a
   new variant, compared on the held-out split before it becomes the default.

@@ -28,7 +28,7 @@ def trace(index: int, at: datetime, *, route="draft", unavailable=False, duratio
     events = [{"ts": ts, "trace_id": tid, "request_id": f"R{index}", "step": "request", "status": "received", "duration_ms": None, "attrs": {}, "schema": 1}]
     if unavailable:
         events.append({"ts": ts, "trace_id": tid, "request_id": f"R{index}", "step": "classify", "status": "unavailable", "duration_ms": 3500.0,
-                       "attrs": {"attempts": 3, "last_error": "LLMTimeout"}, "schema": 1})
+                       "attrs": {"attempts": 3, "last_error": "LLMTimeout", "failed_calls": 3}, "schema": 1})
         calls, tok = 0, (0, 0)
     else:
         events.append({"ts": ts, "trace_id": tid, "request_id": f"R{index}", "step": "classify", "status": "ok", "duration_ms": duration_ms / 2,
@@ -68,7 +68,8 @@ def test_indicators_from_one_window():
     assert values["escalation_rate"] == 0.75           # human_review, unavailable, flagged
     assert values["drafted_rate"] == 0.5               # the plain draft and the flagged one
     assert values["flagged_draft_rate"] == 0.25
-    assert values["model_call_failure_rate"] == pytest.approx(1 / 7)
+    assert values["model_call_failure_rate"] == pytest.approx(3 / 9)   # three failed attempts against six completed calls
+    assert values["retry_rate"] == 0.0                                 # the failed request never completed a retry
     assert values["cost_per_request_usd"] > 0
     assert indicators(events)["cost_per_request_usd"] is None
     assert indicators([])["requests"] == 0
@@ -164,3 +165,40 @@ def test_replay_traffic_stamps_simulated_time_and_injects_an_outage(tmp_path):
     assert finals[0]["duration_ms"] > 1000                                     # simulated model latency, not replay speed
     assert "classification_unavailable" in finals[1]["attrs"]["reasons"]       # the injected outage hit request 2
     assert finals[1]["duration_ms"] > finals[0]["duration_ms"]                 # backoff counted in simulated time
+
+
+def test_flaky_calls_are_retries_not_outages_and_rules_mode_contains(tmp_path):
+    """Every other call fails for requests 2..4: they complete on a retry and count as retried, not unavailable;
+    requests 5..6 run in rules mode with no model call at all."""
+    root = Path(__file__).resolve().parent.parent
+    out = tmp_path / "events.jsonl"
+    result = subprocess.run([sys.executable, "scripts/replay_traffic.py", "data/traffic/week-2.jsonl", "--events", str(out), "--limit", "6",
+                             "--flaky", "2:5:rate_limit", "--rules-from", "5:7"], cwd=root, capture_output=True, text=True)
+    assert result.returncode == 0, result.stderr
+    from support_assistant.telemetry.events import read_events
+    from support_assistant.telemetry.metrics import summarize
+    rows = read_events(out)
+    finals = [r for r in rows if r["step"] == "request" and r["status"] != "received"]
+    summary = summarize(rows)
+    assert summary["model_unavailable"] == 0
+    assert summary["requests_with_retries"] == 3 and summary["model_call_failures"] >= 3
+    assert all(f["attrs"]["versions"]["mode"] == "rules" for f in finals[4:6])
+    assert all(f["attrs"]["calls"] == 0 for f in finals[4:6])
+    assert indicators(rows)["retry_rate"] == 0.5
+
+
+def test_the_rehearsed_incident_warns_before_it_fails_and_is_contained():
+    from support_assistant.telemetry.events import read_events
+    root = Path(__file__).resolve().parent.parent
+    events = read_events(root / "results" / "events" / "week-2-incident.jsonl")
+    report = evaluate_alerts(events, load_rules(), 1.0, 5.0)
+    by_rule = {a["rule"]: a for a in report["alerts"]}
+    assert set(by_rule) == {"retries_rising", "model_unavailable"}
+    assert by_rule["retries_rising"]["fired_at"] < by_rule["model_unavailable"]["fired_at"]
+    finals = [e for e in events if e["step"] == "request" and e["status"] != "received"]
+    unavailable = [e for e in finals if "classification_unavailable" in e["attrs"]["reasons"]]
+    assert len(unavailable) == 4
+    contained = [e for e in finals if e["attrs"]["versions"]["mode"] == "rules"]
+    assert len(contained) == 28 and all(e["attrs"]["calls"] == 0 for e in contained)
+    after = [e for e in finals if e["ts"] > max(c["ts"] for c in contained)]
+    assert after and all(e["attrs"]["versions"]["mode"] == "model" and "classification_unavailable" not in e["attrs"]["reasons"] for e in after)

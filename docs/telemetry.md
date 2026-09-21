@@ -72,7 +72,8 @@ on the 40-request batch, replay client, concurrency 4:
 | Versions | app 2.1.0, prompt 81ec9d26f2c2, variant v1, model claude-haiku-4-5, client replay |
 
 The trial run with the injected outage: 25 requests, 1 with classification unavailable, 42
-calls, $0.0281, p95 13.5 ms and max 36.2 ms, both from the retried request. That is the shape an
+completed calls and 4 failed attempts (three timeouts, one rate limit), $0.0281, p95 13.5 ms and
+max 36.2 ms, both from the retried requests. That is the shape an
 outage has in this log: a small number of slow, escalated requests with `attempts` on their
 classify event, not a failed batch.
 

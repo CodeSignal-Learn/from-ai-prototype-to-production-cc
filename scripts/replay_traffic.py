@@ -27,7 +27,7 @@ sys.path.insert(0, str(ROOT))
 from support_assistant.config import load_settings  # noqa: E402
 from support_assistant.intake import load_requests  # noqa: E402
 from support_assistant.knowledge import load_articles  # noqa: E402
-from support_assistant.llm.errors import LLMTimeout  # noqa: E402
+from support_assistant.llm.errors import LLMRateLimited, LLMTimeout, LLMUnavailable  # noqa: E402
 from support_assistant.llm.factory import build_client  # noqa: E402
 from support_assistant.pipeline import process_request  # noqa: E402
 from support_assistant.telemetry.events import EventSink  # noqa: E402
@@ -54,12 +54,14 @@ class LatencyClient:
     long draft takes longer than a short classification, as it does live.
     """
 
-    def __init__(self, inner, clock: SimulatedClock, latency_ms, timeout_seconds: float):
+    def __init__(self, inner, clock: SimulatedClock, latency_ms, timeout_seconds: float, flaky=None):
         self.inner = inner
         self.clock = clock
         self.latency_ms = latency_ms      # a callable returning the current latency, or a number
         self.timeout_seconds = timeout_seconds
+        self.flaky = flaky                # a callable returning an exception to raise on this call, or None
         self.model = inner.model
+        self.calls_seen = 0
 
     @property
     def usage(self):
@@ -72,6 +74,11 @@ class LatencyClient:
     def complete(self, system, user, max_tokens):
         base = self.latency_ms() if callable(self.latency_ms) else self.latency_ms
         spread = 0.6 + 0.8 * (int(hashlib.sha256(user.encode("utf-8")).hexdigest()[:8], 16) / 0xFFFFFFFF)
+        self.calls_seen += 1
+        injected = self.flaky(self.calls_seen) if self.flaky else None
+        if injected is not None:
+            self.clock.advance(self.timeout_seconds if isinstance(injected, LLMTimeout) else 0.3)
+            raise injected
         try:
             completion = self.inner.complete(system, user, max_tokens)
         except LLMTimeout:
@@ -98,15 +105,37 @@ def main(argv=None) -> int:
     parser.add_argument("--variant", choices=("v1", "v2"), default=None)
     parser.add_argument("--latency-ms", type=float, default=2400.0, help="simulated model latency per call")
     parser.add_argument("--outage", default=None, help="START:COUNT, inject COUNT timeouts before request index START (1-based)")
+    parser.add_argument("--failures", action="append", default=[], help="START:COUNT:KIND, inject COUNT failures of KIND (timeout|rate_limit|unavailable) before request START; repeatable")
     parser.add_argument("--slow", default=None, help="START:END:MS, model latency MS for requests START..END-1 (1-based)")
+    parser.add_argument("--rules-from", default=None, help="START:END, process requests START..END-1 in rules mode (the runbook's containment)")
+    parser.add_argument("--flaky", default=None, help="START:END:KIND, every other model call fails with KIND for requests START..END-1 and succeeds on retry (an early warning, not an outage)")
     parser.add_argument("--limit", type=int, default=None)
     args = parser.parse_args(argv)
 
     settings = dataclasses.replace(load_settings(), mode="model", llm_client="replay", events_file=None,
                                    **({"prompt_variant": args.variant} if args.variant else {}))
     clock = SimulatedClock()
-    outage = parse_span(args.outage, 2) if args.outage else None
     slow = parse_span(args.slow, 3) if args.slow else None
+    contain = parse_span(args.rules_from, 2) if args.rules_from else None
+    kinds = {"timeout": lambda: LLMTimeout("injected timeout"), "rate_limit": lambda: LLMRateLimited("injected rate limit"),
+             "unavailable": lambda: LLMUnavailable("injected outage")}
+    injections: dict = {}
+    if args.outage:
+        start, count = parse_span(args.outage, 2)
+        injections.setdefault(start, []).extend(kinds["timeout"]() for _ in range(count))
+    for spec in args.failures:
+        start, count, kind = spec.split(":")
+        injections.setdefault(int(start), []).extend(kinds[kind]() for _ in range(int(count)))
+    rules_settings = dataclasses.replace(settings, mode="rules")
+    flaky_span = None
+    if args.flaky:
+        start, end, kind = args.flaky.split(":")
+        flaky_span = (int(start), int(end), kinds[kind])
+
+    def flaky(call_number):
+        if flaky_span and flaky_span[0] <= current_index["i"] < flaky_span[1] and call_number % 2 == 1:
+            return flaky_span[2]()
+        return None
     current_index = {"i": 0}
 
     def latency_now():
@@ -115,7 +144,7 @@ def main(argv=None) -> int:
         return args.latency_ms
 
     replay = build_client(settings)
-    client = LatencyClient(replay, clock, latency_now, settings.timeout_seconds)
+    client = LatencyClient(replay, clock, latency_now, settings.timeout_seconds, flaky)
     articles = load_articles(settings.knowledge_dir)
     requests = load_requests(args.traffic)
     if args.limit:
@@ -125,24 +154,28 @@ def main(argv=None) -> int:
         events_path.unlink()
     sink = EventSink(events_path)
 
-    outcomes = {"draft": 0, "human_review": 0, "unavailable": 0}
+    outcomes = {"draft": 0, "human_review": 0, "unavailable": 0, "rules": 0}
     for index, request in enumerate(requests, start=1):
         current_index["i"] = index
-        if outage and index == outage[0]:
-            replay.failures.extend(LLMTimeout("injected outage") for _ in range(outage[1]))
+        if index in injections:
+            replay.failures.extend(injections[index])
         arrived = datetime.fromisoformat(request.created_at.replace("Z", "+00:00"))
         base = clock.seconds
 
         def now(arrived=arrived, base=base):
             return (arrived + timedelta(seconds=clock.seconds - base)).isoformat(timespec="milliseconds")
 
-        result = process_request(request, articles, settings, client, sleep=clock.advance, sink=sink, clock=clock, now=now)
+        contained = bool(contain and contain[0] <= index < contain[1])
+        active = rules_settings if contained else settings
+        result = process_request(request, articles, active, None if contained else client, sleep=clock.advance, sink=sink, clock=clock, now=now)
+        outcomes["rules"] += contained
         outcomes[result.route] += 1
         if any(r in ("classification_unavailable", "draft_unavailable") for r in result.reasons):
             outcomes["unavailable"] += 1
 
     print(f"replayed {len(requests)} requests from {args.traffic} as {settings.prompt_variant}: "
-          f"{outcomes['draft']} drafts, {outcomes['human_review']} to a person, {outcomes['unavailable']} with a model step unavailable")
+          f"{outcomes['draft']} drafts, {outcomes['human_review']} to a person, {outcomes['unavailable']} with a model step unavailable, "
+          f"{outcomes['rules']} handled in rules mode")
     print(f"events: {len(sink)} written to {events_path}")
     print(f"model calls {client.usage.calls}, input tokens {client.usage.input_tokens}, output tokens {client.usage.output_tokens}")
     return 0

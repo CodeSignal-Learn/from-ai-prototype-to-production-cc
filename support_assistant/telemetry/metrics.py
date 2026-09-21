@@ -51,7 +51,10 @@ def summarize(events: list[dict], input_rate: float | None = None, output_rate: 
     reasons = Counter(r for e in requests for r in e["attrs"].get("reasons", []))
     categories = Counter(e["attrs"].get("category") for e in requests if e["attrs"].get("category"))
     versions = Counter(json.dumps(e["attrs"].get("versions"), sort_keys=True) for e in requests if e["attrs"].get("versions"))
-    model_failures = sum(n for (step, status), n in step_status.items() if step in ("classify", "draft") and status in ("failed", "unavailable"))
+    model_failures = sum(e["attrs"].get("failed_calls", 0) for e in steps)          # every attempt that raised, retried or not
+    # Completed after at least one failed attempt: the model answered on a retry.
+    retried_requests = sum(1 for e in requests if e["attrs"].get("failed_calls", 0) > 0
+                           and not any(r in ("classification_unavailable", "draft_unavailable") for r in e["attrs"].get("reasons", [])))
     unavailable = sum(1 for e in requests if any(r in ("classification_unavailable", "draft_unavailable") for r in e["attrs"].get("reasons", [])))
     cost = estimate_cost(input_tokens, output_tokens, input_rate, output_rate)
     return {
@@ -64,6 +67,7 @@ def summarize(events: list[dict], input_rate: float | None = None, output_rate: 
         "step_latency_ms_p50": {step: percentile(values, 50) for step, values in sorted(step_durations.items())},
         "step_status": {f"{step}:{status}": n for (step, status), n in sorted(step_status.items())},
         "model_call_failures": model_failures,
+        "requests_with_retries": retried_requests,
         "usage": {"calls": calls, "input_tokens": input_tokens, "output_tokens": output_tokens},
         "cost": None if cost is None else {"total_usd": cost, "per_request_usd": round(cost / len(requests), 6) if requests else None,
                                            "input_rate_per_million": input_rate, "output_rate_per_million": output_rate},

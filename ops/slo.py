@@ -94,12 +94,13 @@ def indicators(events: list[dict], input_rate: float | None = None, output_rate:
         "drafted_rate": s["drafted"] / n,
         "flagged_draft_rate": s["flagged_drafts"] / n,
         "model_call_failure_rate": failures / (calls + failures) if (calls + failures) else 0.0,
+        "retry_rate": s["requests_with_retries"] / n,
         "cost_per_request_usd": s["cost"]["per_request_usd"] if s["cost"] else None,
     }
 
 
 INDICATORS = ("requests", "availability", "model_unavailable_rate", "latency_p95_ms", "latency_p50_ms", "escalation_rate",
-              "drafted_rate", "flagged_draft_rate", "model_call_failure_rate", "cost_per_request_usd")
+              "drafted_rate", "flagged_draft_rate", "model_call_failure_rate", "retry_rate", "cost_per_request_usd")
 
 
 def evaluate(events: list[dict], objectives: list[Objective], input_rate: float | None = None, output_rate: float | None = None) -> list[dict]:

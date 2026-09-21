@@ -18,6 +18,24 @@
     "why": "An unavailable model step is the failure the retry policy could not fix. One window is enough to act because every affected request costs an agent the draft."
   },
   {
+    "name": "retries_rising",
+    "indicator": "retry_rate",
+    "threshold": 0.2,
+    "comparison": ">",
+    "window_minutes": 60,
+    "for_windows": 2,
+    "min_requests": 5,
+    "severity": "warning",
+    "owner": "on-call engineer",
+    "inspect": [
+      "failed_calls and last_error on classify and draft events: timeouts or rate limits",
+      "latency p95 in the same windows: retries add backoff before anything is unavailable",
+      "the provider's status page"
+    ],
+    "respond": "Nothing is broken yet: requests complete on a retry. Lower ASSISTANT_CONCURRENCY to ease rate limits, confirm the rules-mode fallback is ready (runbook), and watch the next window. If the unavailable rule fires next, switch without waiting for its second window.",
+    "why": "Retries that succeed are the hour before an outage. Seeing them early turns the outage response from a second-window decision into a first-window one."
+  },
+  {
     "name": "latency_p95",
     "indicator": "latency_p95_ms",
     "threshold": 8000,

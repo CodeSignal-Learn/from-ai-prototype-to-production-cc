@@ -29,6 +29,7 @@ python3 -m ops.slo results/events/week-1.jsonl --input-rate 1.00 --output-rate 5
 python3 -m ops.alerts results/events/week-1-incidents.jsonl --input-rate 1.00 --output-rate 5.00   # which rules fire, for whom, what to do
 python3 -m ops.drift --baseline results/events/week-1.jsonl --recent results/events/week-2.jsonl --out results/drift/week-2-vs-week-1.json
 python3 -m ops.scheduled_eval --as-of 2026-09-20 --traffic data/traffic/week-2.jsonl --label 2026-09-20-week-2   # suites vs reference, window quality
+python3 scripts/replay_traffic.py data/traffic/week-2.jsonl --events results/events/week-2-incident.jsonl --flaky 96:114:rate_limit --failures 118:12:timeout --rules-from 122:150   # the rehearsed incident
 ```
 
 Settings are read from `ASSISTANT_*` environment variables (mode, model, client, prompt variant,
@@ -49,6 +50,8 @@ windows, with the report in `docs/ops-report.md`; `data/traffic/` holds two reco
 `scripts/replay_traffic.py` replays with simulated time. `ops/drift.py` compares two windows and
 names investigation signals; `ops/scheduled_eval.py` re-runs the evaluation suites against their
 reference runs, scores the cases behind a traffic window weighted by request counts, and records
-every new failure (`docs/drift-report.md`).
+every new failure (`docs/drift-report.md`). `ops/runbook.md` is what to do when an alert fires;
+`docs/incident-2026-09-15.md` is a rehearsal of a provider outage, warned, contained in rules
+mode, and compared with the same outage left alone.
 
 The requests in `data/` are synthetic samples; no real customer data is stored in this repository.
