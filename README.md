@@ -20,11 +20,11 @@ ASSISTANT_API_KEY=<secret> python3 scripts/load_test.py --base-url http://127.0.
 python3 -m evals.dataset v1                                            # validate the evaluation cases, print coverage
 python3 -m evals.runner --dataset v1 --split development --client replay --label check   # score a split offline
 python3 -m evals.calibration --run v1-development-baseline --human evals/datasets/v1/human_judgments.jsonl
-ASSISTANT_PROMPT_VARIANT=v2 python3 -m support_assistant.cli data/requests.jsonl --mode model   # the candidate prompts (live)
+ASSISTANT_PROMPT_VARIANT=v1 python3 -m support_assistant.cli data/requests.jsonl --mode model   # the previous prompts, the rollback (live)
 python3 -m evals.report --baseline v1-held_out-baseline-r1 v1-held_out-baseline-r2 v1-held_out-baseline-r3 --candidate v1-held_out-candidate-r1 v1-held_out-candidate-r2 v1-held_out-candidate-r3
 python3 -m support_assistant.cli data/requests.jsonl --mode model --client replay --events results/events/batch.jsonl   # write a trace per request
 python3 -m support_assistant.telemetry.metrics results/events/batch.jsonl --input-rate 1.00 --output-rate 5.00        # latency, errors, usage, cost
-python3 scripts/replay_traffic.py data/traffic/week-1.jsonl --events results/events/week-1.jsonl [--outage 200:30] [--slow 320:360:12000] [--variant v2]
+python3 scripts/replay_traffic.py data/traffic/week-1.jsonl --events results/events/week-1.jsonl --variant v1 [--outage 200:30] [--slow 320:360:12000]   # the committed week logs are v1
 python3 -m ops.slo results/events/week-1.jsonl --input-rate 1.00 --output-rate 5.00      # objectives over daily windows
 python3 -m ops.alerts results/events/week-1-incidents.jsonl --input-rate 1.00 --output-rate 5.00   # which rules fire, for whom, what to do
 python3 -m ops.drift --baseline results/events/week-1.jsonl --recent results/events/week-2.jsonl --out results/drift/week-2-vs-week-1.json
@@ -34,8 +34,10 @@ python3 scripts/replay_traffic.py data/traffic/week-2.jsonl --events results/eve
 
 Settings are read from `ASSISTANT_*` environment variables (mode, model, client, prompt variant,
 timeouts, retries, concurrency, folders, the API key); see `support_assistant/config.py`. Flags override them.
-`ASSISTANT_PROMPT_VARIANT` is `v1` by default; `v2` selects the candidate prompts described in
-`docs/eval-comparison.md`, which are not rolled out.
+`ASSISTANT_PROMPT_VARIANT` is `v2` by default since app version 3.0.0 (`docs/eval-comparison.md`
+for the comparison, `docs/optimization-experiment.md` for the rollout decision); `v1` is the shipped
+prompt set and the rollback. `ASSISTANT_DRAFT_POLICY=skip_unnamed` is a measured and rejected
+optimization, kept behind its setting.
 
 Documents for the POC engagement are in `docs/`: the charter, ADR 001, the decision log, the
 trial results, and the go or no-go recommendation. The evaluation suite lives in `evals/`:
@@ -52,6 +54,7 @@ names investigation signals; `ops/scheduled_eval.py` re-runs the evaluation suit
 reference runs, scores the cases behind a traffic window weighted by request counts, and records
 every new failure (`docs/drift-report.md`). `ops/runbook.md` is what to do when an alert fires;
 `docs/incident-2026-09-15.md` is a rehearsal of a provider outage, warned, contained in rules
-mode, and compared with the same outage left alone.
+mode, and compared with the same outage left alone. `docs/optimization-experiment.md` records the
+v2 rollout on replayed traffic (adopted) and a call-saving draft policy (rejected).
 
 The requests in `data/` are synthetic samples; no real customer data is stored in this repository.

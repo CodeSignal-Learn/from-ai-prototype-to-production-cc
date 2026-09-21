@@ -56,7 +56,7 @@
   {
     "name": "escalation_share",
     "indicator": "escalation_rate",
-    "threshold": 0.6,
+    "threshold": 0.85,
     "comparison": ">",
     "window_minutes": 240,
     "for_windows": 2,
@@ -69,7 +69,7 @@
       "whether a prompt variant or version changed in the window (versions on request events)"
     ],
     "respond": "Open a drift investigation. Do not roll anything back on this alert alone: a change in what customers ask is not a fault in the assistant, and the fix may be a knowledge article.",
-    "why": "Escalation share moves with the traffic mix as much as with the assistant, so it is judged over half-day windows and needs two in a row before anyone is told, and its response is an investigation, not a switch."
+    "why": "Escalation share moves with the traffic mix as much as with the assistant, and under v2 it includes every request the knowledge base cannot answer, so it is judged over half-day windows against a high threshold and needs two in a row before anyone is told; its response is an investigation, not a switch."
   },
   {
     "name": "flagged_drafts",

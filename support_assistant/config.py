@@ -15,7 +15,8 @@ class Settings:
     mode: str = "rules"                      # rules | model
     llm_client: str = "live"                 # live | replay
     model: str = "claude-haiku-4-5"
-    prompt_variant: str = "v1"               # v1 shipped; v2 is the evaluation candidate
+    prompt_variant: str = "v2"               # v2 adopted after the held-out comparison and the replayed rollout; v1 is the rollback
+    draft_policy: str = "always"             # always | skip_unnamed: with v2, skip the draft call when the classifier names no article
     confidence_threshold: float = 0.6
     timeout_seconds: float = 20.0
     max_retries: int = 2
@@ -46,6 +47,7 @@ def load_settings(env=None) -> Settings:
         llm_client=pick("LLM_CLIENT", str, defaults.llm_client),
         model=pick("MODEL", str, defaults.model),
         prompt_variant=pick("PROMPT_VARIANT", str, defaults.prompt_variant),
+        draft_policy=pick("DRAFT_POLICY", str, defaults.draft_policy),
         confidence_threshold=pick("CONFIDENCE_THRESHOLD", float, defaults.confidence_threshold),
         timeout_seconds=pick("TIMEOUT_SECONDS", float, defaults.timeout_seconds),
         max_retries=pick("MAX_RETRIES", int, defaults.max_retries),
@@ -72,6 +74,10 @@ def validate(settings: Settings) -> None:
         raise ValueError(f"ASSISTANT_LLM_CLIENT must be live or replay, got {settings.llm_client!r}")
     if settings.prompt_variant not in ("v1", "v2"):
         raise ValueError(f"ASSISTANT_PROMPT_VARIANT must be v1 or v2, got {settings.prompt_variant!r}")
+    if settings.draft_policy not in ("always", "skip_unnamed"):
+        raise ValueError(f"ASSISTANT_DRAFT_POLICY must be always or skip_unnamed, got {settings.draft_policy!r}")
+    if settings.draft_policy == "skip_unnamed" and settings.prompt_variant != "v2":
+        raise ValueError("ASSISTANT_DRAFT_POLICY=skip_unnamed needs the v2 prompts, which name the article")
     if not 0.0 <= settings.confidence_threshold <= 1.0:
         raise ValueError("ASSISTANT_CONFIDENCE_THRESHOLD must be between 0 and 1")
     if settings.timeout_seconds <= 0:

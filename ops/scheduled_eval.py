@@ -31,7 +31,7 @@ from support_assistant.llm.factory import build_client
 SCHEDULED_DIR = RESULTS_DIR / "scheduled"
 NEW_FAILURES = SCHEDULED_DIR / "new-failures.jsonl"
 REFERENCES = {"v1": {"v1": "v1-development-after-repair", "adv-v1": "adv-v1-development-after-repair"},
-              "v2": {"v1": "v1-development-candidate", "adv-v1": None}}
+              "v2": {"v1": "v1-development-candidate", "adv-v1": "adv-v1-development-candidate"}}
 
 
 def compare_with_reference(items: list[dict], reference_items: list[dict]) -> dict:

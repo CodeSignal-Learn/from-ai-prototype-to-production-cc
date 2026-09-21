@@ -1,0 +1,384 @@
+{
+  "baseline": {
+    "requests": 500,
+    "categories": {
+      "account_access": 0.256,
+      "billing": 0.152,
+      "orders_shipping": 0.172,
+      "other": 0.128,
+      "product_issue": 0.166,
+      "returns_refunds": 0.126
+    },
+    "channels": {
+      "chat": 0.214,
+      "email": 0.458,
+      "web_form": 0.328
+    },
+    "body_chars_p50": 88,
+    "escalation_rate": 0.292,
+    "drafted_rate": 0.742,
+    "flagged_rate": 0.034,
+    "unavailable_rate": 0.0,
+    "reasons": {
+      "hostile_language": 0.042,
+      "instruction_to_assistant": 0.02,
+      "insufficient_information": 0.05,
+      "legal_threat": 0.04,
+      "no_reference_article": 0.128,
+      "sensitive_data": 0.014,
+      "unknown_category": 0.128,
+      "unverifiable_promise": 0.034
+    },
+    "articles": {
+      "none": 0.128,
+      "account-merge": 0.176,
+      "billing-and-invoices": 0.152,
+      "order-tracking": 0.118,
+      "password-reset": 0.08,
+      "product-care": 0.112,
+      "refund-timelines": 0.052,
+      "returns-policy": 0.074,
+      "shipping-times": 0.054,
+      "warranty-claims": 0.054
+    },
+    "lookup_method": {
+      "keyword": 1.0
+    },
+    "latency_p50_ms": 3479.1,
+    "latency_p95_ms": 4281.5,
+    "tokens_per_request": {
+      "input": 512.472,
+      "output": 128.064
+    },
+    "cost_per_request_usd": 0.001153,
+    "versions": [
+      {
+        "app": "2.1.0",
+        "client": "replay",
+        "mode": "model",
+        "model": "claude-haiku-4-5",
+        "prompt": "81ec9d26f2c2",
+        "prompt_variant": "v1"
+      }
+    ]
+  },
+  "recent": {
+    "requests": 500,
+    "categories": {
+      "account_access": 0.26,
+      "billing": 0.156,
+      "orders_shipping": 0.156,
+      "other": 0.176,
+      "product_issue": 0.112,
+      "returns_refunds": 0.14
+    },
+    "channels": {
+      "chat": 0.214,
+      "email": 0.458,
+      "web_form": 0.328
+    },
+    "body_chars_p50": 88,
+    "escalation_rate": 0.688,
+    "drafted_rate": 0.348,
+    "flagged_rate": 0.036,
+    "unavailable_rate": 0.0,
+    "reasons": {
+      "article_does_not_answer": 0.346,
+      "hostile_language": 0.042,
+      "instruction_to_assistant": 0.02,
+      "insufficient_information": 0.05,
+      "legal_threat": 0.04,
+      "low_confidence": 0.012,
+      "no_reference_article": 0.176,
+      "sensitive_data": 0.014,
+      "unknown_category": 0.176,
+      "unverifiable_promise": 0.036
+    },
+    "articles": {
+      "none": 0.176,
+      "account-merge": 0.112,
+      "billing-and-invoices": 0.156,
+      "order-tracking": 0.114,
+      "password-reset": 0.148,
+      "product-care": 0.028,
+      "refund-timelines": 0.05,
+      "returns-policy": 0.09,
+      "shipping-times": 0.042,
+      "warranty-claims": 0.084
+    },
+    "lookup_method": {
+      "keyword": 0.29,
+      "model": 0.71
+    },
+    "latency_p50_ms": 3170.6,
+    "latency_p95_ms": 4385.7,
+    "tokens_per_request": {
+      "input": 1026.868,
+      "output": 117.222
+    },
+    "cost_per_request_usd": 0.001613,
+    "versions": [
+      {
+        "app": "2.1.0",
+        "client": "replay",
+        "mode": "model",
+        "model": "claude-haiku-4-5",
+        "prompt": "559724143452",
+        "prompt_variant": "v2"
+      }
+    ]
+  },
+  "comparison": {
+    "enough_data": true,
+    "versions_changed": true,
+    "categories": {
+      "account_access": {
+        "before": 0.256,
+        "after": 0.26,
+        "delta": 0.004
+      },
+      "billing": {
+        "before": 0.152,
+        "after": 0.156,
+        "delta": 0.004
+      },
+      "orders_shipping": {
+        "before": 0.172,
+        "after": 0.156,
+        "delta": -0.016
+      },
+      "other": {
+        "before": 0.128,
+        "after": 0.176,
+        "delta": 0.048
+      },
+      "product_issue": {
+        "before": 0.166,
+        "after": 0.112,
+        "delta": -0.054
+      },
+      "returns_refunds": {
+        "before": 0.126,
+        "after": 0.14,
+        "delta": 0.014
+      }
+    },
+    "reasons": {
+      "article_does_not_answer": {
+        "before": 0.0,
+        "after": 0.346,
+        "delta": 0.346
+      },
+      "hostile_language": {
+        "before": 0.042,
+        "after": 0.042,
+        "delta": 0.0
+      },
+      "instruction_to_assistant": {
+        "before": 0.02,
+        "after": 0.02,
+        "delta": 0.0
+      },
+      "insufficient_information": {
+        "before": 0.05,
+        "after": 0.05,
+        "delta": 0.0
+      },
+      "legal_threat": {
+        "before": 0.04,
+        "after": 0.04,
+        "delta": 0.0
+      },
+      "low_confidence": {
+        "before": 0.0,
+        "after": 0.012,
+        "delta": 0.012
+      },
+      "no_reference_article": {
+        "before": 0.128,
+        "after": 0.176,
+        "delta": 0.048
+      },
+      "sensitive_data": {
+        "before": 0.014,
+        "after": 0.014,
+        "delta": 0.0
+      },
+      "unknown_category": {
+        "before": 0.128,
+        "after": 0.176,
+        "delta": 0.048
+      },
+      "unverifiable_promise": {
+        "before": 0.034,
+        "after": 0.036,
+        "delta": 0.002
+      }
+    },
+    "articles": {
+      "account-merge": {
+        "before": 0.176,
+        "after": 0.112,
+        "delta": -0.064
+      },
+      "billing-and-invoices": {
+        "before": 0.152,
+        "after": 0.156,
+        "delta": 0.004
+      },
+      "none": {
+        "before": 0.128,
+        "after": 0.176,
+        "delta": 0.048
+      },
+      "order-tracking": {
+        "before": 0.118,
+        "after": 0.114,
+        "delta": -0.004
+      },
+      "password-reset": {
+        "before": 0.08,
+        "after": 0.148,
+        "delta": 0.068
+      },
+      "product-care": {
+        "before": 0.112,
+        "after": 0.028,
+        "delta": -0.084
+      },
+      "refund-timelines": {
+        "before": 0.052,
+        "after": 0.05,
+        "delta": -0.002
+      },
+      "returns-policy": {
+        "before": 0.074,
+        "after": 0.09,
+        "delta": 0.016
+      },
+      "shipping-times": {
+        "before": 0.054,
+        "after": 0.042,
+        "delta": -0.012
+      },
+      "warranty-claims": {
+        "before": 0.054,
+        "after": 0.084,
+        "delta": 0.03
+      }
+    },
+    "rates": {
+      "escalation_rate": {
+        "before": 0.292,
+        "after": 0.688
+      },
+      "drafted_rate": {
+        "before": 0.742,
+        "after": 0.348
+      },
+      "flagged_rate": {
+        "before": 0.034,
+        "after": 0.036
+      },
+      "unavailable_rate": {
+        "before": 0.0,
+        "after": 0.0
+      }
+    },
+    "latency_p95_ms": {
+      "before": 4281.5,
+      "after": 4385.7
+    },
+    "tokens_per_request": {
+      "before": {
+        "input": 512.472,
+        "output": 128.064
+      },
+      "after": {
+        "input": 1026.868,
+        "output": 117.222
+      }
+    },
+    "signals": [
+      {
+        "kind": "system_change",
+        "statement": "The versions that produced the two windows differ; any behavioral difference below may be the system's, not the customers'.",
+        "evidence": {
+          "baseline": [
+            {
+              "app": "2.1.0",
+              "client": "replay",
+              "mode": "model",
+              "model": "claude-haiku-4-5",
+              "prompt": "81ec9d26f2c2",
+              "prompt_variant": "v1"
+            }
+          ],
+          "recent": [
+            {
+              "app": "2.1.0",
+              "client": "replay",
+              "mode": "model",
+              "model": "claude-haiku-4-5",
+              "prompt": "559724143452",
+              "prompt_variant": "v2"
+            }
+          ]
+        },
+        "does_not_prove": "that the change made anything worse; the recurring evaluation on the recent cases says that"
+      },
+      {
+        "kind": "system_change",
+        "statement": "The share of product_issue requests moved from 17% to 11%.",
+        "evidence": {
+          "category": "product_issue",
+          "before": 0.166,
+          "after": 0.112,
+          "delta": -0.054
+        },
+        "does_not_prove": "that the assistant handles this category worse; it says more of the traffic is this category"
+      },
+      {
+        "kind": "system_change",
+        "statement": "escalation rate moved from 29% to 69%.",
+        "evidence": {
+          "before": 0.292,
+          "after": 0.688,
+          "delta": 0.396
+        },
+        "does_not_prove": "a fault in the assistant when the category mix also moved; a mix that needs a person more often escalates more often"
+      },
+      {
+        "kind": "system_change",
+        "statement": "drafted rate moved from 74% to 35%.",
+        "evidence": {
+          "before": 0.742,
+          "after": 0.348,
+          "delta": -0.394
+        },
+        "does_not_prove": "a fault in the assistant when the category mix also moved; a mix that needs a person more often escalates more often"
+      },
+      {
+        "kind": "system_change",
+        "statement": "Escalation reason article_does_not_answer moved from 0% to 35% of requests.",
+        "evidence": {
+          "reason": "article_does_not_answer",
+          "before": 0.0,
+          "after": 0.346,
+          "delta": 0.346
+        },
+        "does_not_prove": "which requests were mishandled; the reason names the rule, not the customer's need"
+      },
+      {
+        "kind": "system_change",
+        "statement": "Input tokens per request moved by a quarter or more.",
+        "evidence": {
+          "before": 512,
+          "after": 1027
+        },
+        "does_not_prove": "anything about quality; it is a cost signal"
+      }
+    ],
+    "next_step": "Run the recurring evaluation on the cases behind the recent window and compare its rubric results with the baseline window's; a mix shift with unchanged per-case quality needs knowledge articles, not a rollback; a quality drop with an unchanged mix needs the version history."
+  }
+}

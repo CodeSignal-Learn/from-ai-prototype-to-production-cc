@@ -103,6 +103,7 @@ def main(argv=None) -> int:
     parser.add_argument("traffic", help="JSONL requests with created_at, in the order they arrived")
     parser.add_argument("--events", required=True, help="event log to write (overwritten)")
     parser.add_argument("--variant", choices=("v1", "v2"), default=None)
+    parser.add_argument("--policy", choices=("always", "skip_unnamed"), default=None, help="draft policy (skip_unnamed needs --variant v2)")
     parser.add_argument("--latency-ms", type=float, default=2400.0, help="simulated model latency per call")
     parser.add_argument("--outage", default=None, help="START:COUNT, inject COUNT timeouts before request index START (1-based)")
     parser.add_argument("--failures", action="append", default=[], help="START:COUNT:KIND, inject COUNT failures of KIND (timeout|rate_limit|unavailable) before request START; repeatable")
@@ -113,7 +114,8 @@ def main(argv=None) -> int:
     args = parser.parse_args(argv)
 
     settings = dataclasses.replace(load_settings(), mode="model", llm_client="replay", events_file=None,
-                                   **({"prompt_variant": args.variant} if args.variant else {}))
+                                   **({"prompt_variant": args.variant} if args.variant else {}),
+                                   **({"draft_policy": args.policy} if args.policy else {}))
     clock = SimulatedClock()
     slow = parse_span(args.slow, 3) if args.slow else None
     contain = parse_span(args.rules_from, 2) if args.rules_from else None

@@ -1,0 +1,618 @@
+{
+  "protocol": {
+    "dataset": "v1",
+    "dataset_sha256": "8fce73436a13e9dcdbc5bd42e5ef9a82be270551e1274d154b4f7c5059335bf5",
+    "split": "held_out",
+    "cases": 56,
+    "baseline_prompt": "559724143452",
+    "candidate_prompt": "559724143452",
+    "baseline_versions": {
+      "draft_policy": null,
+      "model": "claude-haiku-4-5",
+      "prompt": "559724143452",
+      "prompt_variant": "v2"
+    },
+    "candidate_versions": {
+      "draft_policy": "skip_unnamed",
+      "model": "claude-haiku-4-5",
+      "prompt": "559724143452",
+      "prompt_variant": "v2"
+    },
+    "baseline_variant": "v2",
+    "candidate_variant": "v2",
+    "judge": {
+      "model": "claude-haiku-4-5",
+      "prompt": "4feda4d1cbbc"
+    },
+    "repeats": {
+      "baseline": 3,
+      "candidate": 3
+    }
+  },
+  "baseline": {
+    "runs": [
+      "v1-held_out-candidate-r1",
+      "v1-held_out-candidate-r2",
+      "v1-held_out-candidate-r3"
+    ],
+    "per_repeat": [
+      {
+        "acceptable": 41,
+        "R1_pass": 49,
+        "R2_missed": 1,
+        "R2_over": 4,
+        "R3_fail": 7,
+        "R4_fail": 0,
+        "R4_partial": 6,
+        "R5_fail": 1,
+        "drafted": 23,
+        "article_correct": 49
+      },
+      {
+        "acceptable": 40,
+        "R1_pass": 48,
+        "R2_missed": 3,
+        "R2_over": 3,
+        "R3_fail": 8,
+        "R4_fail": 3,
+        "R4_partial": 5,
+        "R5_fail": 0,
+        "drafted": 26,
+        "article_correct": 49
+      },
+      {
+        "acceptable": 44,
+        "R1_pass": 49,
+        "R2_missed": 0,
+        "R2_over": 4,
+        "R3_fail": 5,
+        "R4_fail": 3,
+        "R4_partial": 2,
+        "R5_fail": 1,
+        "drafted": 23,
+        "article_correct": 49
+      }
+    ],
+    "spread": {
+      "acceptable": {
+        "mean": 41.67,
+        "min": 40,
+        "max": 44,
+        "values": [
+          41,
+          40,
+          44
+        ]
+      },
+      "R1_pass": {
+        "mean": 48.67,
+        "min": 48,
+        "max": 49,
+        "values": [
+          49,
+          48,
+          49
+        ]
+      },
+      "R2_missed": {
+        "mean": 1.33,
+        "min": 0,
+        "max": 3,
+        "values": [
+          1,
+          3,
+          0
+        ]
+      },
+      "R2_over": {
+        "mean": 3.67,
+        "min": 3,
+        "max": 4,
+        "values": [
+          4,
+          3,
+          4
+        ]
+      },
+      "R3_fail": {
+        "mean": 6.67,
+        "min": 5,
+        "max": 8,
+        "values": [
+          7,
+          8,
+          5
+        ]
+      },
+      "R4_fail": {
+        "mean": 2.0,
+        "min": 0,
+        "max": 3,
+        "values": [
+          0,
+          3,
+          3
+        ]
+      },
+      "R4_partial": {
+        "mean": 4.33,
+        "min": 2,
+        "max": 6,
+        "values": [
+          6,
+          5,
+          2
+        ]
+      },
+      "R5_fail": {
+        "mean": 0.67,
+        "min": 0,
+        "max": 1,
+        "values": [
+          1,
+          0,
+          1
+        ]
+      },
+      "drafted": {
+        "mean": 24.0,
+        "min": 23,
+        "max": 26,
+        "values": [
+          23,
+          26,
+          23
+        ]
+      },
+      "article_correct": {
+        "mean": 49.0,
+        "min": 49,
+        "max": 49,
+        "values": [
+          49,
+          49,
+          49
+        ]
+      }
+    }
+  },
+  "candidate": {
+    "runs": [
+      "v1-held_out-candidate-skip-r1",
+      "v1-held_out-candidate-skip-r2",
+      "v1-held_out-candidate-skip-r3"
+    ],
+    "per_repeat": [
+      {
+        "acceptable": 42,
+        "R1_pass": 49,
+        "R2_missed": 0,
+        "R2_over": 5,
+        "R3_fail": 6,
+        "R4_fail": 0,
+        "R4_partial": 6,
+        "R5_fail": 1,
+        "drafted": 21,
+        "article_correct": 49
+      },
+      {
+        "acceptable": 41,
+        "R1_pass": 49,
+        "R2_missed": 1,
+        "R2_over": 4,
+        "R3_fail": 8,
+        "R4_fail": 3,
+        "R4_partial": 5,
+        "R5_fail": 0,
+        "drafted": 23,
+        "article_correct": 49
+      },
+      {
+        "acceptable": 43,
+        "R1_pass": 48,
+        "R2_missed": 0,
+        "R2_over": 5,
+        "R3_fail": 5,
+        "R4_fail": 3,
+        "R4_partial": 2,
+        "R5_fail": 1,
+        "drafted": 22,
+        "article_correct": 49
+      }
+    ],
+    "spread": {
+      "acceptable": {
+        "mean": 42.0,
+        "min": 41,
+        "max": 43,
+        "values": [
+          42,
+          41,
+          43
+        ]
+      },
+      "R1_pass": {
+        "mean": 48.67,
+        "min": 48,
+        "max": 49,
+        "values": [
+          49,
+          49,
+          48
+        ]
+      },
+      "R2_missed": {
+        "mean": 0.33,
+        "min": 0,
+        "max": 1,
+        "values": [
+          0,
+          1,
+          0
+        ]
+      },
+      "R2_over": {
+        "mean": 4.67,
+        "min": 4,
+        "max": 5,
+        "values": [
+          5,
+          4,
+          5
+        ]
+      },
+      "R3_fail": {
+        "mean": 6.33,
+        "min": 5,
+        "max": 8,
+        "values": [
+          6,
+          8,
+          5
+        ]
+      },
+      "R4_fail": {
+        "mean": 2.0,
+        "min": 0,
+        "max": 3,
+        "values": [
+          0,
+          3,
+          3
+        ]
+      },
+      "R4_partial": {
+        "mean": 4.33,
+        "min": 2,
+        "max": 6,
+        "values": [
+          6,
+          5,
+          2
+        ]
+      },
+      "R5_fail": {
+        "mean": 0.67,
+        "min": 0,
+        "max": 1,
+        "values": [
+          1,
+          0,
+          1
+        ]
+      },
+      "drafted": {
+        "mean": 22.0,
+        "min": 21,
+        "max": 23,
+        "values": [
+          21,
+          23,
+          22
+        ]
+      },
+      "article_correct": {
+        "mean": 49.0,
+        "min": 49,
+        "max": 49,
+        "values": [
+          49,
+          49,
+          49
+        ]
+      }
+    }
+  },
+  "delta_mean": {
+    "acceptable": 0.33,
+    "R1_pass": 0.0,
+    "R2_missed": -1.0,
+    "R2_over": 1.0,
+    "R3_fail": -0.34,
+    "R4_fail": 0.0,
+    "R4_partial": 0.0,
+    "R5_fail": 0.0,
+    "drafted": -2.0,
+    "article_correct": 0.0
+  },
+  "by_category": {
+    "baseline": {
+      "account_access": {
+        "cases": 8,
+        "acceptable_mean": 5.67
+      },
+      "billing": {
+        "cases": 8,
+        "acceptable_mean": 6.0
+      },
+      "orders_shipping": {
+        "cases": 12,
+        "acceptable_mean": 9.33
+      },
+      "other": {
+        "cases": 8,
+        "acceptable_mean": 8.0
+      },
+      "product_issue": {
+        "cases": 10,
+        "acceptable_mean": 6.33
+      },
+      "returns_refunds": {
+        "cases": 10,
+        "acceptable_mean": 6.33
+      }
+    },
+    "candidate": {
+      "account_access": {
+        "cases": 8,
+        "acceptable_mean": 5.67
+      },
+      "billing": {
+        "cases": 8,
+        "acceptable_mean": 6.0
+      },
+      "orders_shipping": {
+        "cases": 12,
+        "acceptable_mean": 8.67
+      },
+      "other": {
+        "cases": 8,
+        "acceptable_mean": 8.0
+      },
+      "product_issue": {
+        "cases": 10,
+        "acceptable_mean": 7.0
+      },
+      "returns_refunds": {
+        "cases": 10,
+        "acceptable_mean": 6.67
+      }
+    }
+  },
+  "by_tag": {
+    "baseline": {
+      "action-required": {
+        "cases": 2,
+        "acceptable_mean": 1.67
+      },
+      "hostile": {
+        "cases": 1,
+        "acceptable_mean": 1.0
+      },
+      "keywordless": {
+        "cases": 1,
+        "acceptable_mean": 0.0
+      },
+      "legal": {
+        "cases": 3,
+        "acceptable_mean": 2.0
+      },
+      "not-covered": {
+        "cases": 10,
+        "acceptable_mean": 7.33
+      },
+      "outside-policy": {
+        "cases": 2,
+        "acceptable_mean": 1.0
+      },
+      "overlap": {
+        "cases": 1,
+        "acceptable_mean": 0.67
+      },
+      "oversized": {
+        "cases": 1,
+        "acceptable_mean": 1.0
+      },
+      "sensitive": {
+        "cases": 3,
+        "acceptable_mean": 3.0
+      },
+      "spam": {
+        "cases": 1,
+        "acceptable_mean": 1.0
+      },
+      "three-words": {
+        "cases": 1,
+        "acceptable_mean": 1.0
+      },
+      "two-topics": {
+        "cases": 2,
+        "acceptable_mean": 2.0
+      },
+      "untagged": {
+        "cases": 28,
+        "acceptable_mean": 20.0
+      },
+      "urgent": {
+        "cases": 2,
+        "acceptable_mean": 1.0
+      }
+    },
+    "candidate": {
+      "action-required": {
+        "cases": 2,
+        "acceptable_mean": 1.67
+      },
+      "hostile": {
+        "cases": 1,
+        "acceptable_mean": 1.0
+      },
+      "keywordless": {
+        "cases": 1,
+        "acceptable_mean": 0.0
+      },
+      "legal": {
+        "cases": 3,
+        "acceptable_mean": 2.0
+      },
+      "not-covered": {
+        "cases": 10,
+        "acceptable_mean": 8.33
+      },
+      "outside-policy": {
+        "cases": 2,
+        "acceptable_mean": 1.0
+      },
+      "overlap": {
+        "cases": 1,
+        "acceptable_mean": 0.67
+      },
+      "oversized": {
+        "cases": 1,
+        "acceptable_mean": 1.0
+      },
+      "sensitive": {
+        "cases": 3,
+        "acceptable_mean": 3.0
+      },
+      "spam": {
+        "cases": 1,
+        "acceptable_mean": 1.0
+      },
+      "three-words": {
+        "cases": 1,
+        "acceptable_mean": 1.0
+      },
+      "two-topics": {
+        "cases": 2,
+        "acceptable_mean": 2.0
+      },
+      "untagged": {
+        "cases": 28,
+        "acceptable_mean": 19.33
+      },
+      "urgent": {
+        "cases": 2,
+        "acceptable_mean": 1.0
+      }
+    }
+  },
+  "paired": {
+    "improved": [
+      {
+        "id": "EV-3117",
+        "baseline_acceptable": "2/3",
+        "candidate_acceptable": "3/3",
+        "baseline_failures": [
+          {
+            "all": "pass"
+          },
+          {
+            "R1": "fail",
+            "R2": "missed"
+          },
+          {
+            "all": "pass"
+          }
+        ],
+        "candidate_failures": [
+          {
+            "all": "pass"
+          },
+          {
+            "all": "pass"
+          },
+          {
+            "all": "pass"
+          }
+        ]
+      },
+      {
+        "id": "EV-3132",
+        "baseline_acceptable": "1/3",
+        "candidate_acceptable": "3/3",
+        "baseline_failures": [
+          {
+            "R1": "fail",
+            "R2": "missed"
+          },
+          {
+            "R1": "fail",
+            "R2": "missed"
+          },
+          {
+            "all": "pass"
+          }
+        ],
+        "candidate_failures": [
+          {
+            "all": "pass"
+          },
+          {
+            "all": "pass"
+          },
+          {
+            "all": "pass"
+          }
+        ]
+      }
+    ],
+    "regressed": [
+      {
+        "id": "EV-3073",
+        "baseline_acceptable": "2/3",
+        "candidate_acceptable": "0/3",
+        "baseline_failures": [
+          {
+            "R3": "fail"
+          },
+          {
+            "all": "pass"
+          },
+          {
+            "all": "pass"
+          }
+        ],
+        "candidate_failures": [
+          {
+            "R1": "fail",
+            "R2": "over"
+          },
+          {
+            "R1": "fail",
+            "R2": "over"
+          },
+          {
+            "R1": "fail",
+            "R2": "over"
+          }
+        ]
+      }
+    ],
+    "unstable_across_repeats": [
+      "EV-3029",
+      "EV-3039",
+      "EV-3065",
+      "EV-3073",
+      "EV-3078",
+      "EV-3102",
+      "EV-3107",
+      "EV-3114",
+      "EV-3117",
+      "EV-3122",
+      "EV-3124",
+      "EV-3132",
+      "EV-3137"
+    ]
+  }
+}

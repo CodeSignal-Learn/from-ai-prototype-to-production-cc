@@ -1,5 +1,8 @@
 # Baseline versus candidate: the v2 prompts
 
+> Outcome: adopted on 2026-09-21 after the replayed rollout in `docs/optimization-experiment.md`;
+> `v2` is the default from app version 3.0.0 and `v1` is the rollback.
+
 Decision this document supports: should the v2 prompt set replace v1 as the assistant's default?
 Recommendation at the end. Numbers come from `results/evals/comparison/held-out.json`, produced
 by `evals.report` from six runs; nothing here was computed by hand.

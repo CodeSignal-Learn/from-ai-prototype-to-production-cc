@@ -8,7 +8,7 @@ import hashlib
 from . import model
 from .config import Settings
 
-APP_VERSION = "2.1.0"
+APP_VERSION = "3.0.0"
 
 
 def prompt_version(variant: str = "v1") -> str:
@@ -24,5 +24,6 @@ def versions(settings: Settings) -> dict:
         "model": settings.model if settings.mode == "model" else None,
         "prompt": prompt_version(settings.prompt_variant) if settings.mode == "model" else None,
         "prompt_variant": settings.prompt_variant if settings.mode == "model" else None,
+        "draft_policy": settings.draft_policy if settings.mode == "model" else None,
         "client": settings.llm_client if settings.mode == "model" else None,
     }

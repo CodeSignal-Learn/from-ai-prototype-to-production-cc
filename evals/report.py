@@ -37,8 +37,11 @@ def check_protocol(baseline: list[tuple[list[dict], dict]], candidate: list[tupl
     ids = [tuple(sorted(i["id"] for i in items)) for items, _ in runs]
     if len(set(ids)) != 1:
         raise ProtocolError("runs do not cover the same cases")
-    base_prompts = {s["versions"]["prompt"] for _, s in baseline}
-    cand_prompts = {s["versions"]["prompt"] for _, s in candidate}
+    def identity(summary):
+        v = summary["versions"]
+        return json.dumps({k: v.get(k) for k in ("prompt", "prompt_variant", "model", "draft_policy")}, sort_keys=True)
+    base_prompts = {identity(s) for _, s in baseline}
+    cand_prompts = {identity(s) for _, s in candidate}
     if len(base_prompts) != 1 or len(cand_prompts) != 1:
         raise ProtocolError("each side must use one prompt version across its repeats")
     if base_prompts == cand_prompts:
@@ -50,7 +53,8 @@ def check_protocol(baseline: list[tuple[list[dict], dict]], candidate: list[tupl
         raise ProtocolError("a run has unjudged items; every item must carry a verdict")
     dataset, sha, split = next(iter(keys))
     return {"dataset": dataset, "dataset_sha256": sha, "split": split, "cases": len(ids[0]),
-            "baseline_prompt": next(iter(base_prompts)), "candidate_prompt": next(iter(cand_prompts)),
+            "baseline_prompt": baseline[0][1]["versions"]["prompt"], "candidate_prompt": candidate[0][1]["versions"]["prompt"],
+            "baseline_versions": json.loads(next(iter(base_prompts))), "candidate_versions": json.loads(next(iter(cand_prompts))),
             "baseline_variant": baseline[0][1]["versions"].get("prompt_variant") or "v1",
             "candidate_variant": candidate[0][1]["versions"].get("prompt_variant") or "v1",
             "judge": runs[0][1]["judge"], "repeats": {"baseline": len(baseline), "candidate": len(candidate)}}
@@ -143,8 +147,8 @@ def compare(baseline: list[tuple[list[dict], dict]], candidate: list[tuple[list[
 def render(report: dict) -> str:
     p = report["protocol"]
     lines = [f"Protocol: dataset {p['dataset']} ({p['dataset_sha256'][:12]}), split {p['split']}, {p['cases']} cases; "
-             f"baseline {p['baseline_variant']} prompt {p['baseline_prompt']} x{p['repeats']['baseline']} repeats; "
-             f"candidate {p['candidate_variant']} prompt {p['candidate_prompt']} x{p['repeats']['candidate']} repeats; judge {p['judge']}",
+             f"baseline {p['baseline_variant']} prompt {p['baseline_prompt']} policy {p['baseline_versions'].get('draft_policy') or 'always'} x{p['repeats']['baseline']} repeats; "
+             f"candidate {p['candidate_variant']} prompt {p['candidate_prompt']} policy {p['candidate_versions'].get('draft_policy') or 'always'} x{p['repeats']['candidate']} repeats; judge {p['judge']}",
              "", "| Measure | Baseline mean (min-max) | Candidate mean (min-max) | Delta |", "| --- | --- | --- | --- |"]
     for name, _ in MEASURES:
         b, c = report["baseline"]["spread"][name], report["candidate"]["spread"][name]

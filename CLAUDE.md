@@ -17,8 +17,9 @@ refreshed with `scripts/record.py` whenever a prompt changes.
 versioned case set, `evals/runner.py` runs a split and counts the deterministic criteria,
 `evals/judge.py` asks a model the judged ones, `evals/calibration.py` compares the judge with
 human judgments, `evals/report.py` compares a baseline and a candidate over repeated runs. Runs
-are written to `results/evals/<run-id>/`. Two prompt variants live in `model.py`: `v1` (shipped)
-and `v2` (the candidate, `ASSISTANT_PROMPT_VARIANT=v2`); results and `/health` stamp the variant.
+are written to `results/evals/<run-id>/`. Two prompt variants live in `model.py`: `v2` (the default
+since 3.0.0) and `v1` (the previous set, the rollback: `ASSISTANT_PROMPT_VARIANT=v1`); results and
+`/health` stamp the variant and the draft policy (`ASSISTANT_DRAFT_POLICY`, default `always`).
 `support_assistant/telemetry/` emits one trace per request: a `request` event, one event per
 step with its duration and tokens (`trace.py`), written as JSON lines by `EventSink`
 (`ASSISTANT_EVENTS_FILE`); `telemetry/metrics.py` recomputes latency, errors, usage, and cost
@@ -60,15 +61,18 @@ containment switches (all environment variables) and the procedure per alert; st
   back by itself. Quality is measured by the rubric on labeled cases, not inferred from events.
 - Containment is configuration (`ASSISTANT_MODE=rules`, a pinned model, the previous variant),
   confirmed by `/health` and the next window's events; nothing is edited under pressure.
-- Prompts are versioned by content hash and recordings are keyed by prompt. Editing a `v1`
-  prompt invalidates every recording and every evaluation run made with it; a new prompt is a
-  new variant, compared on the held-out split before it becomes the default.
+- Prompts are versioned by content hash and recordings are keyed by prompt. Editing a `v1` or
+  `v2` prompt invalidates every recording and every evaluation run made with it; a new prompt is
+  a new variant, compared on a fresh held-out split before it becomes the default. A behavior
+  change that is not a prompt (a draft policy) is a setting stamped in `versions`, measured the
+  same way; `docs/optimization-experiment.md` shows one adopted and one rejected.
 
 ## How to verify a change
 ```bash
 python3 -m pytest
 python3 -m support_assistant.cli data/requests.jsonl
 python3 -m support_assistant.cli data/requests.jsonl --mode model --client replay
+ASSISTANT_PROMPT_VARIANT=v1 python3 -m support_assistant.cli data/requests.jsonl --mode model --client replay
 ```
 Model-mode checks run on the replay client. Never run live calls in tests or submission checks.
 Run both after any implementation change and report the actual results. The test suite does

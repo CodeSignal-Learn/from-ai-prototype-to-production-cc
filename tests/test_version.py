@@ -9,7 +9,7 @@ def test_every_result_says_what_produced_it(articles):
     request = parse_request({"id": "REQ-1", "customer_name": "A B", "email": "a@example.com", "subject": "Refund",
                              "body": "when will i get my refund for the boots", "channel": "email", "created_at": "2026-08-01T00:00:00Z"})
     result = process_request(request, articles, Settings(mode="rules"))
-    assert result.versions == {"app": APP_VERSION, "mode": "rules", "model": None, "prompt": None, "prompt_variant": None, "client": None}
+    assert result.versions == {"app": APP_VERSION, "mode": "rules", "model": None, "prompt": None, "prompt_variant": None, "draft_policy": None, "client": None}
 
 
 def test_model_mode_versions_include_model_prompt_and_client():

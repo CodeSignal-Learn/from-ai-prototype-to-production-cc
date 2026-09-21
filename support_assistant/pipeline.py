@@ -19,6 +19,7 @@ from .version import versions
 CLASSIFICATION_UNAVAILABLE = "classification_unavailable"
 DRAFT_UNAVAILABLE = "draft_unavailable"
 ARTICLE_DOES_NOT_ANSWER = "article_does_not_answer"
+NO_ARTICLE_NAMED = "no_article_named"
 
 
 def retry_policy(settings: Settings) -> RetryPolicy:
@@ -51,6 +52,7 @@ def process_request(
     confidence = None
     reasons: list[str] = []
     chosen: Article | None = None
+    named_article = False
     variant = settings.prompt_variant
     try:
         if settings.mode == "model":
@@ -64,6 +66,7 @@ def process_request(
                     confidence = verdict.confidence
                     # v2 names the article; it is used only if it exists and belongs to the category.
                     chosen = next((a for a in articles if a.slug == verdict.article and a.category == category), None)
+                    named_article = verdict.article is not None
                     outcome.attrs.update(category=category, confidence=confidence, named_article=verdict.article)
                 except LLMFailed as error:
                     category = "other"
@@ -80,6 +83,10 @@ def process_request(
         reasons += escalation_reasons(request, category, article)
         if confidence is not None and confidence < settings.confidence_threshold:
             reasons.append("low_confidence")
+        if settings.mode == "model" and variant == "v2" and settings.draft_policy == "skip_unnamed" and not named_article and article is not None:
+            # The classifier saw every article and named none. Drafting from the keyword fallback almost
+            # always ends in a decline; the policy saves that call and sends the request to a person.
+            reasons.append(NO_ARTICLE_NAMED)
         route = decide_route(reasons)
         draft = None
         if route == DRAFT and article:
