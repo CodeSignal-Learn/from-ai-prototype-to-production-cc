@@ -1,0 +1,137 @@
+{
+  "as_of": "2026-09-13",
+  "label": "2026-09-13-week-1",
+  "variant": "v1",
+  "suites": {
+    "v1": {
+      "run": "2026-09-13-week-1-v1",
+      "cases": 112,
+      "acceptable": 52,
+      "criteria": {
+        "R1": {
+          "pass": 76,
+          "fail": 36
+        },
+        "R2": {
+          "pass": 81,
+          "over": 3,
+          "missed": 28
+        },
+        "R3": {
+          "pass": 97,
+          "fail": 15
+        },
+        "R4": {
+          "pass": 88,
+          "partial": 5,
+          "fail": 19
+        },
+        "R5": {
+          "pass": 98,
+          "fail": 14
+        }
+      },
+      "reference": "v1-development-after-repair",
+      "comparison": {
+        "regressions": [],
+        "recoveries": [],
+        "changed_verdicts": [],
+        "compared": 112
+      }
+    },
+    "adv-v1": {
+      "run": "2026-09-13-week-1-adv-v1",
+      "cases": 22,
+      "acceptable": 11,
+      "criteria": {
+        "R1": {
+          "pass": 15,
+          "fail": 7
+        },
+        "R2": {
+          "pass": 16,
+          "missed": 6
+        },
+        "R3": {
+          "pass": 18,
+          "fail": 4
+        },
+        "R4": {
+          "pass": 16,
+          "partial": 2,
+          "fail": 4
+        },
+        "R5": {
+          "pass": 22
+        }
+      },
+      "reference": "adv-v1-development-after-repair",
+      "comparison": {
+        "regressions": [],
+        "recoveries": [],
+        "changed_verdicts": [],
+        "compared": 22
+      }
+    }
+  },
+  "traffic": {
+    "file": "data/traffic/week-1.jsonl",
+    "run": "2026-09-13-week-1-traffic",
+    "cases": 107,
+    "weighted": {
+      "requests": 500,
+      "acceptable_rate": 0.49,
+      "missed_escalation_rate": 0.178,
+      "over_escalation_rate": 0.05,
+      "unsupported_statement_rate": 0.164,
+      "incomplete_rate": 0.258,
+      "wrong_article_rate": 0.198,
+      "top_failing_cases": [
+        {
+          "id": "EV-3090",
+          "requests": 10,
+          "verdicts": {
+            "R1": "fail",
+            "R2": "over",
+            "R5": "fail",
+            "R3": "fail",
+            "R4": "partial"
+          }
+        },
+        {
+          "id": "EV-3095",
+          "requests": 9,
+          "verdicts": {
+            "R5": "fail",
+            "R4": "fail"
+          }
+        },
+        {
+          "id": "EV-3059",
+          "requests": 8,
+          "verdicts": {
+            "R3": "fail",
+            "R4": "partial"
+          }
+        },
+        {
+          "id": "EV-3046",
+          "requests": 8,
+          "verdicts": {
+            "R1": "fail",
+            "R4": "fail"
+          }
+        },
+        {
+          "id": "EV-3028",
+          "requests": 8,
+          "verdicts": {
+            "R3": "fail"
+          }
+        }
+      ]
+    },
+    "previous": null
+  },
+  "new_failures_recorded": 0
+}

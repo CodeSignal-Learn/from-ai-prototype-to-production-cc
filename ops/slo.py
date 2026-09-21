@@ -8,7 +8,7 @@ escalation rate, flagged-draft rate, cost per request). An objective is an indic
 a comparison, a window length, and the minimum number of requests a window needs before the
 number means anything. Objectives are data in ops/objectives.json so the team can change a
 target without changing code. Indicators from events are immediate; whether the drafts were
-any good is a delayed measurement that comes from an evaluation run, not from here.
+any good is a delayed measurement that comes from the recurring evaluation, not from here.
 """
 import argparse
 import json
