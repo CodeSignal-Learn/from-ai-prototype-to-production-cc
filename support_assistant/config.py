@@ -25,6 +25,9 @@ class Settings:
     replay_failures: tuple[str, ...] = ()  # failures the replay client raises first, e.g. ("timeout", "timeout")
     recordings_dir: Path = ROOT / "fixtures" / "recordings"
     recording_salt: str = ""               # distinguishes repeated live runs of the same prompts
+    events_file: Path | None = None        # JSONL event log; None keeps events in memory only
+    input_rate_per_million: float | None = None   # dollars per million input tokens, for cost estimates
+    output_rate_per_million: float | None = None  # dollars per million output tokens
     knowledge_dir: Path = ROOT / "kb"
     api_key: str | None = None             # required to serve the API; requests carry it in X-API-Key
 
@@ -52,6 +55,9 @@ def load_settings(env=None) -> Settings:
         replay_failures=pick("REPLAY_FAILURES", lambda raw: tuple(part.strip() for part in raw.split(",") if part.strip()), defaults.replay_failures),
         recordings_dir=pick("RECORDINGS_DIR", Path, defaults.recordings_dir),
         recording_salt=pick("RECORDING_SALT", str, defaults.recording_salt),
+        events_file=pick("EVENTS_FILE", Path, defaults.events_file),
+        input_rate_per_million=pick("INPUT_RATE_PER_MILLION", float, defaults.input_rate_per_million),
+        output_rate_per_million=pick("OUTPUT_RATE_PER_MILLION", float, defaults.output_rate_per_million),
         knowledge_dir=pick("KNOWLEDGE_DIR", Path, defaults.knowledge_dir),
         api_key=pick("API_KEY", str, defaults.api_key),
     )
@@ -78,6 +84,11 @@ def validate(settings: Settings) -> None:
         raise ValueError("ASSISTANT_CONCURRENCY must be at least 1")
     if settings.replay_latency_seconds < 0:
         raise ValueError("ASSISTANT_REPLAY_LATENCY_SECONDS must be zero or more")
+    for name, rate in (("INPUT_RATE_PER_MILLION", settings.input_rate_per_million), ("OUTPUT_RATE_PER_MILLION", settings.output_rate_per_million)):
+        if rate is not None and rate < 0:
+            raise ValueError(f"ASSISTANT_{name} must be zero or more")
+    if (settings.input_rate_per_million is None) != (settings.output_rate_per_million is None):
+        raise ValueError("ASSISTANT_INPUT_RATE_PER_MILLION and ASSISTANT_OUTPUT_RATE_PER_MILLION must be set together")
     unknown = [name for name in settings.replay_failures if name not in ("timeout", "rate_limit", "unavailable", "malformed")]
     if unknown:
         raise ValueError(f"ASSISTANT_REPLAY_FAILURES has unknown failure names: {', '.join(unknown)}")

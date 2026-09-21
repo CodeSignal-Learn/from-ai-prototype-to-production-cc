@@ -23,8 +23,9 @@ assert on the delays that would have been slept. End-to-end failure paths run of
 scripts exceptions between answers, and `ReplayClient(failures=[...])` raises them before serving a recording.
 
 ## Still open
-- A run of repeated `classification_unavailable` results is a signal nobody sees yet; alerts
-  belong to the observability course.
-- Latency and cost of retries are not measured. Instrumentation comes with observability.
+- A run of repeated `classification_unavailable` results is now recorded: each unavailable step's
+  event carries its attempts and last error (`docs/telemetry.md`). Nothing alerts on it yet.
+- The latency of retries shows in step durations, but a retry that succeeded leaves no field on
+  the event, so retries that recover are not counted.
 - Results are written only when the batch finishes, so a run that dies halfway has nothing on disk
   and starts over. Writing each result as it arrives belongs to the rollout work.

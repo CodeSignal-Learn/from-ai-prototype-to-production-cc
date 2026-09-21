@@ -95,6 +95,6 @@ article" holds for most facts and slips on inferences.
   route a non-answer to a person and ground the draft in the right article. That change is
   measured on the held-out split before anyone rolls it out.
 - Finding 4 names two small deterministic gaps, masked sensitive fields and the three-word
-  minimum, for the red-teaming unit to confirm and close.
+  minimum, for the red-teaming work to confirm and close.
 - Finding 3 says the deterministic promise patterns should also cover deferrals that name an
   outcome, and that the judge remains the only detector for rule extensions.

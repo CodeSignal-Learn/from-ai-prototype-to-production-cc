@@ -33,5 +33,5 @@ the pipeline offline.
 ## Not yet addressed
 Timeouts are configured but nothing retries or falls back; the model's answer is still trusted;
 the customer text is not yet delimited or marked as data inside the user message; batches run one
-request at a time; there is no service interface and no version stamping. Each has its own unit.
+request at a time; there is no service interface and no version stamping. Each is addressed separately.
 The per-call token limits stay hardcoded in `model.py` by choice.
