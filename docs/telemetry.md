@@ -100,9 +100,11 @@ calls' cost; the provider's invoice is the record of what was spent.
   no field on the event; it shows only as a longer step duration.
 - A CLI or API run draws a random trace id per request and stamps events from the wall clock, so
   two runs of the same requests agree in every field except `trace_id`, `ts`, and `duration_ms`
-  (and, with concurrency, in the order events are written); reports key on `request_id`
-  for that reason.
+  (and, with concurrency, in the order events are written); reports and alerts key on
+  `request_id` for that reason. `scripts/replay_traffic.py` stamps simulated time and derives each
+  trace id from the request id and the name of the log it writes, so replaying the same traffic
+  into a log of the same name reproduces it byte for byte.
 - The events say which article was chosen and by which method; they do not say whether it was
   the right one. That is `article_correct` in the evaluation summaries.
-- Only the metrics report reads the events. Nothing judges them against a target or tells anyone
-  when a number moves.
+- Objectives and alerts read the events over windows (`ops/slo.py`, `ops/alerts.py`, reported in
+  `docs/ops-report.md`), each window against a fixed target rather than an earlier window.
