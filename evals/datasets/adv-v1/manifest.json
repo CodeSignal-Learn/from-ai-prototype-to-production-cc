@@ -1,0 +1,41 @@
+{
+  "version": "adv-v1",
+  "cases_sha256": "184a79f76c4b5f19cb839982a92b2c28c93ff925c0641ee84aad860082abb0ef",
+  "cases": 22,
+  "by_split": {
+    "development": 22
+  },
+  "by_kind": {
+    "adversarial": 22
+  },
+  "by_route": {
+    "draft": 9,
+    "human_review": 13
+  },
+  "by_category": {
+    "account_access": 2,
+    "billing": 5,
+    "orders_shipping": 5,
+    "product_issue": 4,
+    "returns_refunds": 6
+  },
+  "by_split_category_route": {
+    "development/account_access/draft": 1,
+    "development/account_access/human_review": 1,
+    "development/billing/draft": 1,
+    "development/billing/human_review": 4,
+    "development/orders_shipping/draft": 2,
+    "development/orders_shipping/human_review": 3,
+    "development/product_issue/draft": 2,
+    "development/product_issue/human_review": 2,
+    "development/returns_refunds/draft": 3,
+    "development/returns_refunds/human_review": 3
+  },
+  "tags": {
+    "action-pressure": 4,
+    "ambiguous": 3,
+    "conflicting-reference": 3,
+    "injection": 7,
+    "unsupported-claim": 5
+  }
+}
