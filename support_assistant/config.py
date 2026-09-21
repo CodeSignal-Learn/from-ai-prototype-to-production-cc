@@ -15,6 +15,7 @@ class Settings:
     mode: str = "rules"                      # rules | model
     llm_client: str = "live"                 # live | replay
     model: str = "claude-haiku-4-5"
+    prompt_variant: str = "v1"               # v1 shipped; v2 is the evaluation candidate
     confidence_threshold: float = 0.6
     timeout_seconds: float = 20.0
     max_retries: int = 2
@@ -23,6 +24,7 @@ class Settings:
     replay_latency_seconds: float = 0.0    # simulated model latency for offline load tests
     replay_failures: tuple[str, ...] = ()  # failures the replay client raises first, e.g. ("timeout", "timeout")
     recordings_dir: Path = ROOT / "fixtures" / "recordings"
+    recording_salt: str = ""               # distinguishes repeated live runs of the same prompts
     knowledge_dir: Path = ROOT / "kb"
     api_key: str | None = None             # required to serve the API; requests carry it in X-API-Key
 
@@ -40,6 +42,7 @@ def load_settings(env=None) -> Settings:
         mode=pick("MODE", str, defaults.mode),
         llm_client=pick("LLM_CLIENT", str, defaults.llm_client),
         model=pick("MODEL", str, defaults.model),
+        prompt_variant=pick("PROMPT_VARIANT", str, defaults.prompt_variant),
         confidence_threshold=pick("CONFIDENCE_THRESHOLD", float, defaults.confidence_threshold),
         timeout_seconds=pick("TIMEOUT_SECONDS", float, defaults.timeout_seconds),
         max_retries=pick("MAX_RETRIES", int, defaults.max_retries),
@@ -48,6 +51,7 @@ def load_settings(env=None) -> Settings:
         replay_latency_seconds=pick("REPLAY_LATENCY_SECONDS", float, defaults.replay_latency_seconds),
         replay_failures=pick("REPLAY_FAILURES", lambda raw: tuple(part.strip() for part in raw.split(",") if part.strip()), defaults.replay_failures),
         recordings_dir=pick("RECORDINGS_DIR", Path, defaults.recordings_dir),
+        recording_salt=pick("RECORDING_SALT", str, defaults.recording_salt),
         knowledge_dir=pick("KNOWLEDGE_DIR", Path, defaults.knowledge_dir),
         api_key=pick("API_KEY", str, defaults.api_key),
     )
@@ -60,6 +64,8 @@ def validate(settings: Settings) -> None:
         raise ValueError(f"ASSISTANT_MODE must be rules or model, got {settings.mode!r}")
     if settings.llm_client not in ("live", "replay"):
         raise ValueError(f"ASSISTANT_LLM_CLIENT must be live or replay, got {settings.llm_client!r}")
+    if settings.prompt_variant not in ("v1", "v2"):
+        raise ValueError(f"ASSISTANT_PROMPT_VARIANT must be v1 or v2, got {settings.prompt_variant!r}")
     if not 0.0 <= settings.confidence_threshold <= 1.0:
         raise ValueError("ASSISTANT_CONFIDENCE_THRESHOLD must be between 0 and 1")
     if settings.timeout_seconds <= 0:
