@@ -20,11 +20,11 @@
   {
     "name": "Escalation share",
     "indicator": "escalation_rate",
-    "target": 0.45,
+    "target": 0.8,
     "comparison": "<=",
     "window_minutes": 1440,
     "min_requests": 20,
-    "why": "The share of requests a person handles without a draft is the agents' workload. Above this, the assistant is not paying for itself; it is also the first place a change in the traffic mix shows."
+    "why": "The share of requests a person handles without a draft is the agents' workload, and the first place a change in the traffic mix shows. Under the v2 prompts most requests the knowledge base cannot answer become escalations with a reason instead of drafted deferrals (missed escalations fell from 34% to 3% of the same recorded week), so the share is structurally higher than under v1 (0.69 against 0.29 on that week, and 0.62 to 0.76 a day under v2); the target sits above the highest replayed day and follows the behavior the team adopted, and a rise beyond it is the signal."
   },
   {
     "name": "Flagged drafts",

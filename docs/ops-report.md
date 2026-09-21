@@ -36,6 +36,9 @@ seconds and reads like a week. Replayed twice:
   simulated calls at about 4 to 9 s against 1.2 to 2.7 s normally (a slow stretch of about five
   and a half hours from 12:32 on Friday, plus the first request on Saturday).
 
+The committed week logs are v1. From app 3.0.0 the default variant is v2, so pass `--variant v1`
+to reproduce them.
+
 ## Objectives
 
 Daily windows, at least 20 requests each, rates $1.00 / $5.00 per million tokens.
@@ -47,6 +50,10 @@ Daily windows, at least 20 requests each, rates $1.00 / $5.00 per million tokens
 | Escalation share | requests routed to a person at most 0.45 | The agents' workload, and the first place a change in the traffic mix shows |
 | Flagged drafts | requests with a flagged draft, as a share of all requests, at most 0.10 | On the first recorded week the checks flagged 25 of 500 requests (5.9 percent of the 422 drafts), 2.8 to 9.9 percent of requests a day, 15 of them unverifiable promises and 10 ungrounded numbers; a rising rate is the signal, not the level |
 | Spend | estimated cost per request at most $0.01 | The POC charter's cost gate, at operator-supplied rates; without rates it reports insufficient data |
+
+From app 3.0.0 the escalation-share target is 0.80, re-baselined for the v2 prompts
+(`docs/optimization-experiment.md`). The week-1 results below were measured against 0.45; under
+0.80 they are the same.
 
 `python3 -m ops.slo results/events/week-1.jsonl --input-rate 1.00 --output-rate 5.00`:
 
@@ -79,6 +86,9 @@ is either a wrong target or a real problem, and the report has to say which.
 | escalation_share | over 0.60 in a 240-minute window of at least 20 requests | 2 consecutive | low, support lead | The reasons mix, the category mix against the baseline week, version changes. Open a drift investigation; roll nothing back on this alert alone |
 | flagged_drafts | over 0.15 in a 120-minute window of at least 8 requests | 2 consecutive | medium, on-call engineer | Which checks fire, whether the prompt version or model alias changed. Pin the previous versions; confirm on the replay client |
 | spend | over $0.01 per request in a daily window of at least 20 requests | 1 window | low, product owner | Tokens per step, the variant running. No automatic action |
+
+From app 3.0.0 the escalation_share threshold is 0.85, for the same reason. The trigger tests
+below were run against 0.60; under 0.85 they give the same results.
 
 Windows are sized to the volume: at seven requests an hour, a one-hour window rarely holds enough
 requests to judge a percentile, so latency and flagged drafts use two-hour windows and escalation
