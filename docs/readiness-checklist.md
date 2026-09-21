@@ -30,7 +30,7 @@ One gate stays open; release is not recommended until it closes.
 
 | Gate | Why it is open | What closes it |
 | --- | --- | --- |
-| Monitoring | Every request records structured events (`docs/telemetry.md`), and five objectives and five alert rules, each with an owner and a response, judge them over windows (`docs/ops-report.md`). Nothing compares one week's traffic with another's, the evaluation suites run only by hand, and no procedure says how to work an incident | Drift reports, recurring evaluation, an incident runbook rehearsed on an outage, and a release watched through them |
+| Monitoring | Structured events, five objectives and five alert rules over windows (`docs/ops-report.md`), drift reports between traffic windows, and the suites re-run on a schedule against their reference runs (`docs/drift-report.md`) are in place. No procedure says how to work an incident, and none has been rehearsed | An incident runbook rehearsed on an outage, and a release watched through the monitoring |
 
 ## Known limits, not blocking
 - Confidence is uncalibrated (20 of 25 values at 0.95 in the POC trial, 18 of 25 on the hardened

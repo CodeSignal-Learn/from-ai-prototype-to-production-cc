@@ -14,10 +14,10 @@ is deployed with; this project builds none of them.
 Everything in this document comes from events, and events are immediate: a request completed,
 took this long, was escalated for these reasons, used these tokens. Whether the draft was any
 good is a **delayed** measurement. It needs the article, the request, and a reader or a
-calibrated judge, and it comes from an evaluation run, not from an event. The objectives
+calibrated judge, and it comes from the recurring evaluation, not from an event. The objectives
 below therefore use two proxies the events do carry, the escalation share and the flagged-draft
-share, and say so; a fall in quality that changes neither will only show when the evaluation
-suites are run again on recent cases.
+share, and say so; a fall in quality that changes neither will only show in the scheduled
+evaluation. That is the gap the drift work fills.
 
 ## The traffic
 
@@ -75,7 +75,7 @@ is either a wrong target or a real problem, and the report has to say which.
 | --- | --- | --- | --- | --- |
 | model_unavailable | unavailable rate over 0.05 in a 60-minute window of at least 5 requests | 1 window | high, on-call engineer | Inspect the unavailable step events (attempts, last error), the provider's status, `/health`. If a second window follows, switch to rules mode per `docs/rollout-rollback-plan.md`; back when two windows are clean |
 | latency_p95 | p95 over 8 s in a 120-minute window of at least 8 requests | 2 consecutive | medium, on-call engineer | Per-step durations, output tokens, attempts. Pause batch runs or lower their concurrency, and raise the timeout within the objective; rules mode if it persists two more windows |
-| escalation_share | over 0.60 in a 240-minute window of at least 20 requests | 2 consecutive | low, support lead | The reasons mix, the category mix against the clean week's, version changes. Find what changed in the requests; roll nothing back on this alert alone |
+| escalation_share | over 0.60 in a 240-minute window of at least 20 requests | 2 consecutive | low, support lead | The reasons mix, the category mix against the baseline week, version changes. Open a drift investigation; roll nothing back on this alert alone |
 | flagged_drafts | over 0.15 in a 120-minute window of at least 8 requests | 2 consecutive | medium, on-call engineer | Which checks fire, whether the prompt version or model alias changed. Pin the previous versions; confirm on the replay client |
 | spend | over $0.01 per request in a daily window of at least 20 requests | 1 window | low, product owner | Tokens per step, the variant running. No automatic action |
 
@@ -124,7 +124,7 @@ nothing and the incident week fires exactly these two.
 ## What the alerts cannot see
 
 - A prompt or model change that makes drafts worse without making them promise anything shows
-  in none of these indicators. Only running the evaluation suites again on recent cases shows it.
+  in none of these indicators. The recurring evaluation and the drift report are the detector.
 - A change in the traffic mix that raises escalations looks like a fault and is not one. The
   escalation rule's response is an investigation for that reason.
 - A request that never finishes, because the process stopped, has a `received` event and no
