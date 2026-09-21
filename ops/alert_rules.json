@@ -14,8 +14,26 @@
       "the provider's status page and the retry backoff in the step durations",
       "/health for the running mode, client, and versions"
     ],
-    "respond": "If the rate stays above threshold for a second window, switch the deployment to rules mode (ASSISTANT_MODE=rules) per docs/rollout-rollback-plan.md; requests are still answered from templates and a person still sends. Switch back when two consecutive windows on the model are clean.",
+    "respond": "If the rate stays above threshold for a second window, switch the deployment to rules mode (ASSISTANT_MODE=rules) per the runbook; requests are still answered from templates and a person still sends. Switch back after the runbook's recovery probe (five live requests from a separate process, none unavailable), then confirm the next window on the model is clean.",
     "why": "An unavailable model step is the failure the retry policy could not fix. One window is enough to act because every affected request costs an agent the draft."
+  },
+  {
+    "name": "retries_rising",
+    "indicator": "retry_rate",
+    "threshold": 0.2,
+    "comparison": ">",
+    "window_minutes": 60,
+    "for_windows": 2,
+    "min_requests": 5,
+    "severity": "warning",
+    "owner": "on-call engineer",
+    "inspect": [
+      "failed_calls and last_error on classify and draft events: timeouts or rate limits",
+      "latency p95 in the same windows: retries add backoff before anything is unavailable",
+      "the provider's status page"
+    ],
+    "respond": "Nothing is broken yet: requests complete on a retry. Pause batch runs or lower their ASSISTANT_CONCURRENCY to ease rate limits (single requests are not bounded by it), confirm the rules-mode fallback is ready (runbook), and watch the next window. If the unavailable rule fires next, switch without waiting for its second window.",
+    "why": "Retries that succeed often rise before calls start failing outright. Seeing them early turns the outage response from a second-window decision into a first-window one."
   },
   {
     "name": "latency_p95",

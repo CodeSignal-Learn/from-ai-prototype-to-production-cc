@@ -28,7 +28,7 @@ def trace(index: int, at: datetime, *, route="draft", unavailable=False, duratio
     events = [{"ts": ts, "trace_id": tid, "request_id": f"R{index}", "step": "request", "status": "received", "duration_ms": None, "attrs": {}, "schema": 1}]
     if unavailable:
         events.append({"ts": ts, "trace_id": tid, "request_id": f"R{index}", "step": "classify", "status": "unavailable", "duration_ms": 3500.0,
-                       "attrs": {"attempts": 3, "last_error": "LLMTimeout"}, "schema": 1})
+                       "attrs": {"attempts": 3, "last_error": "LLMTimeout", "failed_calls": 3}, "schema": 1})
         calls, tok = 0, (0, 0)
     else:
         events.append({"ts": ts, "trace_id": tid, "request_id": f"R{index}", "step": "classify", "status": "ok", "duration_ms": duration_ms / 2,
@@ -68,7 +68,8 @@ def test_indicators_from_one_window():
     assert values["escalation_rate"] == 0.75           # human_review, unavailable, flagged
     assert values["drafted_rate"] == 0.5               # the plain draft and the flagged one
     assert values["flagged_draft_rate"] == 0.25
-    assert values["model_call_failure_rate"] == pytest.approx(1 / 7)
+    assert values["model_call_failure_rate"] == pytest.approx(3 / 9)   # three failed attempts against six completed calls
+    assert values["retry_rate"] == 0.0                                 # the failed request never completed a retry
     assert values["cost_per_request_usd"] > 0
     assert indicators(events)["cost_per_request_usd"] is None
     assert indicators([])["requests"] == 0
@@ -187,3 +188,62 @@ def test_a_replay_reproduces_and_an_outage_is_a_stretch_of_time(tmp_path):
     finals = [r for r in read_events(tmp_path / "a" / "events.jsonl") if r["step"] == "request" and r["status"] != "received"]
     unavailable = [n for n, r in enumerate(finals, start=1) if "classification_unavailable" in r["attrs"]["reasons"]]
     assert unavailable == [2, 3]                                               # from request 2's arrival to request 4's
+
+
+def test_flaky_calls_are_retries_not_outages_and_rules_mode_contains(tmp_path):
+    """Every other call fails for requests 2..4: they complete on a retry and count as retried, not unavailable;
+    requests 5..6 run in rules mode with no model call at all."""
+    root = Path(__file__).resolve().parent.parent
+    out = tmp_path / "events.jsonl"
+    result = subprocess.run([sys.executable, "scripts/replay_traffic.py", "data/traffic/week-2.jsonl", "--events", str(out), "--limit", "6",
+                             "--flaky", "2:5:rate_limit", "--rules-from", "5:7"], cwd=root, capture_output=True, text=True)
+    assert result.returncode == 0, result.stderr
+    from support_assistant.telemetry.events import read_events
+    from support_assistant.telemetry.metrics import summarize
+    rows = read_events(out)
+    finals = [r for r in rows if r["step"] == "request" and r["status"] != "received"]
+    summary = summarize(rows)
+    assert summary["model_unavailable"] == 0
+    assert summary["requests_with_retries"] == 3 and summary["model_call_failures"] >= 3
+    assert all(f["attrs"]["versions"]["mode"] == "rules" for f in finals[4:6])
+    assert all(f["attrs"]["calls"] == 0 for f in finals[4:6])
+    assert indicators(rows)["retry_rate"] == 0.5
+    retried = [r for r in rows if r["step"] in ("classify", "draft") and r["status"] == "ok" and r["attrs"].get("failed_calls")]
+    assert retried and all(r["attrs"]["last_error"] == "LLMRateLimited" for r in retried)     # a retried step says what it retried
+    assert len({f["attrs"]["versions"]["prompt"] for f in finals}) == 1                       # containment is not a release
+
+
+def test_containment_avoids_the_calls_an_outage_fails(tmp_path):
+    """The same outage with and without rules mode inside it: rules mode makes no model call, so only
+    the requests that reach the model during the outage are unavailable."""
+    root = Path(__file__).resolve().parent.parent
+    from support_assistant.telemetry.events import read_events
+    hit = {}
+    for name, extra in (("uncontained", []), ("contained", ["--rules-from", "3:5"])):
+        out = tmp_path / f"{name}.jsonl"
+        result = subprocess.run([sys.executable, "scripts/replay_traffic.py", "data/traffic/week-2.jsonl", "--events", str(out), "--limit", "6",
+                                 "--failures", "2:6:timeout", *extra], cwd=root, capture_output=True, text=True)
+        assert result.returncode == 0, result.stderr
+        finals = [r for r in read_events(out) if r["step"] == "request" and r["status"] != "received"]
+        hit[name] = [n for n, r in enumerate(finals, start=1) if "classification_unavailable" in r["attrs"]["reasons"]]
+    assert hit == {"uncontained": [2, 3, 4, 5], "contained": [2, 5]}
+
+
+def test_the_rehearsed_incident_warns_before_it_fails_and_is_contained():
+    from support_assistant.telemetry.events import read_events
+    root = Path(__file__).resolve().parent.parent
+    events = read_events(root / "results" / "events" / "week-2-incident.jsonl")
+    report = evaluate_alerts(events, load_rules(), 1.0, 5.0)
+    by_rule = {a["rule"]: a for a in report["alerts"]}
+    assert set(by_rule) == {"retries_rising", "model_unavailable"}
+    assert by_rule["retries_rising"]["fired_at"] < by_rule["model_unavailable"]["fired_at"]
+    finals = [e for e in events if e["step"] == "request" and e["status"] != "received"]
+    unavailable = [e for e in finals if "classification_unavailable" in e["attrs"]["reasons"]]
+    assert len(unavailable) == 4
+    contained = [e for e in finals if e["attrs"]["versions"]["mode"] == "rules"]
+    assert len(contained) == 28 and all(e["attrs"]["calls"] == 0 for e in contained)
+    after = [e for e in finals if e["ts"] > max(c["ts"] for c in contained)]
+    assert after and all(e["attrs"]["versions"]["mode"] == "model" and "classification_unavailable" not in e["attrs"]["reasons"] for e in after)
+    twin = read_events(root / "results" / "events" / "week-2-incident-uncontained.jsonl")       # the same outage, no containment
+    hit = [e["request_id"] for e in twin if e["step"] == "request" and "classification_unavailable" in e["attrs"].get("reasons", [])]
+    assert hit[:4] == [e["request_id"] for e in unavailable] and len(hit) == 26

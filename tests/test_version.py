@@ -8,8 +8,11 @@ from support_assistant.version import APP_VERSION, prompt_version, versions
 def test_every_result_says_what_produced_it(articles):
     request = parse_request({"id": "REQ-1", "customer_name": "A B", "email": "a@example.com", "subject": "Refund",
                              "body": "when will i get my refund for the boots", "channel": "email", "created_at": "2026-08-01T00:00:00Z"})
-    result = process_request(request, articles, Settings(mode="rules"))
-    assert result.versions == {"app": APP_VERSION, "mode": "rules", "model": None, "prompt": None, "prompt_variant": None, "client": None}
+    settings = Settings(mode="rules")
+    result = process_request(request, articles, settings)
+    # No model is called in rules mode; the prompt set is the deployment's, so a containment is not a release.
+    assert result.versions == {"app": APP_VERSION, "mode": "rules", "model": None, "prompt": prompt_version(settings.prompt_variant),
+                               "prompt_variant": settings.prompt_variant, "client": None}
 
 
 def test_model_mode_versions_include_model_prompt_and_client():
