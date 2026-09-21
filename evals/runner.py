@@ -182,11 +182,26 @@ def load_run(run_dir: Path) -> tuple[list[dict], dict]:
     return items, json.loads((run_dir / "summary.json").read_text(encoding="utf-8"))
 
 
-def run(dataset: str, split: str, settings: Settings, client: LLMClient | None, judge: LLMClient | None,
-        run_id: str, rubric: Rubric | None = None, results_dir: Path = RESULTS_DIR, sleep=time.sleep, log=print) -> dict:
+def traffic_case_ids(path: Path) -> list[str]:
+    """The dataset cases a recorded traffic window was sampled from (its `source_case` field), deduplicated."""
+    ids = []
+    for line in Path(path).read_text(encoding="utf-8").splitlines():
+        if line.strip():
+            case_id = json.loads(line).get("source_case")
+            if case_id and case_id not in ids:
+                ids.append(case_id)
+    return ids
+
+
+def run(dataset: str, split: str | None, settings: Settings, client: LLMClient | None, judge: LLMClient | None,
+        run_id: str, rubric: Rubric | None = None, results_dir: Path = RESULTS_DIR, sleep=time.sleep, log=print,
+        case_ids: list[str] | None = None) -> dict:
     rubric = rubric or load_rubric()
     articles = load_articles(settings.knowledge_dir)
     cases = load_cases(dataset, split, {a.slug for a in articles})
+    if case_ids is not None:
+        wanted = set(case_ids)
+        cases = [c for c in cases if c.id in wanted]
     items = []
     for index, case in enumerate(cases, start=1):
         item = score_case(case, articles, settings, client, judge, rubric, sleep)
@@ -199,7 +214,8 @@ def run(dataset: str, split: str, settings: Settings, client: LLMClient | None, 
         "created_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "dataset": dataset,
         "dataset_sha256": build_manifest(dataset, load_cases(dataset, article_slugs={a.slug for a in articles}))["cases_sha256"],
-        "split": split,
+        "split": split or "all",
+        "case_filter": None if case_ids is None else {"cases": len(cases), "source": "case_ids"},
         "versions": versions(settings),
         "rubric_version": rubric.version,
         "judge": None if judge is None else {"model": settings.model, "prompt": judge_prompt_version(rubric)},
@@ -240,6 +256,7 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--dataset", default="v1")
     parser.add_argument("--split", choices=("development", "held_out"), default="development")
+    parser.add_argument("--traffic", default=None, help="score only the cases a recorded traffic window was sampled from (its source_case ids), any split")
     parser.add_argument("--client", choices=("live", "replay"), default=None, help="overrides ASSISTANT_LLM_CLIENT")
     parser.add_argument("--record", action="store_true", help="run live and record every completion for replay")
     parser.add_argument("--no-judge", action="store_true", help="deterministic criteria only")
@@ -266,8 +283,10 @@ def main(argv=None) -> int:
     else:
         client = build_client(settings)
         judge = None if args.no_judge else build_client(dataclasses.replace(settings, recording_salt=""))
-    run_id = f"{args.dataset}-{args.split}-{args.label}"
-    summary = run(args.dataset, args.split, settings, client, judge, run_id)
+    case_ids = traffic_case_ids(Path(args.traffic)) if args.traffic else None
+    split = None if case_ids is not None else args.split
+    run_id = f"{args.dataset}-{'traffic' if case_ids is not None else args.split}-{args.label}"
+    summary = run(args.dataset, split, settings, client, judge, run_id, case_ids=case_ids)
     print_summary(summary)
     print(f"wrote results/evals/{run_id}/")
     return 0

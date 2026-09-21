@@ -27,6 +27,8 @@ python3 -m support_assistant.telemetry.metrics results/events/batch.jsonl --inpu
 python3 scripts/replay_traffic.py data/traffic/week-1.jsonl --events results/events/week-1.jsonl [--outage 200:30] [--slow 320:360:12000] [--variant v2]
 python3 -m ops.slo results/events/week-1.jsonl --input-rate 1.00 --output-rate 5.00      # objectives over daily windows
 python3 -m ops.alerts results/events/week-1-incidents.jsonl --input-rate 1.00 --output-rate 5.00   # which rules fire, for whom, what to do
+python3 -m ops.drift --baseline results/events/week-1.jsonl --recent results/events/week-2.jsonl --out results/drift/week-2-vs-week-1.json
+python3 -m ops.scheduled_eval --as-of 2026-09-20 --traffic data/traffic/week-2.jsonl --label 2026-09-20-week-2   # suites vs reference, window quality
 ```
 
 Settings are read from `ASSISTANT_*` environment variables (mode, model, client, prompt variant,
@@ -44,6 +46,9 @@ structured events (`support_assistant/telemetry/`, `docs/telemetry.md`), written
 `ASSISTANT_EVENTS_FILE`; events carry no customer or draft text. `ops/` holds the service
 objectives (`ops/objectives.json`) and alert rules (`ops/alert_rules.json`) evaluated over event
 windows, with the report in `docs/ops-report.md`; `data/traffic/` holds two recorded weeks that
-`scripts/replay_traffic.py` replays with simulated time.
+`scripts/replay_traffic.py` replays with simulated time. `ops/drift.py` compares two windows and
+names investigation signals; `ops/scheduled_eval.py` re-runs the evaluation suites against their
+reference runs, scores the cases behind a traffic window weighted by request counts, and records
+every new failure (`docs/drift-report.md`).
 
 The requests in `data/` are synthetic samples; no real customer data is stored in this repository.

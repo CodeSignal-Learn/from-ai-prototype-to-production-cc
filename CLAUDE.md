@@ -27,6 +27,10 @@ from explicit rates (`ASSISTANT_INPUT_RATE_PER_MILLION`, `ASSISTANT_OUTPUT_RATE_
 log; `ops/alerts.py` evaluates `ops/alert_rules.json` (threshold, window, consecutive windows,
 owner, what to inspect, what to do). `scripts/replay_traffic.py` replays `data/traffic/*.jsonl`
 on the replay client with simulated time and optional injected outages or slow stretches.
+`ops/drift.py` compares a recent event window with a baseline (mix, rates, reasons, latency,
+versions) and emits signals that say what they do not prove; `ops/scheduled_eval.py` re-runs the
+suites against the reference runs, scores a traffic window's cases weighted by request counts,
+and appends regressions to `results/evals/scheduled/new-failures.jsonl`.
 
 ## Boundaries
 - Drafts are never sent. `Result.sent` stays `False`. The only network calls in this codebase are
@@ -50,6 +54,8 @@ on the replay client with simulated time and optional injected outages or slow s
   and never a judgment about draft quality. Clocks and sleeps are injected; tests never wait.
 - Objectives and alert rules are data, not code; a rule change is an edit to the JSON with its
   `why`, tested by replaying a week and checking what fires. Alerts name an owner and a response.
+- A drift signal is a reason to run the evaluation on the window's cases, never a reason to roll
+  back by itself. Quality is measured by the rubric on labeled cases, not inferred from events.
 - Prompts are versioned by content hash and recordings are keyed by prompt. Editing a `v1`
   prompt invalidates every recording and every evaluation run made with it; a new prompt is a
   new variant, compared on the held-out split before it becomes the default.
