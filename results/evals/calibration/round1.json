@@ -1,0 +1,166 @@
+{
+  "judged_by_both": 43,
+  "skipped": [],
+  "criteria": {
+    "R3": {
+      "items": 43,
+      "agreement": 0.814,
+      "kappa": 0.095,
+      "confusion": {
+        "human=fail judge=fail": 1,
+        "human=fail judge=pass": 4,
+        "human=pass judge=fail": 4,
+        "human=pass judge=pass": 34
+      },
+      "judge_stricter": 4,
+      "judge_lenient": 4,
+      "disagreements": [
+        {
+          "id": "EV-3003",
+          "human": "pass",
+          "judge": "fail",
+          "human_evidence": "Says the merge article 'doesn't cover login errors' and defers; checking the email and password is advice, not a policy claim.",
+          "judge_evidence": [
+            "please make sure you're using the email address the account was created with, and that you have the exact password you set",
+            "If you have a second account, let us know its email address too."
+          ]
+        },
+        {
+          "id": "EV-3021",
+          "human": "pass",
+          "judge": "fail",
+          "human_evidence": "'it may be fixable' and 'that could be part of the issue' are hedged readings of the tennis-ball and low-heat instructions; 'a common concern' claims nothing about the jacket.",
+          "judge_evidence": [
+            "If the jacket was dried on a higher heat or without the tennis balls, that could be part of the issue."
+          ]
+        },
+        {
+          "id": "EV-3044",
+          "human": "fail",
+          "judge": "pass",
+          "human_evidence": "'download the invoice for your order from the Orders page, which shows the charges in detail' says what an invoice contains; the article only says one can be downloaded.",
+          "judge_evidence": []
+        },
+        {
+          "id": "EV-3069",
+          "human": "fail",
+          "judge": "pass",
+          "human_evidence": "'you can update your email address or account details from the Account settings page' widens the article, which names only the email address.",
+          "judge_evidence": []
+        },
+        {
+          "id": "EV-3072",
+          "human": "pass",
+          "judge": "fail",
+          "human_evidence": "'it would leave the warehouse the next business day, which is Monday' is the article's 2 pm and weekend rule applied to a Friday evening order.",
+          "judge_evidence": [
+            "Since your order was placed Friday evening, it would leave the warehouse the next business day, which is Monday."
+          ]
+        },
+        {
+          "id": "EV-3075",
+          "human": "pass",
+          "judge": "fail",
+          "human_evidence": "Restates what the tracking article covers and says it 'doesn't describe how missing deliveries marked as delivered are handled'; the neighbor suggestion is advice.",
+          "judge_evidence": [
+            "you may want to check with neighbors or any safe drop-off spots near your home, and look for a delivery photo or note on the carrier's tracking page."
+          ]
+        },
+        {
+          "id": "EV-3090",
+          "human": "fail",
+          "judge": "pass",
+          "human_evidence": "'express to Toronto would be roughly three to six business days from the shipping date' is a total the article never states; it gives the two ranges separately.",
+          "judge_evidence": []
+        },
+        {
+          "id": "EV-3139",
+          "human": "fail",
+          "judge": "pass",
+          "human_evidence": "'a specialist will follow up with where to ship it' says the pole will be mailed; the article starts a claim with photos and never mentions sending the item.",
+          "judge_evidence": []
+        }
+      ]
+    },
+    "R4": {
+      "items": 43,
+      "agreement": 0.791,
+      "kappa": 0.616,
+      "confusion": {
+        "human=fail judge=fail": 9,
+        "human=fail judge=partial": 2,
+        "human=partial judge=partial": 2,
+        "human=partial judge=pass": 5,
+        "human=pass judge=partial": 2,
+        "human=pass judge=pass": 23
+      },
+      "judge_stricter": 2,
+      "judge_lenient": 7,
+      "disagreements": [
+        {
+          "id": "EV-3003",
+          "human": "fail",
+          "judge": "partial",
+          "human_evidence": "Defers although the password-reset article answers sign-in problems; the reset flow is never mentioned.",
+          "judge_evidence": "Our help article covers changing your email address from Account settings and merging duplicate accounts, but it doesn't cover login errors, so a specialist will follow up with you about this."
+        },
+        {
+          "id": "EV-3011",
+          "human": "partial",
+          "judge": "pass",
+          "human_evidence": "Says plainly the question is not covered and defers, then pads with order-tracking steps for a gift not yet ordered.",
+          "judge_evidence": "Unfortunately, our order tracking information doesn't cover shipping destinations, so I can't confirm whether we ship to APO addresses. A support specialist will follow up with you on this question."
+        },
+        {
+          "id": "EV-3038",
+          "human": "partial",
+          "judge": "pass",
+          "human_evidence": "Takes the amount and date for investigation, but adds the pending-authorization explanation for a customer who has never ordered.",
+          "judge_evidence": "If a charge appears that does not match an order in your account, contact us with the amount and date and we will investigate."
+        },
+        {
+          "id": "EV-3057",
+          "human": "partial",
+          "judge": "pass",
+          "human_evidence": "Says plainly that adding a person is not covered and defers, then answers a neighboring question by suggesting a merge.",
+          "judge_evidence": "It doesn't describe adding a second person to an existing account, so I can't confirm whether that's possible. A support specialist will follow up with you on this."
+        },
+        {
+          "id": "EV-3079",
+          "human": "fail",
+          "judge": "partial",
+          "human_evidence": "Defers although the shipping article says Fernwood ships to all fifty states and Canada.",
+          "judge_evidence": "\"I'm sorry, but I don't have information about shipping to Mexico City or other international destinations, so I can't confirm whether it's available for your address. A member of our support team will follow up with you on this question.\""
+        },
+        {
+          "id": "EV-3087",
+          "human": "partial",
+          "judge": "pass",
+          "human_evidence": "Says plainly that pickup is not covered, then pads with delivery times and the trace rule the customer did not ask about.",
+          "judge_evidence": "\"it doesn't mention in-person pickup at our warehouse. Because I can't confirm whether that's available for your order, a member of our support team will follow up with you directly.\""
+        },
+        {
+          "id": "EV-3094",
+          "human": "pass",
+          "judge": "partial",
+          "human_evidence": "Defers the order status and tells the customer not to share the full card number.",
+          "judge_evidence": "\"For order 49345, I'm not able to look up order details from here, so a specialist will follow up with you on its status.\" The draft defers on the order status but does not clearly state that the article does not cover where a specific order is, and it omits the reviewer-required instruction that a "
+        },
+        {
+          "id": "EV-3119",
+          "human": "pass",
+          "judge": "partial",
+          "human_evidence": "Answers the return and defers the sign-in question to a specialist.",
+          "judge_evidence": "For your password issue, our information doesn't cover login troubleshooting, so a specialist will follow up with you about that."
+        },
+        {
+          "id": "EV-3131",
+          "human": "partial",
+          "judge": "pass",
+          "human_evidence": "Says plainly the recall is not covered and defers, then answers a neighboring question with the warranty claim process.",
+          "judge_evidence": "I don't have any information about a recall or a gas leak issue with Fernwood camp stoves, so I can't confirm whether serial FW-2291 is affected. A support specialist will follow up with you about this."
+        }
+      ]
+    }
+  }
+}

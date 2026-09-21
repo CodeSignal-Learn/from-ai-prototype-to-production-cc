@@ -1,0 +1,157 @@
+{
+  "judged_by_both": 43,
+  "skipped": [],
+  "criteria": {
+    "R3": {
+      "items": 43,
+      "agreement": 0.837,
+      "kappa": 0.133,
+      "confusion": {
+        "human=fail judge=fail": 1,
+        "human=fail judge=pass": 4,
+        "human=pass judge=fail": 3,
+        "human=pass judge=pass": 35
+      },
+      "judge_stricter": 3,
+      "judge_lenient": 4,
+      "disagreements": [
+        {
+          "id": "EV-3003",
+          "human": "pass",
+          "judge": "fail",
+          "human_evidence": "Says the merge article 'doesn't cover login errors' and defers; checking the email and password is advice, not a policy claim.",
+          "judge_evidence": [
+            "In the meantime, please make sure you're using the email address the account was created with, and that you have the exact password you set. If you have a second account, let us know its email address too."
+          ]
+        },
+        {
+          "id": "EV-3044",
+          "human": "fail",
+          "judge": "pass",
+          "human_evidence": "'download the invoice for your order from the Orders page, which shows the charges in detail' says what an invoice contains; the article only says one can be downloaded.",
+          "judge_evidence": []
+        },
+        {
+          "id": "EV-3069",
+          "human": "fail",
+          "judge": "pass",
+          "human_evidence": "'you can update your email address or account details from the Account settings page' widens the article, which names only the email address.",
+          "judge_evidence": []
+        },
+        {
+          "id": "EV-3075",
+          "human": "pass",
+          "judge": "fail",
+          "human_evidence": "Restates what the tracking article covers and says it 'doesn't describe how missing deliveries marked as delivered are handled'; the neighbor suggestion is advice.",
+          "judge_evidence": [
+            "look for a delivery photo or note on the carrier's tracking page"
+          ]
+        },
+        {
+          "id": "EV-3090",
+          "human": "fail",
+          "judge": "pass",
+          "human_evidence": "'express to Toronto would be roughly three to six business days from the shipping date' is a total the article never states; it gives the two ranges separately.",
+          "judge_evidence": []
+        },
+        {
+          "id": "EV-3106",
+          "human": "pass",
+          "judge": "fail",
+          "human_evidence": "Return conditions, fee, and final sale are the article; 'help locate the purchase and follow up with you on your options' is a deferral.",
+          "judge_evidence": [
+            "You can start a return from the Orders page, but since you don't have the order number, a specialist will need to help locate the purchase and follow up with you on your options.",
+            "A member of our team will be in touch shortly."
+          ]
+        },
+        {
+          "id": "EV-3139",
+          "human": "fail",
+          "judge": "pass",
+          "human_evidence": "'a specialist will follow up with where to ship it' says the pole will be mailed; the article starts a claim with photos and never mentions sending the item.",
+          "judge_evidence": []
+        }
+      ]
+    },
+    "R4": {
+      "items": 43,
+      "agreement": 0.791,
+      "kappa": 0.616,
+      "confusion": {
+        "human=fail judge=fail": 9,
+        "human=fail judge=partial": 2,
+        "human=partial judge=partial": 2,
+        "human=partial judge=pass": 5,
+        "human=pass judge=partial": 2,
+        "human=pass judge=pass": 23
+      },
+      "judge_stricter": 2,
+      "judge_lenient": 7,
+      "disagreements": [
+        {
+          "id": "EV-3011",
+          "human": "partial",
+          "judge": "pass",
+          "human_evidence": "Says plainly the question is not covered and defers, then pads with order-tracking steps for a gift not yet ordered.",
+          "judge_evidence": "Unfortunately, our order tracking information doesn't cover shipping destinations, so I can't confirm whether we ship to APO addresses. A support specialist will follow up with you on this question."
+        },
+        {
+          "id": "EV-3060",
+          "human": "partial",
+          "judge": "pass",
+          "human_evidence": "Says plainly the Google sign-in is not covered and defers, then offers the password reset the customer said does not apply.",
+          "judge_evidence": "It doesn't cover the \"Sign in with Google\" option, so I can't confirm why that button isn't working or what steps will fix it. A support specialist will follow up with you about this."
+        },
+        {
+          "id": "EV-3079",
+          "human": "fail",
+          "judge": "partial",
+          "human_evidence": "Defers although the shipping article says Fernwood ships to all fifty states and Canada.",
+          "judge_evidence": "\"I don't have information about shipping to Mexico City or other international destinations, so I can't confirm whether it's available for your address. A member of our support team will follow up with you on this question.\""
+        },
+        {
+          "id": "EV-3087",
+          "human": "partial",
+          "judge": "pass",
+          "human_evidence": "Says plainly that pickup is not covered, then pads with delivery times and the trace rule the customer did not ask about.",
+          "judge_evidence": "\"it doesn't mention in-person pickup at our warehouse. Because I can't confirm whether that's available for your order, a member of our support team will follow up with you directly.\""
+        },
+        {
+          "id": "EV-3094",
+          "human": "pass",
+          "judge": "partial",
+          "human_evidence": "Defers the order status and tells the customer not to share the full card number.",
+          "judge_evidence": "\"You can follow your order from the Orders page of your account. Once the package leaves our warehouse, the order shows a carrier name and tracking number\" — the article answers where-is-my-order, but the draft never addresses the card-number issue the reviewer notes require (telling the customer no"
+        },
+        {
+          "id": "EV-3106",
+          "human": "fail",
+          "judge": "partial",
+          "human_evidence": "Explains the ordinary return flow and fee for a gift with no order number instead of saying the case is not covered.",
+          "judge_evidence": "Unworn items with tags attached can be returned or exchanged within 60 days of delivery."
+        },
+        {
+          "id": "EV-3119",
+          "human": "pass",
+          "judge": "partial",
+          "human_evidence": "Answers the return and defers the sign-in question to a specialist.",
+          "judge_evidence": "Return from the Orders page, prepaid label, 60 days, unworn with tags, and the $7 fee are all in the article: \"choose the items, and print the prepaid return label\" and \"a flat 7 dollar label fee is deducted unless the item arrived damaged or we sent the wrong item.\" The password question is deferre"
+        },
+        {
+          "id": "EV-3131",
+          "human": "partial",
+          "judge": "pass",
+          "human_evidence": "Says plainly the recall is not covered and defers, then answers a neighboring question with the warranty claim process.",
+          "judge_evidence": "The draft says \"I don't have any information about a recall or a gas leak issue with Fernwood camp stoves, so I can't confirm whether serial FW-2291 is affected. A support specialist will follow up with you about this.\""
+        },
+        {
+          "id": "EV-3146",
+          "human": "partial",
+          "judge": "pass",
+          "human_evidence": "Says plainly that gift cards are not covered and defers, then pads with the Orders page, which has nothing to do with a balance.",
+          "judge_evidence": "Unfortunately, the information available to me doesn't cover gift card balances, so I can't tell you how to check the balance on your card. A specialist will follow up with you to help."
+        }
+      ]
+    }
+  }
+}

@@ -27,3 +27,19 @@ def test_key_changes_when_any_prompt_part_changes():
     assert recording_key("m", "s", "u", 11) != base
     assert recording_key("m", "s2", "u", 10) != base
     assert recording_key("m2", "s", "u", 10) != base
+
+
+def test_a_recording_client_serves_an_existing_recording_instead_of_calling_live(tmp_path):
+    live = ScriptedClient(["first answer"], model="m")
+    recorder = RecordingClient(live, tmp_path)
+    assert recorder.complete("s", "u", 5).text == "first answer"
+    again = RecordingClient(ScriptedClient(["would be a second live call"], model="m"), tmp_path)
+    assert again.complete("s", "u", 5).text == "first answer"
+    assert again.replayed == 1 and again.usage.calls == 0
+
+
+def test_a_recording_client_can_be_told_to_re_record(tmp_path):
+    RecordingClient(ScriptedClient(["old"], model="m"), tmp_path).complete("s", "u", 5)
+    fresh = RecordingClient(ScriptedClient(["new"], model="m"), tmp_path, reuse_existing=False)
+    assert fresh.complete("s", "u", 5).text == "new"
+    assert fresh.replayed == 0

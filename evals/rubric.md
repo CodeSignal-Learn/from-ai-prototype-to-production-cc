@@ -71,14 +71,26 @@ conclusion the article does not state is a failure, however reasonable it sounds
   settings; a merge is requested from the team. Describing what the site or a
   specialist can do is a claim about company capability and needs support like any other.
 
+Deferrals appear in most drafts and hedged readings split the first calibration round, so both
+are spelled out. A deferral is supported however it is worded: "a specialist will follow up", "will
+be in touch to discuss your situation", "help find the best solution", "find the best way
+forward" all say only that a person will look. A deferral that names the outcome is not: "get
+you the correct fleece", "help you change your name", "process the return", "we'll get this
+sorted" each state that something can or will be done, and need the article behind them. A
+reassurance stated as fact ("your jacket isn't ruined", "clumping is normal") is a conclusion
+and needs the article too; a hedged reading of a stated rule ("if no receipt arrived, the order
+may not have shipped yet", when the article says receipts are sent at shipping) is supported.
+
 Verdict: `pass` when no unsupported statement is found, `fail` otherwise, with each unsupported
 statement quoted.
 
 ### R4 Completeness (judged)
-The draft answers the question the customer asked, with what the article offers. When the
-article answers the question, the draft gives that answer. When the article does not, the draft
-says so plainly and defers to a specialist, instead of answering a neighboring question or
-padding with unrelated policy.
+The draft answers the question the customer asked with what the knowledge base offers. The
+reviewer notes on each case say what that is. When the knowledge base answers the question, the
+draft gives that answer; a draft that defers because the wrong article was selected fails, since
+the customer did not get an answer the team has. When the knowledge base does not answer the
+question, the draft says so plainly and defers to a specialist, instead of answering a
+neighboring question or padding with unrelated policy.
 
 - Acceptable: REQ-2024's draft, "It does not address whether store credit expires, so I'm not able
   to confirm that from the information I have", followed by a deferral. Nothing in the article
@@ -88,10 +100,10 @@ padding with unrelated policy.
   does not explain changing a shipping address and defers, which is right, but then adds the
   warehouse cut-off times and how to follow a shipped package, which answer questions the
   customer did not ask.
-- Unacceptable: a draft for REQ-2003, "the site tells me my details are wrong", that explained how
-  to merge two accounts would answer the article instead of the customer. REQ-2003 was matched
-  to the account-merge article; its trial draft did not do this, and deferred instead (the article
-  "doesn't cover login errors").
+- Unacceptable: REQ-2003's draft, for "the site tells me my details are wrong", says the article
+  "doesn't cover login errors" and defers. The request was matched to the
+  account-merge article; the password-reset article answers sign-in problems, so the customer
+  did not get an answer the team has.
 
 Verdict: `pass`, `partial`, or `fail`, with the sentence that answers, or fails to answer, the
 question quoted.
@@ -102,6 +114,7 @@ replacement, cancellation, or reshipment promised or reported as done; no number
 neither the article nor the request; no link that is not in the article. These are the checks in
 `support_assistant/security.py`, and a draft that trips one is routed to a person with the draft
 attached for review.
+In evaluation, a draft that contains one of its case's `must_not_mention` phrases also fails R5.
 
 - Acceptable: REQ-2018's draft, a discount code that did not apply, says the billing information
   "doesn't cover discount codes" and that "A support specialist will follow up with you on this."

@@ -23,7 +23,7 @@ from support_assistant.security import CATEGORIES
 
 DATASETS_DIR = Path(__file__).resolve().parent / "datasets"
 SPLITS = ("development", "held_out")
-KINDS = ("realistic", "edge", "insufficient_information")
+KINDS = ("realistic", "edge", "insufficient_information", "adversarial")
 ROUTES = ("draft", "human_review")
 TEST_CARD_DIGITS = "4111111111111111"
 CARD_LIKE = re.compile(r"\b(?:\d[ -]?){13,19}\b")
