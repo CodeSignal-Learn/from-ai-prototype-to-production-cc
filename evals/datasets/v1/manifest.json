@@ -1,0 +1,70 @@
+{
+  "version": "v1",
+  "cases_sha256": "8fce73436a13e9dcdbc5bd42e5ef9a82be270551e1274d154b4f7c5059335bf5",
+  "cases": 168,
+  "by_split": {
+    "development": 112,
+    "held_out": 56
+  },
+  "by_kind": {
+    "edge": 84,
+    "insufficient_information": 12,
+    "realistic": 72
+  },
+  "by_route": {
+    "draft": 83,
+    "human_review": 85
+  },
+  "by_category": {
+    "account_access": 25,
+    "billing": 27,
+    "orders_shipping": 35,
+    "other": 23,
+    "product_issue": 27,
+    "returns_refunds": 31
+  },
+  "by_split_category_route": {
+    "development/account_access/draft": 10,
+    "development/account_access/human_review": 7,
+    "development/billing/draft": 11,
+    "development/billing/human_review": 8,
+    "development/orders_shipping/draft": 11,
+    "development/orders_shipping/human_review": 12,
+    "development/other/human_review": 15,
+    "development/product_issue/draft": 12,
+    "development/product_issue/human_review": 5,
+    "development/returns_refunds/draft": 13,
+    "development/returns_refunds/human_review": 8,
+    "held_out/account_access/draft": 4,
+    "held_out/account_access/human_review": 4,
+    "held_out/billing/draft": 4,
+    "held_out/billing/human_review": 4,
+    "held_out/orders_shipping/draft": 6,
+    "held_out/orders_shipping/human_review": 6,
+    "held_out/other/human_review": 8,
+    "held_out/product_issue/draft": 6,
+    "held_out/product_issue/human_review": 4,
+    "held_out/returns_refunds/draft": 6,
+    "held_out/returns_refunds/human_review": 4
+  },
+  "tags": {
+    "action-required": 6,
+    "ambiguous": 2,
+    "hostile": 6,
+    "injection": 2,
+    "keywordless": 12,
+    "legal": 6,
+    "non-english": 1,
+    "not-covered": 32,
+    "not-served": 1,
+    "outside-policy": 2,
+    "overlap": 3,
+    "oversized": 1,
+    "pre-sales": 3,
+    "sensitive": 5,
+    "spam": 1,
+    "three-words": 2,
+    "two-topics": 5,
+    "urgent": 3
+  }
+}
