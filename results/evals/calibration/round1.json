@@ -1,0 +1,139 @@
+{
+  "judged_by_both": 44,
+  "skipped": [],
+  "criteria": {
+    "R3": {
+      "items": 44,
+      "agreement": 0.818,
+      "kappa": 0.323,
+      "confusion": {
+        "human=fail judge=fail": 3,
+        "human=fail judge=pass": 3,
+        "human=pass judge=fail": 5,
+        "human=pass judge=pass": 33
+      },
+      "judge_stricter": 5,
+      "judge_lenient": 3,
+      "disagreements": [
+        {
+          "id": "EV-3007",
+          "human": "fail",
+          "judge": "pass",
+          "human_evidence": "'help resolve this issue and get you the correct women's medium fleece' commits to an outcome the article does not state.",
+          "judge_evidence": []
+        },
+        {
+          "id": "EV-3028",
+          "human": "pass",
+          "judge": "fail",
+          "human_evidence": "'it may indicate your order hasn't shipped yet' follows directly from 'receipts are emailed when the order ships'; hedged, not a new policy.",
+          "judge_evidence": [
+            "it may indicate your order hasn't shipped yet, or there could be another issue"
+          ]
+        },
+        {
+          "id": "EV-3038",
+          "human": "pass",
+          "judge": "fail",
+          "human_evidence": "'We take unauthorized charges seriously' is a stance, not a policy, timeline, or capability; the rest is the article's investigation sentence.",
+          "judge_evidence": [
+            "We take unauthorized charges seriously.",
+            "A specialist will follow up with you promptly to look into this matter and determine what happened."
+          ]
+        },
+        {
+          "id": "EV-3055",
+          "human": "fail",
+          "judge": "pass",
+          "human_evidence": "'to help you change your name in the system' says a name change is possible; no article says so.",
+          "judge_evidence": []
+        },
+        {
+          "id": "EV-3094",
+          "human": "pass",
+          "judge": "fail",
+          "human_evidence": "Tracking instructions are the article's; 'a specialist will follow up with you shortly' is a deferral and nothing else is claimed.",
+          "judge_evidence": [
+            "a specialist will follow up with you shortly"
+          ]
+        },
+        {
+          "id": "EV-3106",
+          "human": "fail",
+          "judge": "pass",
+          "human_evidence": "'help locate your gift and process the return or exchange. We'll get this sorted for you!' promises an outcome for a case no article covers.",
+          "judge_evidence": []
+        },
+        {
+          "id": "EV-3135",
+          "human": "pass",
+          "judge": "fail",
+          "human_evidence": "'discuss your pack and find the best solution' is a deferral.",
+          "judge_evidence": [
+            "A specialist will follow up with you shortly to discuss your pack and find the best solution."
+          ]
+        },
+        {
+          "id": "EV-3138",
+          "human": "pass",
+          "judge": "fail",
+          "human_evidence": "'we do ask for two photos' is the article; 'find the best way forward' is a deferral.",
+          "judge_evidence": [
+            "a specialist will follow up with you to discuss your specific situation and find the best way forward"
+          ]
+        }
+      ]
+    },
+    "R4": {
+      "items": 44,
+      "agreement": 0.886,
+      "kappa": 0.788,
+      "confusion": {
+        "human=fail judge=fail": 12,
+        "human=partial judge=fail": 1,
+        "human=partial judge=partial": 2,
+        "human=pass judge=partial": 4,
+        "human=pass judge=pass": 25
+      },
+      "judge_stricter": 5,
+      "judge_lenient": 0,
+      "disagreements": [
+        {
+          "id": "EV-3023",
+          "human": "pass",
+          "judge": "partial",
+          "human_evidence": "Explains the pending authorization and the five business days.",
+          "judge_evidence": "The draft explains that 'a pending authorization can remain visible for a day or two before dropping off automatically—this typically happens within five business days,' which addresses the customer's concern, but it adds an unsupported claim about what happens after cancellation specifically."
+        },
+        {
+          "id": "EV-3028",
+          "human": "pass",
+          "judge": "partial",
+          "human_evidence": "Says when receipts are sent and where to download an invoice.",
+          "judge_evidence": "According to our process, receipts are emailed when your order ships. You can also download an invoice anytime from the Orders page in your account."
+        },
+        {
+          "id": "EV-3094",
+          "human": "pass",
+          "judge": "partial",
+          "human_evidence": "Gives the tracking steps for the order number asked about.",
+          "judge_evidence": "The draft answers the general question about how to track orders with information from the article, but does not address the customer's specific request about order 49345, instead deferring to a specialist without confirming whether that's necessary."
+        },
+        {
+          "id": "EV-3119",
+          "human": "pass",
+          "judge": "partial",
+          "human_evidence": "Answers the return and defers the second topic explicitly.",
+          "judge_evidence": "The draft answers the return question with 'you can start the process from the Orders page by selecting the items you'd like to return and printing the prepaid label' and 'We accept unworn items with tags attached within 60 days of delivery,' but for the password issue, it says 'a specialist will fo"
+        },
+        {
+          "id": "EV-3138",
+          "human": "partial",
+          "judge": "fail",
+          "human_evidence": "Acknowledges the photo requirement but then invites a claim without photos, which the article does not allow.",
+          "judge_evidence": "The article states 'To start a claim, send us your order number, a description of the problem, and two photos showing the defect' with no alternative process offered for customers unable to provide photos."
+        }
+      ]
+    }
+  }
+}

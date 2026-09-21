@@ -54,21 +54,34 @@ class ReplayClient:
 
 
 class RecordingClient:
-    """Wraps a real client and writes every completion to the recordings folder."""
+    """Wraps a real client and writes every completion to the recordings folder.
 
-    def __init__(self, inner, recordings_dir: Path):
+    A prompt that already has a recording is served from it instead of being sent again, so a
+    recording run that stops halfway can be restarted without paying twice, and a run over a
+    partly changed prompt set only records what changed. `replayed` counts the served ones.
+    """
+
+    def __init__(self, inner, recordings_dir: Path, reuse_existing: bool = True):
         self.inner = inner
         self.model = inner.model
         self.recordings_dir = Path(recordings_dir)
         self.recordings_dir.mkdir(parents=True, exist_ok=True)
+        self.reuse_existing = reuse_existing
+        self.replayed = 0
 
     @property
     def usage(self) -> UsageTotals:
         return self.inner.usage
 
     def complete(self, system: str, user: str, max_tokens: int) -> Completion:
-        completion = self.inner.complete(system, user, max_tokens)
         key = recording_key(self.model, system, user, max_tokens)
+        path = self.recordings_dir / f"{key}.json"
+        if self.reuse_existing and path.exists():
+            record = json.loads(path.read_text(encoding="utf-8"))
+            self.replayed += 1
+            return Completion(text=record["text"], input_tokens=record["input_tokens"],
+                              output_tokens=record["output_tokens"], model=record["model"])
+        completion = self.inner.complete(system, user, max_tokens)
         record = {
             "model": completion.model,
             "system": system,
