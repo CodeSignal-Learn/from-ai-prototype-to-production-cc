@@ -30,7 +30,7 @@ One gate stays open; release is not recommended until it closes.
 
 | Gate | Why it is open | What closes it |
 | --- | --- | --- |
-| Monitoring | Every request records structured events with step durations, tokens, and versions, and the metrics report recomputes latency, routes, and cost from a log (`docs/telemetry.md`). Nothing judges those numbers against a target or alerts on the rate of `classification_unavailable`, flagged drafts, latency, or cost; nothing compares one week's traffic with another's; the evaluation suites run only by hand | Objectives and alerts over event windows, drift reports, recurring evaluation, an incident runbook rehearsed on an outage, and a release watched through them |
+| Monitoring | Every request records structured events (`docs/telemetry.md`), and five objectives and five alert rules, each with an owner and a response, judge them over windows (`docs/ops-report.md`). Nothing compares one week's traffic with another's, the evaluation suites run only by hand, and no procedure says how to work an incident | Drift reports, recurring evaluation, an incident runbook rehearsed on an outage, and a release watched through them |
 
 ## Known limits, not blocking
 - Confidence is uncalibrated (20 of 25 values at 0.95 in the POC trial, 18 of 25 on the hardened
